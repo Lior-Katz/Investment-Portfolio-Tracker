@@ -6,14 +6,75 @@
              xmlns:local="clr-namespace:PortfolioTrackerUI.View.UserControls"
              xmlns:userControls="clr-namespace:PortfolioTrackerUI.View.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
+             d:DesignHeight="600" d:DesignWidth="1200"
              Background="DimGray">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="100"></RowDefinition>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition MinHeight="80" Height="1*"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <userControls:Banner/>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"></RowDefinition>
+                    <RowDefinition Height="5*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label FontSize="20" Foreground="DarkBlue">
+                    Most Influential Holdings
+                </Label>
+                <DataGrid Name="mostInfluentialHoldings" Grid.Row="1" Background="LightGray">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Width="24*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Current Price" Width="19*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Today's change %" Width="19*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Today's change in currency" Width="19*"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Value" Width="19*"></DataGridTextColumn>
+                    </DataGrid.Columns>
+
+                </DataGrid>
+            </Grid>
+
+            <Grid Grid.Column="1" Margin="20">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20*"></RowDefinition>
+                    <RowDefinition Height="60*"></RowDefinition>
+                    <RowDefinition Height="20*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label FontSize="20" Foreground="DarkBlue">
+                    Historical Performance
+                </Label>
+                <Grid Grid.Row="1" Background="LightGray">
+                    <Label FontSize="40" HorizontalAlignment="Center" VerticalAlignment="Center">CHART</Label>
+                </Grid>
+
+                <ComboBox Grid.Row="2" Margin="150, 5, 150, 5">
+                    <ComboBoxItem Content="Snp 500"/>
+                    <ComboBoxItem Content="Dow  Jones"/>
+                </ComboBox>
+
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Button Name="btnAllHoldings" Content="All Holdings" Margin="50, 15, 50, 15"></Button>
+            <Button Name="btnTransactionLog" Content="Transaction Log" Grid.Column="1" Margin="50, 15, 50, 15"></Button>
+            <Button Name="btnAddTransaction" Content="Add Transaction" Grid.Column="2" Margin="50, 15, 50, 15"></Button>
+            <Button Name="btnDistributions" Content="Distributions" Grid.Column="3" Margin="50, 15, 50, 15"></Button>
+
+        </Grid>
     </Grid>
 </UserControl>
