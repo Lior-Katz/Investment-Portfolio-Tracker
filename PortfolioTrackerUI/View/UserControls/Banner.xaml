@@ -9,18 +9,23 @@
              Background="LightGray">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-
-        </Grid.ColumnDefinitions>
-        <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center">Portfolio Name</TextBlock>
-        <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1">Portfolio Value</TextBlock>
-        <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">Daily Change %</TextBlock>
-        <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3">Real Daily Change</TextBlock>
-        <TextBlock FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4">Change Since Price</TextBlock>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+			<ColumnDefinition />
+		</Grid.ColumnDefinitions>
+		<Button Name="btnGoToMainScreen"
+				Content="Main"
+				Width="60"
+				Height="30"
+				Click="btnGoToMainScreen_Click" />
+		<TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1">Portfolio Name</TextBlock>
+        <TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">Portfolio Value</TextBlock>
+        <TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3">Daily Change %</TextBlock>
+        <TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="4">Real Daily Change</TextBlock>
+        <TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="5">Change Since Price</TextBlock>
 
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using PortfolioTrackerUI.View.Screens;
+using PortfolioTrackerUI.View.UserControls;
 using System;
 using System.Windows;
 
@@ -24,6 +25,9 @@ namespace PortfolioTrackerUI
 
 			// Subscribe to SwitchToDistributionsScreenScreenRequested event in MainScreen.
 			MainScreen.SwitchToDistributionsScreenRequested += MainScreen_SwitchToDistributionsScreenRequested;
+
+			// Subscribe to SwitchToMainScreenRequested event in Banner
+			Banner.SwitchToMainScreenRequested += Banner_SwitchToDistributionsScreenRequested;
 		}
 
 		public void MainScreen_SwitchToHoldingsScreenRequested(object sender, EventArgs e)
@@ -44,6 +48,16 @@ namespace PortfolioTrackerUI
 		public void MainScreen_SwitchToDistributionsScreenRequested(object sender, EventArgs e)
 		{
 			DistributionsScreen.Visibility = Visibility.Visible;
+		}
+
+		public void Banner_SwitchToDistributionsScreenRequested(object sender, EventArgs e)
+		{
+			HoldingsScreen.Visibility = Visibility.Collapsed;
+			TransactionHistoryScreen.Visibility = Visibility.Collapsed;
+			AddTransactionScreen.Visibility = Visibility.Collapsed;
+			DistributionsScreen.Visibility = Visibility.Collapsed;
+
+			MainScreen.Visibility = Visibility.Visible;
 		}
 	}
 }
