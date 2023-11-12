@@ -18,6 +18,7 @@ namespace PortfolioTrackerUI.View.Screens
 		{
 			myAddTransactionScreen.Visibility = System.Windows.Visibility.Collapsed;
 			SwitchToMainScreenRequested?.Invoke(this, new EventArgs());
+			//TODO- save to database
 		}
 	}
 }
