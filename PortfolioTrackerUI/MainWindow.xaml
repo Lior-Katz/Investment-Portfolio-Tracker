@@ -5,14 +5,34 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PortfolioTrackerUI"
 		xmlns:Screens="clr-namespace:PortfolioTrackerUI.View.Screens"
-        mc:Ignorable="d"
+		xmlns:userControls="clr-namespace:PortfolioTrackerUI.View.UserControls"
+		mc:Ignorable="d"
 		Name="main"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-		<Screens:MainScreen x:Name="MainScreen" />
-		<Screens:HoldingsScreen x:Name="HoldingsScreen" Visibility="Collapsed" />
-		<Screens:DistributionsScreen x:Name="DistributionsScreen" Visibility="Collapsed" />
-		<Screens:TransactionHistoryScreen x:Name="TransactionHistoryScreen" Visibility="Collapsed" />
-		<Screens:AddTransactionScreen x:Name="AddTransactionScreen" Visibility="Collapsed" />
+		<Grid.RowDefinitions>
+			<RowDefinition Height="100"/>
+			<RowDefinition />
+		</Grid.RowDefinitions>
+		<userControls:Banner x:Name="Banner"/>
+		
+		<Screens:MainScreen x:Name="MainScreen"
+							Grid.Row="1" />
+		
+		<Screens:HoldingsScreen x:Name="HoldingsScreen"
+								Visibility="Collapsed"
+								Grid.Row="1" />
+		
+		<Screens:DistributionsScreen x:Name="DistributionsScreen"
+									 Visibility="Collapsed"
+									 Grid.Row="1" />
+		
+		<Screens:TransactionHistoryScreen x:Name="TransactionHistoryScreen"
+										  Visibility="Collapsed"
+										  Grid.Row="1" />
+		
+		<Screens:AddTransactionScreen x:Name="AddTransactionScreen"
+									  Visibility="Collapsed"
+									  Grid.Row="1" />
 	</Grid>
 </Window>
