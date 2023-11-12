@@ -91,19 +91,24 @@
 					Content="All Holdings"
 					Margin="50, 15, 50, 15"
 					Click="btnAllHoldings_Click" />
-			
-			<Button Name="btnTransactionLog"
+
+			<Button Name="btnTransactionHistory"
 					Content="Transaction Log"
 					Grid.Column="1"
-					Margin="50, 15, 50, 15"></Button>
+					Margin="50, 15, 50, 15"
+					Click="btnTransactionHistory_Click" />
+
 			<Button Name="btnAddTransaction"
 					Content="Add Transaction"
 					Grid.Column="2"
-					Margin="50, 15, 50, 15"></Button>
+					Margin="50, 15, 50, 15"
+					Click="btnAddTransaction_Click" />
+
 			<Button Name="btnDistributions"
 					Content="Distributions"
 					Grid.Column="3"
-					Margin="50, 15, 50, 15"></Button>
+					Margin="50, 15, 50, 15"
+					Click="btnDistributions_Click" />
 
 		</Grid>
 	</Grid>

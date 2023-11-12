@@ -11,8 +11,8 @@
     <Grid>
 		<Screens:MainScreen x:Name="MainScreen" />
 		<Screens:HoldingsScreen x:Name="HoldingsScreen" Visibility="Collapsed" />
-		<Screens:DistributionsScreen x:Name="Distributions" Visibility="Collapsed" />
-		<Screens:TransactionHistoryScreen x:Name="TransactionHistory" Visibility="Collapsed" />
-		<Screens:AddTransactionScreen x:Name="AddTransaction" Visibility="Collapsed" />
+		<Screens:DistributionsScreen x:Name="DistributionsScreen" Visibility="Collapsed" />
+		<Screens:TransactionHistoryScreen x:Name="TransactionHistoryScreen" Visibility="Collapsed" />
+		<Screens:AddTransactionScreen x:Name="AddTransactionScreen" Visibility="Collapsed" />
 	</Grid>
 </Window>

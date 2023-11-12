@@ -13,13 +13,37 @@ namespace PortfolioTrackerUI
 		{
 			InitializeComponent();
 
-			// subscribe to SwitchToHoldingsScreenRequested event in MainScreen
+			// Subscribe to SwitchToHoldingsScreenRequested event in MainScreen.
 			MainScreen.SwitchToHoldingsScreenRequested += MainScreen_SwitchToHoldingsScreenRequested;
+
+			// Subscribe to SwitchToTransactionScreenScreenRequested event in MainScreen.
+			MainScreen.SwitchToTransactionHistoryScreenRequested += MainScreen_SwitchToTransactionHistoryScreenRequested;
+
+			// Subscribe to SwitchToAddTransactionScreenScreenRequested event in MainScreen.
+			MainScreen.SwitchToAddTransactionScreenRequested += MainScreen_SwitchToAddTransactionScreenRequested;
+
+			// Subscribe to SwitchToDistributionsScreenScreenRequested event in MainScreen.
+			MainScreen.SwitchToDistributionsScreenRequested += MainScreen_SwitchToDistributionsScreenRequested;
 		}
 
 		public void MainScreen_SwitchToHoldingsScreenRequested(object sender, EventArgs e)
 		{
 			HoldingsScreen.Visibility = Visibility.Visible;
+		}
+
+		public void MainScreen_SwitchToTransactionHistoryScreenRequested(object sender, EventArgs e)
+		{
+			TransactionHistoryScreen.Visibility = Visibility.Visible;
+		}
+
+		public void MainScreen_SwitchToAddTransactionScreenRequested(object sender, EventArgs e)
+		{
+			AddTransactionScreen.Visibility = Visibility.Visible;
+		}
+
+		public void MainScreen_SwitchToDistributionsScreenRequested(object sender, EventArgs e)
+		{
+			DistributionsScreen.Visibility = Visibility.Visible;
 		}
 	}
 }
