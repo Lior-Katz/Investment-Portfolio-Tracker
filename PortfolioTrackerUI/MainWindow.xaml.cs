@@ -29,7 +29,10 @@ namespace PortfolioTrackerUI
 			// Subscribe to SwitchToMainScreenRequested event in Banner
 			Banner.SwitchToMainScreenRequested += Banner_SwitchToDistributionsScreenRequested;
 
-			TransactionHistoryScreen.SwitchToAddTransactionScreen += TransactionHistoryScreen_SwitchToAddTransactionScreen; 
+			// Subscribe to SwitchToAddTransactionScreenRequested event in TransactionHistoryScreen
+			TransactionHistoryScreen.SwitchToAddTransactionScreenRequested += TransactionHistoryScreen_SwitchToAddTransactionScreenRequested;
+
+			AddTransactionScreen.SwitchToMainScreenRequested += AddTransactionScreen_SwitchToMainScreenRequested;
 		}
 
 		public void MainScreen_SwitchToHoldingsScreenRequested(object sender, EventArgs e)
@@ -62,9 +65,14 @@ namespace PortfolioTrackerUI
 			MainScreen.Visibility = Visibility.Visible;
 		}
 
-		public void TransactionHistoryScreen_SwitchToAddTransactionScreen(object sender, EventArgs e)
+		public void TransactionHistoryScreen_SwitchToAddTransactionScreenRequested(object sender, EventArgs e)
 		{
 			AddTransactionScreen.Visibility = Visibility.Visible;
+		}
+
+		public void AddTransactionScreen_SwitchToMainScreenRequested(object sender, EventArgs e)
+		{
+			MainScreen.Visibility = Visibility.Visible;
 		}
 	}
 }

@@ -98,13 +98,14 @@
 					 FontSize="15" />
 		</Grid>
 
-		<Button Name="btnConfirmTransactionAdd" Grid.Row="4"
+		<Button Name="btnConfirmTransactionAdd"
+				Grid.Row="4"
 				HorizontalAlignment="Right"
 				Margin="0,10,50,10"
 				Width="100"
 				Height="40"
-				Content="Confirm" 
+				Content="Confirm"
 				FontSize="20"
-				/>
+				Click="btnConfirmTransactionAdd_Click" />
 	</Grid>
 </UserControl>

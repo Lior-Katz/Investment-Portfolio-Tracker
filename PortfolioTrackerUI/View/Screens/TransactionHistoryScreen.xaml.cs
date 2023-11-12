@@ -5,7 +5,7 @@ namespace PortfolioTrackerUI.View.Screens
 {
 	public partial class TransactionHistoryScreen : UserControl
 	{
-		public event EventHandler SwitchToAddTransactionScreen;
+		public event EventHandler SwitchToAddTransactionScreenRequested;
 		public TransactionHistoryScreen()
 		{
 			InitializeComponent();
@@ -14,7 +14,7 @@ namespace PortfolioTrackerUI.View.Screens
 		private void btnAddTransaction_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
 			myTransactionHistoryScreen.Visibility = System.Windows.Visibility.Collapsed;
-			SwitchToAddTransactionScreen?.Invoke(this, e);
+			SwitchToAddTransactionScreenRequested?.Invoke(this, e);
 		}
 	}
 }
