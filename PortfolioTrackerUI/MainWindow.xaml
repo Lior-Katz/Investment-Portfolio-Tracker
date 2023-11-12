@@ -4,10 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PortfolioTrackerUI"
-        xmlns:mainScreen="clr-namespace:PortfolioTrackerUI.View.Screens"
+		xmlns:Screens="clr-namespace:PortfolioTrackerUI.View.Screens"
         mc:Ignorable="d"
+		Name="main"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <mainScreeen:MainScreen></mainScreeen:MainScreen>
-    </Grid>
+		<Screens:MainScreen x:Name="MainScreen" />
+		<Screens:HoldingsScreen x:Name="HoldingsScreen" Visibility="Collapsed" />
+		<Screens:DistributionsScreen x:Name="Distributions" Visibility="Collapsed" />
+		<Screens:TransactionHistoryScreen x:Name="TransactionHistory" Visibility="Collapsed" />
+		<Screens:AddTransactionScreen x:Name="AddTransaction" Visibility="Collapsed" />
+	</Grid>
 </Window>

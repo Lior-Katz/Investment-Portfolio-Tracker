@@ -6,6 +6,7 @@
 			 xmlns:local="clr-namespace:PortfolioTrackerUI.View.Screens"
 			 xmlns:userControls="clr-namespace:PortfolioTrackerUI.View.UserControls"
 			 mc:Ignorable="d"
+			 Name="myMainScreen"
 			 Background="DimGray"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
@@ -88,7 +89,9 @@
 
 			<Button Name="btnAllHoldings"
 					Content="All Holdings"
-					Margin="50, 15, 50, 15"></Button>
+					Margin="50, 15, 50, 15"
+					Click="btnAllHoldings_Click" />
+			
 			<Button Name="btnTransactionLog"
 					Content="Transaction Log"
 					Grid.Column="1"

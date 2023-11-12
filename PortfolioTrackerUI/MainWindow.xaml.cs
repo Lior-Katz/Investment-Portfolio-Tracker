@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using PortfolioTrackerUI.View.Screens;
+using System;
+using System.Windows;
 
 namespace PortfolioTrackerUI
 {
@@ -10,6 +12,14 @@ namespace PortfolioTrackerUI
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			// subscribe to SwitchToHoldingsScreenRequested event in MainScreen
+			MainScreen.SwitchToHoldingsScreenRequested += MainScreen_SwitchToHoldingsScreenRequested;
+		}
+
+		public void MainScreen_SwitchToHoldingsScreenRequested(object sender, EventArgs e)
+		{
+			HoldingsScreen.Visibility = Visibility.Visible;
 		}
 	}
 }

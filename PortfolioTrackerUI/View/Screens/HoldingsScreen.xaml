@@ -6,6 +6,7 @@
 			 xmlns:local="clr-namespace:PortfolioTrackerUI.View.Screens"
 			 xmlns:userControls="clr-namespace:PortfolioTrackerUI.View.UserControls"
 			 mc:Ignorable="d"
+			 Name="myHoldingsScreen"
 			 d:DesignHeight="450"
 			 d:DesignWidth="800">
 	<Grid Background="DimGray">
