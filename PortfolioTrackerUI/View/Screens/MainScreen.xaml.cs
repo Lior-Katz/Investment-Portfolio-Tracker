@@ -37,7 +37,7 @@ namespace PortfolioTrackerUI.View.Screens
 
 		private void btnTransactionHistory_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-			myMainScreen.Visibility= System.Windows.Visibility.Collapsed;
+			myMainScreen.Visibility = System.Windows.Visibility.Collapsed;
 			SwitchToTransactionHistoryScreenRequested?.Invoke(this, EventArgs.Empty);
 		}
 	}
