@@ -5,11 +5,11 @@
 		/// <summary>
 		/// Unique identifier
 		/// </summary>
-        public int Id { get; set; }
-        /// <summary>
-        /// Asset Name
-        /// </summary>
-        public string Name { get; set; }
+		public int Id { get; set; }
+		/// <summary>
+		/// Asset Name
+		/// </summary>
+		public string Name { get; set; }
 		/// <summary>
 		/// The 3- or 4-letter symbol of the asset
 		/// </summary>
