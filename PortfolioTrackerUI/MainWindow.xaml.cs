@@ -28,6 +28,8 @@ namespace PortfolioTrackerUI
 
 			// Subscribe to SwitchToMainScreenRequested event in Banner
 			Banner.SwitchToMainScreenRequested += Banner_SwitchToDistributionsScreenRequested;
+
+			TransactionHistoryScreen.SwitchToAddTransactionScreen += TransactionHistoryScreen_SwitchToAddTransactionScreen; 
 		}
 
 		public void MainScreen_SwitchToHoldingsScreenRequested(object sender, EventArgs e)
@@ -58,6 +60,11 @@ namespace PortfolioTrackerUI
 			DistributionsScreen.Visibility = Visibility.Collapsed;
 
 			MainScreen.Visibility = Visibility.Visible;
+		}
+
+		public void TransactionHistoryScreen_SwitchToAddTransactionScreen(object sender, EventArgs e)
+		{
+			AddTransactionScreen.Visibility = Visibility.Visible;
 		}
 	}
 }

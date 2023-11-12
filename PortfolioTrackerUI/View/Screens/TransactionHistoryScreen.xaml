@@ -45,7 +45,8 @@
 				VerticalAlignment="Center"
 				Width="120"
 				Height="30"
-				Content="Add Transaction" />
+				Content="Add Transaction" 
+				Click="btnAddTransaction_Click"/>
 
 	</Grid>
 </UserControl>
