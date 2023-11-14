@@ -1,10 +1,6 @@
 ﻿using PortfolioTracker.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PortfolioTracker.ViewModels
 {
@@ -63,9 +59,9 @@ namespace PortfolioTracker.ViewModels
 		public decimal PercentofPortfolio => _holding.PercentofPortfolio;
 
 		public HoldingViewModel(Holding holding)
-        {
+		{
 			_holding = holding;
-        }
+		}
 
-    }
+	}
 }
