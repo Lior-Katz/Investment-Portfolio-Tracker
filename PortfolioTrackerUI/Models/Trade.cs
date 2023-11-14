@@ -42,6 +42,8 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		public decimal Commission { get; set; }
 
+		public decimal Value => Price * Quantity;
+
 		public Trade(string name, string ticker, bool isBuyOrder, DateTime date, string quantity, string price, string tax, string commission)
 		{
 			this.Name = name;
