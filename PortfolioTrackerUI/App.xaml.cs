@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using PortfolioTracker.ViewModels;
+using System.Windows;
 
 namespace PortfolioTrackerUI
 {
@@ -7,5 +8,16 @@ namespace PortfolioTrackerUI
 	/// </summary>
 	public partial class App : Application
 	{
+		protected override void OnStartup(StartupEventArgs e)
+		{
+			MainWindow = new MainWindow()
+			{
+				DataContext = new MainViewModel()
+			};
+
+			MainWindow.Show();
+
+			base.OnStartup(e);
+		}
 	}
 }
