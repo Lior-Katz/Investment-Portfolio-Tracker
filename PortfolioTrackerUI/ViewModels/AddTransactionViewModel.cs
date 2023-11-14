@@ -1,9 +1,11 @@
-﻿using System;
+﻿using PortfolioTracker.Commands;
+using PortfolioTracker.Models;
+using System;
 using System.Windows.Input;
 
 namespace PortfolioTracker.ViewModels
 {
-	internal class AddTransactionViewModel : ViewModelBase
+	public class AddTransactionViewModel : ViewModelBase
 	{
 		private string _name;
 		public string Name
@@ -16,6 +18,20 @@ namespace PortfolioTracker.ViewModels
 			{
 				_name = value;
 				OnPropertyChanged(nameof(Name));
+			}
+		}
+
+		private bool isBuyOrder;
+		public bool IsBuyOrder
+		{
+			get
+			{
+				return isBuyOrder;
+			}
+			set
+			{
+				isBuyOrder = value;
+				OnPropertyChanged(nameof(IsBuyOrder));
 			}
 		}
 
@@ -63,9 +79,8 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
-		//TODO: Fix binding issue
-		private DateOnly _date;
-		public DateOnly Date
+		private DateTime _date = DateTime.Now;
+		public DateTime Date
 		{
 			get
 			{
@@ -78,40 +93,44 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
-		private decimal _commission;
-		public decimal Commission
+		// TODO: allow decimal input
+		private decimal _commissionRate;
+		public decimal CommissionRate
 		{
 			get
 			{
-				return _commission;
+				return _commissionRate;
 			}
 			set
 			{
-				_commission = value;
-				OnPropertyChanged(nameof(Commission));
+				_commissionRate = value;
+				OnPropertyChanged(nameof(CommissionRate));
 			}
 		}
 
-		private decimal _tax;
-		public decimal Tax
+		// TODO: allow decimal input
+		private decimal _taxRate;
+		public decimal TaxRate
 		{
 			get
 			{
-				return _tax;
+				return _taxRate;
 			}
 			set
 			{
-				_tax = value;
-				OnPropertyChanged(nameof(Tax));
+				_taxRate = value;
+				OnPropertyChanged(nameof(TaxRate));
 			}
 		}
+
 
 		public ICommand ConfirmCommand { get; }
 		public ICommand CancelCommand { get; }
 
-		public AddTransactionViewModel()
+		public AddTransactionViewModel(Portfolio portfolio)
 		{
-
+			ConfirmCommand = new ConfirmAddTransactionCommand(this, portfolio);
+			CancelCommand = new CancelAddTransactionCommands();
 		}
 	}
 }
