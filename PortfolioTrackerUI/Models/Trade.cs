@@ -14,40 +14,62 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		public string Name { get; set; } = string.Empty;
 
-		/// <summary>
-		/// The ticker symbol of the asset traded.
-		/// </summary>
-		public string Ticker { get; set; } = string.Empty;
+		//// <summary>
+		///// The ticker symbol of the asset traded.
+		///// </summary>
+		//public string Ticker { get; set; } = string.Empty;
 
+		/// <summary>
+		/// Indicates whether the transaction is a buy order (true) or a sell order (false).
+		/// </summary>
 		public bool IsBuyOrder { get; set; }
 
 		/// <summary>
 		/// The date when the trade took place.
 		/// </summary>
-		public DateTime Date { get; set; }
+		public DateOnly Date { get; set; }
+
 		/// <summary>
 		/// The amount of shares traded.
 		/// </summary>
 		public decimal Quantity { get; set; }
+
 		/// <summary>
 		/// The price per share.
 		/// </summary>
 		public decimal Price { get; set; }
+
 		/// <summary>
 		/// Total tax paid on the trade
 		/// </summary>
 		public decimal Tax { get; set; }
+
 		/// <summary>
 		/// Total commission paid on the trade
 		/// </summary>
 		public decimal Commission { get; set; }
 
+		/// <summary>
+		/// The total value of this transaction, based on the rate.
+		/// Calculated as the product of the rate and the quantity.
+		/// </summary>
 		public decimal Value => Price * Quantity;
 
-		public Trade(string name, string ticker, bool isBuyOrder, DateTime date, string quantity, string price, string tax, string commission)
+		/// <summary>
+		/// Initializes a new instance of the Trade class with specified parameters.
+		/// </summary>
+		/// <param name="name">The name of the asset.</param>
+		/// <!--<param name="ticker">The stock ticker symbol associated with the trade.</param>-->
+		/// <param name="isBuyOrder">A boolean indicating whether the trade is a buy order (true) or a sell order (false).</param>
+		/// <param name="date">The date when the trade occurred.</param>
+		/// <param name="quantity">The quantity of the asset involved in the trade.</param>
+		/// <param name="price">The price per unit of the asset in the trade.</param>
+		/// <param name="tax">The tax amount associated with the trade.</param>
+		/// <param name="commission">The commission amount associated with the trade.</param>
+		public Trade(string name, /*string ticker,*/ bool isBuyOrder, DateOnly date, string quantity, string price, string tax, string commission)
 		{
 			this.Name = name;
-			this.Ticker = ticker;
+			//this.Ticker = ticker;
 			this.IsBuyOrder = isBuyOrder;
 			this.Date = date;
 
@@ -63,6 +85,15 @@ namespace PortfolioTracker.Models
 			this.Commission = commissionValue;
 		}
 
+		/// <summary>
+		/// Determines whether two Trade objects are equal based on their IDs.
+		/// </summary>
+		/// <param name="lvalue">The first Trade object to compare.</param>
+		/// <param name="rvalue">The second Trade object to compare.</param>
+		/// <returns>
+		/// <c>true</c> if the specified Trade objects are equal; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>Two null Trades are considered equal.</remarks>
 		public static bool operator ==(Trade? lvalue, Trade? rvalue)
 		{
 			if (lvalue is null && rvalue is null)
@@ -71,21 +102,56 @@ namespace PortfolioTracker.Models
 			return lvalue is not null && lvalue.Equals(rvalue);
 		}
 
+		/// <summary>
+		/// Determines whether two Trade objects are not equal based on their IDs.
+		/// </summary>
+		/// <param name="lvalue">The first Trade object to compare.</param>
+		/// <param name="rvalue">The second Trade object to compare.</param>
+		/// <returns>
+		/// <c>true</c> if the specified Trade objects are not equal; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>Two null Trades are considered equal.</remarks>
 		public static bool operator !=(Trade? lvalue, Trade? rvalue)
 		{
 			return !(lvalue == rvalue);
 		}
 
+		/// <summary>
+		/// Determines whether the current Trade object is equal to another object based on their IDs.
+		/// </summary>
+		/// <param name="obj">The object to compare with the current Trade object.</param>
+		/// <returns>
+		/// <c>true</c> if the specified object is equal to the current Trade object; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>
+		/// Trades are considered equal if their IDs match.
+		/// </remarks>
 		public bool Equals(Trade? obj)
 		{
 			return obj is Trade trade && this.Id == trade.Id;
 		}
 
+		/// <summary>
+		/// Determines whether the current Trade object is equal to another object based on their IDs.
+		/// </summary>
+		/// <param name="obj">The object to compare with the current Trade object.</param>
+		/// <returns>
+		/// <c>true</c> if the specified object is equal to the current Trade object; otherwise, <c>false</c>.
+		/// </returns>
+		/// <remarks>
+		/// Trades are considered equal if their IDs match.
+		/// </remarks>
 		public override bool Equals(object? obj)
 		{
 			return obj is Trade trade && this.Id == trade.Id;
 		}
 
+		// <summary>
+		/// Serves as a hash function for the Trade class based on its ID.
+		/// </summary>
+		/// <returns>
+		/// A hash code for the current Trade object based on its ID.
+		/// </returns>
 		public override int GetHashCode()
 		{
 			return this.Id.GetHashCode();

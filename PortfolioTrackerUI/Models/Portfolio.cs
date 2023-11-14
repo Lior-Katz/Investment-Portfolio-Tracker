@@ -33,6 +33,13 @@ namespace PortfolioTracker.Models
 			Trades = new List<Trade>();
 		}
 
+		/// <summary>
+		/// Adds a transaction to the portfolio's list of transactions, if it doesn't exist already.
+		/// If the transaction already exists, nothing is done.
+		/// Transactions are distinguished by their ID's.
+		/// </summary>
+		/// <param name="trade">The transaction to add to the list.</param>
+		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
 		public void addTrade(Trade trade)
 		{
 			if (trade == null)
@@ -44,11 +51,24 @@ namespace PortfolioTracker.Models
 			Trades.Add(trade);
 		}
 
+		/// <summary>
+		/// Removes a transaction from the holdings's list of transactions, if it exists.
+		/// If the transaction doesn't exist, nothing is done.
+		/// Transactions are distinguished by their ID's.
+		/// </summary>
+		/// <param name="trade">The transaction to remove from the list.</param>
 		public void removeTrade(Trade trade)
 		{
 			Trades.Remove(trade);
 		}
 
+		/// <summary>
+		/// Adds a new asset to the portfolio's list of holdings, if it doesn't exist already.
+		/// If the holding already exists, nothing is done.
+		/// Holdings are distinguished by their ID's.
+		/// </summary>
+		/// <param name="holding">The asset to add to the list.</param>
+		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
 		public void addHolding(Holding holding)
 		{
 			if (holding == null)
@@ -60,6 +80,12 @@ namespace PortfolioTracker.Models
 			Holdings.Add(holding);
 		}
 
+		/// <summary>
+		/// Removes a holding from the portfolio's list of holdings, if it exists.
+		/// If the holding doesn't exist, nothing is done.
+		/// holdings are distinguished by their ID's.
+		/// </summary>
+		/// <param name="holding">The holding to remove from the list.</param>
 		public void removeHolding(Holding holding)
 		{
 			Holdings.Remove(holding);
