@@ -15,7 +15,7 @@
 			<RowDefinition MinHeight="50"
 						   Height="1*" />
 		</Grid.RowDefinitions>
-		<DataGrid Name="mostInfluentialHoldings"
+		<!--<DataGrid Name="mostInfluentialHoldings"
 				  Background="LightGray"
 				  Margin="50, 50, 50, 30">
 			<DataGrid.Columns>
@@ -38,7 +38,113 @@
 				<DataGridTextColumn Header="Currency"
 									Width="10.5*" />
 			</DataGrid.Columns>
-		</DataGrid>
+		</DataGrid>-->
+
+		<ListView Grid.Row="0"
+				  Background="DimGray"
+				  ItemsSource="{Binding Transactions}">
+			<ListView.ItemContainerStyle>
+				<Style TargetType="ListViewItem">
+					<Setter Property="HorizontalContentAlignment"
+							Value="Stretch" />
+				</Style>
+			</ListView.ItemContainerStyle>
+
+			<ListView.View>
+				<GridView>
+					<GridViewColumn Header="Name">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Name}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Order Type">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding OrderType}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Date">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Date}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Quantity">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Quantity}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Rate">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Price}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Value">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Value}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Commission">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Commission}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<GridViewColumn Header="Tax">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text="{Binding Tax}"
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+
+					<!--TODO: Handle currency-->
+					<GridViewColumn Header="Currency">
+						<GridViewColumn.CellTemplate>
+							<DataTemplate>
+								<TextBlock HorizontalAlignment="Center"
+										   Text=""
+										   Padding="30 0" />
+							</DataTemplate>
+						</GridViewColumn.CellTemplate>
+					</GridViewColumn>
+				</GridView>
+			</ListView.View>
+		</ListView>
 
 		<Button Name="btnAddTransaction"
 				Grid.Row="1"
