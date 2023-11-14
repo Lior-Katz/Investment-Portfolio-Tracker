@@ -16,7 +16,7 @@
 		</Grid.RowDefinitions>
 		<userControls:Banner x:Name="Banner"/>
 		
-		<Screens:MainScreen x:Name="MainScreen"
+		<!--<Screens:MainScreen x:Name="MainScreen"
 							Grid.Row="1" />
 		
 		<Screens:HoldingsScreen x:Name="HoldingsScreen"
@@ -33,6 +33,8 @@
 		
 		<Screens:AddTransactionScreen x:Name="AddTransactionScreen"
 									  Visibility="Collapsed"
-									  Grid.Row="1" />
+									  Grid.Row="1" />-->
+
+		<Screens:AddTransactionScreen Grid.Row="1" DataContext="{Binding CurrentViewModel}" />
 	</Grid>
 </Window>
