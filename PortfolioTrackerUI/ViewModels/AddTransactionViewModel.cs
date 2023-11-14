@@ -63,6 +63,7 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
+		//TODO: Fix binding issue
 		private DateOnly _date;
 		public DateOnly Date
 		{
@@ -108,9 +109,9 @@ namespace PortfolioTracker.ViewModels
 		public ICommand ConfirmCommand { get; }
 		public ICommand CancelCommand { get; }
 
-        public AddTransactionViewModel()
-        {
-            
-        }
-    }
+		public AddTransactionViewModel()
+		{
+
+		}
+	}
 }
