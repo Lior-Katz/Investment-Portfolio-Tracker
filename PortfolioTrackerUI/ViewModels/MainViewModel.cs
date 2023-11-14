@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PortfolioTracker.Models;
 
 namespace PortfolioTracker.ViewModels
 {
-    class MainViewModel : ViewModelBase
-    {
-        public ViewModelBase CurrentViewModel { get; }
+	class MainViewModel : ViewModelBase
+	{
+		public ViewModelBase CurrentViewModel { get; }
 
-        public MainViewModel()
-        {
-            CurrentViewModel = new AddTransactionViewModel();
-        }
+		public MainViewModel(Portfolio portfolio)
+		{
+			CurrentViewModel = new TransactionHistoryViewModel();
+		}
 
-    }
+	}
 }

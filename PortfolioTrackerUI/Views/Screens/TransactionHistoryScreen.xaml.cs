@@ -11,10 +11,10 @@ namespace PortfolioTrackerUI.View.Screens
 			InitializeComponent();
 		}
 
-		private void btnAddTransaction_Click(object sender, System.Windows.RoutedEventArgs e)
-		{
-			myTransactionHistoryScreen.Visibility = System.Windows.Visibility.Collapsed;
-			SwitchToAddTransactionScreenRequested?.Invoke(this, e);
-		}
+		//private void btnAddTransaction_Click(object sender, System.Windows.RoutedEventArgs e)
+		//{
+		//	myTransactionHistoryScreen.Visibility = System.Windows.Visibility.Collapsed;
+		//	SwitchToAddTransactionScreenRequested?.Invoke(this, e);
+		//}
 	}
 }

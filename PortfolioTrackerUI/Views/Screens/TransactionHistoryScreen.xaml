@@ -146,13 +146,14 @@
 			</ListView.View>
 		</ListView>
 
-		<Button Name="btnAddTransaction"
-				Grid.Row="1"
-				VerticalAlignment="Center"
-				Width="120"
-				Height="30"
-				Content="Add Transaction" 
-				Click="btnAddTransaction_Click"/>
+		<Button
+			Name="btnAddTransaction"
+			Grid.Row="1"
+			VerticalAlignment="Center"
+			Width="120"
+			Height="30"
+			Content="Add Transaction" />
+		<!--Click="btnAddTransaction_Click"-->
 
 	</Grid>
 </UserControl>

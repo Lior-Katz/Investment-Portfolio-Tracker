@@ -92,7 +92,7 @@
 			<TextBox Width="100"
 					 Margin="20"
 					 HorizontalAlignment="Center"
-					 Text="{Binding Commission, UpdateSourceTrigger=PropertyChanged}"
+					 Text="{Binding CommissionRate, UpdateSourceTrigger=PropertyChanged}"
 					 TextAlignment="Center"
 					 FontSize="15" />
 
@@ -101,7 +101,7 @@
 					 Width="100"
 					 Margin="20"
 					 HorizontalAlignment="Center"
-					 Text="{Binding Tax, UpdateSourceTrigger=PropertyChanged}"
+					 Text="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
 					 TextAlignment="Center"
 					 FontSize="15" />
 		</Grid>

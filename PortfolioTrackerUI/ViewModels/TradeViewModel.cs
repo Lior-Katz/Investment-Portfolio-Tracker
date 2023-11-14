@@ -16,10 +16,10 @@ namespace PortfolioTracker.ViewModels
 		/// </summary>
 		public string Name => _trade.Name;
 
-		/// <summary>
-		/// The ticker symbol of the asset traded.
-		/// </summary>
-		public string Ticker => _trade.Ticker;
+		///// <summary>
+		///// The ticker symbol of the asset traded.
+		///// </summary>
+		//public string Ticker => _trade.Ticker;
 
 		public string OrderType
 		{
@@ -36,7 +36,7 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// The date when the trade took place.
 		/// </summary>
-		public DateTime Date => _trade.Date;
+		public DateOnly Date => _trade.Date;
 		/// <summary>
 		/// The amount of shares traded.
 		/// </summary>
