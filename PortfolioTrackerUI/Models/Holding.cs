@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PortfolioTracker.Models
 {
@@ -56,7 +55,14 @@ namespace PortfolioTracker.Models
 
 		public decimal Value => CurrentPrice * Quantity;
 
-		public decimal DailyChangePercentage => (DailyChange / Value) * 100;
+		public decimal DailyChangePercentage
+		{
+			get
+			{
+				if(Value == 0) return 0;
+				return (DailyChange / Value) * 100;
+			}
+		}
 
 		public decimal DailyChange => getDailyChange(Ticker, Quantity, Value);
 
