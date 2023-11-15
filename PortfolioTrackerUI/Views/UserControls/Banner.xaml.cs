@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace PortfolioTrackerUI.View.UserControls
+namespace PortfolioTracker.Views.UserControls
 {
 	/// <summary>
 	/// Interaction logic for Banner.xaml

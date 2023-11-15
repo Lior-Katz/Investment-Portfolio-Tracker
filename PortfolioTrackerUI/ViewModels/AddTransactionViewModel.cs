@@ -3,10 +3,16 @@ using PortfolioTracker.Models;
 using System;
 using System.Windows.Input;
 
+/// <summary>
+/// ViewModel for adding a new transaction, derived from the base ViewModel class.
+/// </summary>
 namespace PortfolioTracker.ViewModels
 {
 	public class AddTransactionViewModel : ViewModelBase
 	{
+		/// <summary>
+		/// Gets or sets the name associated with the transaction.
+		/// </summary>
 		private string _name;
 		public string Name
 		{
@@ -21,6 +27,9 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets a boolean indicating whether the transaction is a buy order(true) or a sell order(false).
+		/// </summary>
 		private bool isBuyOrder;
 		public bool IsBuyOrder
 		{
@@ -35,6 +44,9 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the quantity of the transaction.
+		/// </summary>
 		private decimal _quantity;
 		public decimal Quantity
 		{
@@ -49,6 +61,9 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the rate of the transaction.
+		/// </summary>
 		private decimal _rate;
 		public decimal Rate
 		{
@@ -65,6 +80,9 @@ namespace PortfolioTracker.ViewModels
 
 		// TODO: bind to combobox
 		// TODO: figure out data type
+		/// <summary>
+		/// Gets or sets the currency of the transaction.
+		/// </summary>
 		private string _currency;
 		public string Currency
 		{
@@ -79,6 +97,9 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the date of the transaction, defaulting to the current date and time.
+		/// </summary>
 		private DateTime _date = DateTime.Now;
 		public DateTime Date
 		{
@@ -94,6 +115,9 @@ namespace PortfolioTracker.ViewModels
 		}
 
 		// TODO: allow decimal input
+		/// <summary>
+		/// Gets or sets the commission rate for the transaction.
+		/// </summary>
 		private decimal _commissionRate;
 		public decimal CommissionRate
 		{
@@ -109,6 +133,9 @@ namespace PortfolioTracker.ViewModels
 		}
 
 		// TODO: allow decimal input
+		/// <summary>
+		/// Gets or sets the tax rate for the transaction.
+		/// </summary>
 		private decimal _taxRate;
 		public decimal TaxRate
 		{
@@ -123,14 +150,24 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
-
+		/// <summary>
+		/// Gets the command for confirming and adding the transaction to the portfolio.
+		/// </summary>
 		public ICommand ConfirmCommand { get; }
+
+		/// <summary>
+		/// Gets the command for canceling the transaction addition.
+		/// </summary>
 		public ICommand CancelCommand { get; }
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AddTransactionViewModel"/> class.
+		/// </summary>
+		/// <param name="portfolio">The portfolio to which the transaction will be added.</param>
 		public AddTransactionViewModel(Portfolio portfolio)
 		{
 			ConfirmCommand = new ConfirmAddTransactionCommand(this, portfolio);
-			CancelCommand = new CancelAddTransactionCommands();
+			CancelCommand = new CancelAddTransactionCommand();
 		}
 	}
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace PortfolioTrackerUI.View.Screens
+namespace PortfolioTracker.Views.Screens
 {
 	/// <summary>
 	/// Interaction logic for AddTransactionScreen.xaml

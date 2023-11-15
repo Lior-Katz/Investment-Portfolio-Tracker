@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Controls;
 
-namespace PortfolioTrackerUI.View.Screens
+namespace PortfolioTracker.Views.Screens
 {
 	public partial class TransactionHistoryScreen : UserControl
 	{

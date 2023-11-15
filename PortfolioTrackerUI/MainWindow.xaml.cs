@@ -1,9 +1,6 @@
-﻿using PortfolioTrackerUI.View.Screens;
-using PortfolioTrackerUI.View.UserControls;
-using System;
-using System.Windows;
+﻿using System.Windows;
 
-namespace PortfolioTrackerUI
+namespace PortfolioTracker
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -14,18 +11,18 @@ namespace PortfolioTrackerUI
 		{
 			InitializeComponent();
 
-			
-			//// Subscribe to SwitchToHoldingsScreenRequested event in MainScreen.
-			//MainScreen.SwitchToHoldingsScreenRequested += MainScreen_SwitchToHoldingsScreenRequested;
 
-			//// Subscribe to SwitchToTransactionScreenScreenRequested event in MainScreen.
-			//MainScreen.SwitchToTransactionHistoryScreenRequested += MainScreen_SwitchToTransactionHistoryScreenRequested;
+			//// Subscribe to SwitchToHoldingsScreenRequested event in DashboardView.
+			//DashboardView.SwitchToHoldingsScreenRequested += MainScreen_SwitchToHoldingsScreenRequested;
 
-			//// Subscribe to SwitchToAddTransactionScreenScreenRequested event in MainScreen.
-			//MainScreen.SwitchToAddTransactionScreenRequested += MainScreen_SwitchToAddTransactionScreenRequested;
+			//// Subscribe to SwitchToTransactionScreenScreenRequested event in DashboardView.
+			//DashboardView.SwitchToTransactionHistoryScreenRequested += MainScreen_SwitchToTransactionHistoryScreenRequested;
 
-			//// Subscribe to SwitchToDistributionsScreenScreenRequested event in MainScreen.
-			//MainScreen.SwitchToDistributionsScreenRequested += MainScreen_SwitchToDistributionsScreenRequested;
+			//// Subscribe to SwitchToAddTransactionScreenScreenRequested event in DashboardView.
+			//DashboardView.SwitchToAddTransactionScreenRequested += MainScreen_SwitchToAddTransactionScreenRequested;
+
+			//// Subscribe to SwitchToDistributionsScreenScreenRequested event in DashboardView.
+			//DashboardView.SwitchToDistributionsScreenRequested += MainScreen_SwitchToDistributionsScreenRequested;
 
 			//// Subscribe to SwitchToMainScreenRequested event in Banner
 			//Banner.SwitchToMainScreenRequested += Banner_SwitchToDistributionsScreenRequested;
@@ -63,7 +60,7 @@ namespace PortfolioTrackerUI
 		//	AddTransactionScreen.Visibility = Visibility.Collapsed;
 		//	DistributionsScreen.Visibility = Visibility.Collapsed;
 
-		//	MainScreen.Visibility = Visibility.Visible;
+		//	DashboardView.Visibility = Visibility.Visible;
 		//}
 
 		//public void TransactionHistoryScreen_SwitchToAddTransactionScreenRequested(object sender, EventArgs e)
@@ -73,7 +70,7 @@ namespace PortfolioTrackerUI
 
 		//public void AddTransactionScreen_SwitchToMainScreenRequested(object sender, EventArgs e)
 		//{
-		//	MainScreen.Visibility = Visibility.Visible;
+		//	DashboardView.Visibility = Visibility.Visible;
 		//}
 	}
 }

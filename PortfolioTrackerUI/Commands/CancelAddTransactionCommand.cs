@@ -2,7 +2,7 @@
 
 namespace PortfolioTracker.Commands
 {
-	class CancelAddTransactionCommands : CommandsBase
+	class CancelAddTransactionCommand : CommandsBase
 	{
 		/// <summary>
 		/// Cancels the addition of a new transaction and returns to dashboard.

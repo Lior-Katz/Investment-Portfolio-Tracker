@@ -2,7 +2,7 @@
 using PortfolioTracker.ViewModels;
 using System.Windows;
 
-namespace PortfolioTrackerUI
+namespace PortfolioTracker
 {
 	/// <summary>
 	/// Interaction logic for App.xaml
