@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PortfolioTracker"
-		xmlns:Screens="clr-namespace:PortfolioTracker.Views.Screens"
+		xmlns:views="clr-namespace:PortfolioTracker.Views.Screens"
+		xmlns:viewmodels="clr-namespace:PortfolioTracker.ViewModels"
 		xmlns:userControls="clr-namespace:PortfolioTracker.Views.UserControls"
 		mc:Ignorable="d"
 		Name="main"
@@ -35,6 +36,33 @@
 									  Visibility="Collapsed"
 									  Grid.Row="1" />-->
 
-		<Screens:TransactionHistoryScreen Grid.Row="1" DataContext="{Binding CurrentViewModel}" />
+		<!--<Screens:TransactionHistoryScreen Grid.Row="1" DataContext="{Binding CurrentViewModel}" />-->
+
+		<ContentControl
+			Grid.Row="1"
+			Content="{Binding CurrentViewModel}">
+			<ContentControl.Resources>
+				<DataTemplate
+					DataType="{x:Type viewmodels:DashboardViewModel}">
+					<views:DashboardView />
+				</DataTemplate>
+				<DataTemplate
+					DataType="{x:Type viewmodels:HoldingsListingViewModel}">
+					<views:HoldingsScreen />
+				</DataTemplate>
+				<DataTemplate
+					DataType="{x:Type viewmodels:TransactionHistoryViewModel}">
+					<views:TransactionHistoryScreen />
+				</DataTemplate>
+				<DataTemplate
+					DataType="{x:Type viewmodels:AddTransactionViewModel}">
+					<views:AddTransactionScreen />
+				</DataTemplate>
+				<DataTemplate
+					DataType="{x:Type viewmodels:DistributionsViewModel}">
+					<views:DistributionsScreen />
+				</DataTemplate>
+			</ContentControl.Resources>
+		</ContentControl>
 	</Grid>
 </Window>
