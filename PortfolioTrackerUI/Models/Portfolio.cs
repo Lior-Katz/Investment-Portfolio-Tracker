@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PortfolioTracker.Models
 {
@@ -21,6 +22,8 @@ namespace PortfolioTracker.Models
 		/// A record of all trades recorded in this portfolio.
 		/// </summary>
 		public List<Trade> Trades { get; } = new List<Trade>();
+
+		public List<Holding> MostInfluentialHoldings => GetMostInfluentialHoldings();
 
 		/// <summary>
 		/// Constructor
@@ -69,7 +72,7 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		/// <param name="holding">The asset to add to the list.</param>
 		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
-		public void addHolding(Holding holding)
+		public void AddHolding(Holding holding)
 		{
 			if (holding == null)
 				throw new NullReferenceException();
@@ -91,6 +94,37 @@ namespace PortfolioTracker.Models
 			Holdings.Remove(holding);
 		}
 
+		/// <summary>
+		/// Retrieves the top 5 most influential holdings int the portfolio's holdings list based on their daily change percentages.
+		/// </summary>
+		/// <returns>An List of Holding objects representing the most influential holdings.</returns>
+		private List<Holding> GetMostInfluentialHoldings()
+		{
+			// Initialize a list with the first 5 holdings
+			List<Holding> result = new List<Holding>(Holdings.Take(5));
+
+			// Comparison function to sort holdings based on daily change percentage
+			Comparison<Holding> comparison = (x, y) => x.DailyChangePercentage.CompareTo(y.DailyChangePercentage);
+
+			// Sort the initial list of holdings
+			result.Sort(comparison);
+
+			// Iterate over remaining holdings to find the most influential ones
+			foreach (Holding portfolioHolding in Holdings.Skip(result.Count))
+			{
+				// Check if the current holding has a higher daily change percentage than the least influential holding in the result
+				if (portfolioHolding.DailyChangePercentage > result[result.Count - 1].DailyChangePercentage)
+				{
+					// Replace the least influential holding with the current holding
+					result[result.Count - 1] = portfolioHolding;
+
+					// Re-sort the result to maintain the order
+					result.Sort(comparison);
+				}
+			}
+
+			return result;
+		}
 
 
 
