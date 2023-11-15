@@ -9,10 +9,13 @@ namespace PortfolioTracker
 	/// </summary>
 	public partial class App : Application
 	{
-		private readonly Portfolio _portfolio;
+		private readonly PortfolioViewModel _portfolio;
 		public App()
 		{
-			_portfolio = new Portfolio("MyPostrfolio");
+			_portfolio = new PortfolioViewModel(new Portfolio("MyPortfolio"));
+
+
+			// TODO: populate with data from db
 		}
 		protected override void OnStartup(StartupEventArgs e)
 		{

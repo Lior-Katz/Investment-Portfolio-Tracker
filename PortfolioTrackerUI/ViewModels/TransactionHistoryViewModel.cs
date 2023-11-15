@@ -9,9 +9,13 @@ namespace PortfolioTracker.ViewModels
 
 		public IEnumerable<TradeViewModel> Transactions => _transactions;
 
-		public TransactionHistoryViewModel()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TransactionHistoryViewModel"/> class, with an ObservableCollection of TradeViewModels.
+		/// <param name="holdingViewModels">An ObservableCollection of TradeViewModels to be shown on the view.</param>
+		/// </summary>
+		public TransactionHistoryViewModel(ObservableCollection<TradeViewModel> tradeViewModels)
 		{
-			_transactions = new ObservableCollection<TradeViewModel>();
+			_transactions = tradeViewModels;
 		}
 	}
 }
