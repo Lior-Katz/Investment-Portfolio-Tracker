@@ -160,6 +160,7 @@ namespace PortfolioTracker.ViewModels
 		/// </summary>
 		public ICommand CancelCommand { get; }
 
+		// TODO: maybe change parameter to be PortfolioViewModel
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AddTransactionViewModel"/> class.
 		/// </summary>
