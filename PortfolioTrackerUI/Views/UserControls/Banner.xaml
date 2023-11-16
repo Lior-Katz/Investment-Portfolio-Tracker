@@ -16,11 +16,14 @@
 			<ColumnDefinition />
 			<ColumnDefinition />
 		</Grid.ColumnDefinitions>
-		<Button Name="btnGoToMainScreen"
-				Content="Main"
-				Width="60"
-				Height="30"
-				Click="btnGoToMainScreen_Click" />
+
+		<Button
+			Name="btnGoToMainScreen"
+			Content="Main"
+			Width="60"
+			Height="30"
+			Command="{Binding NavigateToDashboardCommand}" />
+		<!--Click="btnGoToMainScreen_Click"-->
 		<TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="1">Portfolio Name</TextBlock>
         <TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="2">Portfolio Value</TextBlock>
         <TextBlock FontSize="15" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Column="3">Daily Change %</TextBlock>

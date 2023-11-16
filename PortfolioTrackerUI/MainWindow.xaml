@@ -15,7 +15,9 @@
 			<RowDefinition Height="100"/>
 			<RowDefinition />
 		</Grid.RowDefinitions>
-		<userControls:Banner x:Name="Banner"/>
+		<!--<userControls:Banner
+			x:Name="Banner"
+			Content="{Binding BannerViewModel}"/>-->
 		
 		<!--<Screens:MainScreen x:Name="MainScreen"
 							Grid.Row="1" />
@@ -37,6 +39,16 @@
 									  Grid.Row="1" />-->
 
 		<!--<Screens:TransactionHistoryScreen Grid.Row="1" DataContext="{Binding CurrentViewModel}" />-->
+		<ContentControl
+			Grid.Row="0"
+			Content="{Binding BannerViewModel}">
+			<ContentControl.Resources>
+				<DataTemplate
+					DataType="{x:Type viewmodels:BannerViewModel}">
+					<userControls:Banner />
+				</DataTemplate>
+			</ContentControl.Resources>
+		</ContentControl>
 
 		<ContentControl
 			Grid.Row="1"
