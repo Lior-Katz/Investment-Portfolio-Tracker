@@ -11,6 +11,11 @@ public class DashboardViewModel : ViewModelBase
 
 	public ICommand NavigateToAllHoldingsCommand { get; }
 
+	public ICommand NavigateToTransactionHistoryCommand { get; }
+
+	public ICommand NavigateToAddTransactionCommand { get; }
+
+	public ICommand NavigateToDistributionsCommand { get; }
 	public CurrencyViewModel SelectedCurrency { get; } = new CurrencyViewModel();
 
 	public DashboardViewModel(/*ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels*/ NavigationStore navigationStore)
@@ -18,6 +23,9 @@ public class DashboardViewModel : ViewModelBase
 		//this._mostInfluentialholdings = mostInfluential_holdingViewModels;
 		_mostInfluentialholdings = new ObservableCollection<HoldingViewModel>();
 		NavigateToAllHoldingsCommand = new NavigateToAllHoldingsCommand(navigationStore);
+		NavigateToAddTransactionCommand = new NavigateToAddTransactionCommand(navigationStore);
+		NavigateToTransactionHistoryCommand = new NavigateToTransactionHistoryCommand(navigationStore);
+		NavigateToDistributionsCommand = new NavigateToDistributionsCommand(navigationStore);
 	}
 
 	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, CurrencyViewModel selectedCurrency)

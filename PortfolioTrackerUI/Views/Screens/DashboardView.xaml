@@ -95,19 +95,22 @@
 			<Button Name="btnTransactionHistory"
 					Content="Transaction Log"
 					Grid.Column="1"
-					Margin="50, 15, 50, 15"/>
+					Margin="50, 15, 50, 15"
+				Command="{Binding NavigateToTransactionHistoryCommand}"/>
 					<!--Click="btnTransactionHistory_Click"--> 
 
 			<Button Name="btnAddTransaction"
 					Content="Add Transaction"
 					Grid.Column="2"
-					Margin="50, 15, 50, 15"/>
+					Margin="50, 15, 50, 15"
+				Command="{Binding NavigateToAddTransactionCommand}"/>
 					<!--Click="btnAddTransaction_Click"--> 
 
 			<Button Name="btnDistributions"
 					Content="Distributions"
 					Grid.Column="3"
-					Margin="50, 15, 50, 15"/>
+					Margin="50, 15, 50, 15"
+				Command="{Binding NavigateToDistributionsCommand}"/>
 					<!--Click="btnDistributions_Click"--> 
 
 		</Grid>
