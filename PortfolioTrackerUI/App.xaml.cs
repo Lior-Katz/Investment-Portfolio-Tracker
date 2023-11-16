@@ -1,4 +1,5 @@
 ﻿using PortfolioTracker.Models;
+using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
 using System.Windows;
 
@@ -19,9 +20,12 @@ namespace PortfolioTracker
 		}
 		protected override void OnStartup(StartupEventArgs e)
 		{
+			NavigationStore navigationStore = new NavigationStore();
+			navigationStore.CurrentViewModel = new DashboardViewModel(navigationStore);
+
 			MainWindow = new MainWindow()
 			{
-				DataContext = new MainViewModel(_portfolio)
+				DataContext = new MainViewModel(navigationStore)
 			};
 
 			MainWindow.Show();

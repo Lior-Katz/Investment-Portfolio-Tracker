@@ -85,10 +85,12 @@
 				<ColumnDefinition></ColumnDefinition>
 			</Grid.ColumnDefinitions>
 
-			<Button Name="btnAllHoldings"
-					Content="All Holdings"
-					Margin="50, 15, 50, 15"/>
-					<!--Click="btnAllHoldings_Click"--> 
+			<Button
+				Name="btnAllHoldings"
+				Content="All Holdings"
+				Margin="50, 15, 50, 15"
+				Command="{Binding NavigateToAllHoldingsCommand}" />
+			<!--Click="btnAllHoldings_Click"--> 
 
 			<Button Name="btnTransactionHistory"
 					Content="Transaction Log"

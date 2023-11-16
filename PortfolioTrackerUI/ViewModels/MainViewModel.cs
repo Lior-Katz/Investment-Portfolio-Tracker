@@ -1,13 +1,22 @@
-﻿namespace PortfolioTracker.ViewModels
+﻿using PortfolioTracker.Stores;
+
+namespace PortfolioTracker.ViewModels
 {
 	class MainViewModel : ViewModelBase
 	{
-		public ViewModelBase CurrentViewModel { get; }
+		private readonly NavigationStore _navigationStore;
 
-		public MainViewModel(PortfolioViewModel portfolio)
+		public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
+		public MainViewModel(NavigationStore navigationStore)
 		{
-			CurrentViewModel = new DashboardViewModel(portfolio.MostInfluentialHoldings);
+			_navigationStore = navigationStore;
+
+			_navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
 		}
 
+		private void OnCurrentViewModelChanged()
+		{
+			OnPropertyChanged(nameof(CurrentViewModel));
+		}
 	}
 }
