@@ -44,7 +44,7 @@ namespace PortfolioTracker.Commands
 		{
 			// additional validity checks must be updated in OnViewModelPropertyChanged
 			bool isNameValid = !string.IsNullOrEmpty(_addTransactionViewModel.Name);
-			bool isDateValid = _addTransactionViewModel.Date >= DateTime.Now;
+			bool isDateValid = _addTransactionViewModel.Date <= DateTime.Now;
 			bool isQuantityValid = _addTransactionViewModel.Quantity > 0;
 			bool isPriceValid = _addTransactionViewModel.Rate > 0;
 
