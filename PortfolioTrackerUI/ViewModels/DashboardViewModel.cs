@@ -22,10 +22,10 @@ public class DashboardViewModel : ViewModelBase
 	{
 		//this._mostInfluentialholdings = mostInfluential_holdingViewModels;
 		_mostInfluentialholdings = new ObservableCollection<HoldingViewModel>();
-		NavigateToAllHoldingsCommand = new NavigateToAllHoldingsCommand(navigationStore);
-		NavigateToAddTransactionCommand = new NavigateToAddTransactionCommand(navigationStore);
-		NavigateToTransactionHistoryCommand = new NavigateToTransactionHistoryCommand(navigationStore);
-		NavigateToDistributionsCommand = new NavigateToDistributionsCommand(navigationStore);
+		NavigateToAllHoldingsCommand = new NavigateCommand<HoldingsListingViewModel>(navigationStore, () => new HoldingsListingViewModel());
+		NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(navigationStore));
+		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => new TransactionHistoryViewModel(navigationStore));
+		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel());
 	}
 
 	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, CurrencyViewModel selectedCurrency)

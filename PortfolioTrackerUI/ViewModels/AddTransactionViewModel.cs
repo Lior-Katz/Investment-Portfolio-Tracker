@@ -1,5 +1,6 @@
 ﻿using PortfolioTracker.Commands;
 using PortfolioTracker.Models;
+using PortfolioTracker.Stores;
 using System;
 using System.Windows.Input;
 
@@ -165,10 +166,12 @@ namespace PortfolioTracker.ViewModels
 		/// Initializes a new instance of the <see cref="AddTransactionViewModel"/> class.
 		/// </summary>
 		/// <param name="portfolio">The portfolio to which the transaction will be added.</param>
-		public AddTransactionViewModel(Portfolio portfolio)
+		public AddTransactionViewModel(/*Portfolio portfolio*/ NavigationStore navigationStore)
 		{
+			//TODO- get actual portfolio
+			Portfolio portfolio = new Portfolio("");
 			ConfirmCommand = new ConfirmAddTransactionCommand(this, portfolio);
-			CancelCommand = new CancelAddTransactionCommand();
+			CancelCommand = new NavigateCommand<DashboardViewModel>(navigationStore, () => new DashboardViewModel(navigationStore));
 		}
 	}
 }

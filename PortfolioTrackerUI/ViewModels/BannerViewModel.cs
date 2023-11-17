@@ -10,7 +10,7 @@ namespace PortfolioTracker.ViewModels
 
 		public BannerViewModel(NavigationStore navigationStore)
 		{
-			this.NavigateToDashboardCommand = new NavigateToDashboardCommand(navigationStore);
+			this.NavigateToDashboardCommand = new NavigateCommand<DashboardViewModel>(navigationStore, () => new DashboardViewModel(navigationStore));
 		}
 	}
 }
