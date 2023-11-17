@@ -13,7 +13,12 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// The name of the asset traded.
 		/// </summary>
-		public string Name { get; set; } = string.Empty;
+		public string Name { get; set; }
+
+		/// <summary>
+		/// 3 or letter ticker symbol
+		/// </summary>
+		public string Ticker { get; set; }
 
 		//// <summary>
 		///// The ticker symbol of the asset traded.
@@ -72,10 +77,10 @@ namespace PortfolioTracker.Models
 		/// <param name="price">The price per unit of the asset in the trade.</param>
 		/// <param name="tax">The tax amount associated with the trade.</param>
 		/// <param name="commission">The commission amount associated with the trade.</param>
-		public Trade(string name, /*string ticker,*/ bool isBuyOrder, DateOnly date, string quantity, string price, string tax, string commission, CurrencyModel currency)
+		public Trade(string name, string ticker, bool isBuyOrder, DateOnly date, string quantity, string price, string tax, string commission, CurrencyModel currency)
 		{
 			this.Name = name;
-			//this.Ticker = ticker;
+			this.Ticker = ticker;
 			this.IsBuyOrder = isBuyOrder;
 			this.Date = date;
 			decimal quantityValue, priceValue, taxValue, commissionValue;

@@ -30,6 +30,23 @@ namespace PortfolioTracker.ViewModels
 		}
 
 		/// <summary>
+		/// 3 or 4 letter ticker symbol
+		/// </summary>
+		private string _ticker;
+		public string Ticker
+		{
+			get
+			{
+				return _ticker;
+			}
+			set
+			{
+				_ticker = value;
+				OnPropertyChanged(nameof(Ticker));
+			}
+		}
+
+		/// <summary>
 		/// Gets or sets a boolean indicating whether the transaction is a buy order(true) or a sell order(false).
 		/// </summary>
 		private bool isBuyOrder;

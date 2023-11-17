@@ -20,6 +20,11 @@ namespace PortfolioTracker.ViewModels
 		/// </summary>
 		public string Name => _trade.Name;
 
+		/// <summary>
+		/// 3 or 4 letter ticker symbol
+		/// </summary>
+		public string Ticker => _trade.Ticker;
+
 		///// <summary>
 		///// The ticker symbol of the asset traded.
 		///// </summary>

@@ -3,6 +3,7 @@ using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
 using System;
 using System.ComponentModel;
+using System.Windows;
 
 namespace PortfolioTracker.Commands
 {
@@ -61,6 +62,7 @@ namespace PortfolioTracker.Commands
 			decimal commissionPaid = _addTransactionViewModel.CommissionRate * _addTransactionViewModel.Rate * _addTransactionViewModel.Quantity;
 
 			Trade trade = new Trade(_addTransactionViewModel.Name,
+				_addTransactionViewModel.Ticker,
 				 _addTransactionViewModel.IsBuyOrder,
 				   DateOnly.FromDateTime(_addTransactionViewModel.Date),
 					 _addTransactionViewModel.Quantity.ToString(),
@@ -69,7 +71,25 @@ namespace PortfolioTracker.Commands
 						commissionPaid.ToString(),
 						   new CurrencyModel(_addTransactionViewModel.Currency));
 
-			_portfolio.addTransaction(trade);
+			if (!_portfolio.AddTransaction(trade))
+			{
+				// TODO: recieve more information for first time buy
+				MessageBox.Show("First time buy- more info required");
+
+				Holding holding = new Holding(_addTransactionViewModel.Name,
+					_addTransactionViewModel.Ticker,
+					 _addTransactionViewModel.Quantity,
+					 DateOnly.FromDateTime(_addTransactionViewModel.Date),
+					 0,
+					 0,
+					 0,
+					 0,
+					 "",
+					 "",
+					  "");
+				holding.addTrade(trade);
+				_portfolio.AddToHoldings(holding);
+			}
 
 			base.Execute(parameter);
 		}

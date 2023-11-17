@@ -43,16 +43,31 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		/// <param name="trade">The transaction to add to the list.</param>
 		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
-		public void addTrade(Trade trade)
+		public bool AddTrade(Trade trade)
 		{
 			if (trade == null)
 				throw new NullReferenceException("null trade added");
 
 			if (Trades.Contains(trade))
-				return;
+				throw new ArgumentException("Trade already exists");
 
 			Trades.Add(trade);
+
+			// Search for a holding with a matching ticker symbol
+			Holding matchingHolding = Holdings.FirstOrDefault(holding => holding.Ticker == trade.Ticker);
+			if (matchingHolding == null)
+			{
+				// holding with same ticker doesn't exist
+				return false;
+			}
+			else
+			{
+				// holding with same ticker already exist
+				UpdateHoldingWithTrade(ref matchingHolding, trade);
+				return true;
+			}
 		}
+
 
 		/// <summary>
 		/// Removes a transaction from the holdings's list of transactions, if it exists.
@@ -60,7 +75,7 @@ namespace PortfolioTracker.Models
 		/// Transactions are distinguished by their ID's.
 		/// </summary>
 		/// <param name="trade">The transaction to remove from the list.</param>
-		public void removeTrade(Trade trade)
+		public void RemoveTrade(Trade trade)
 		{
 			Trades.Remove(trade);
 		}
@@ -72,13 +87,18 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		/// <param name="holding">The asset to add to the list.</param>
 		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
-		public void AddHolding(Holding holding)
+		public void AddToHoldings(Holding holding)
 		{
 			if (holding == null)
 				throw new NullReferenceException();
 
+			// TODO: find a way to get the real info
+			// potentially use dialog if this is a first time buy
+			//Holding holding = new Holding(trade.Name, trade.Ticker, trade.Quantity, trade.Date, 0, 0, 0, 0, "", "", "");
+
+			// TODO: comparison workd by ID but no ID yet
 			if (Holdings.Contains(holding))
-				return;
+				throw new ArgumentException("Holding already exists");
 
 			Holdings.Add(holding);
 		}
@@ -125,6 +145,13 @@ namespace PortfolioTracker.Models
 
 			return result;
 		}
+
+		private void UpdateHoldingWithTrade(ref Holding matchingHolding, Trade trade)
+		{
+			matchingHolding.Quantity += trade.Quantity;
+			matchingHolding.Trades.Add(trade);
+		}
+
 
 
 

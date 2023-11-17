@@ -53,7 +53,9 @@ public class PortfolioViewModel : ViewModelBase
 		this._portfolio = portfolio;
 	}
 
-	public void addTransaction(Trade trade) => _portfolio.addTrade(trade);
+	public bool AddTransaction(Trade trade) => _portfolio.AddTrade(trade);
 
-	public void removeTransaction(Trade trade) => _portfolio.removeTrade(trade);
+	public void RemoveTransaction(Trade trade) => _portfolio.RemoveTrade(trade);
+
+	public void AddToHoldings(Holding holding) => _portfolio.AddToHoldings(holding);
 }
