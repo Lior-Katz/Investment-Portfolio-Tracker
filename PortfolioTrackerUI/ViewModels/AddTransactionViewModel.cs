@@ -8,8 +8,10 @@ using System.Windows.Input;
 /// </summary>
 namespace PortfolioTracker.ViewModels
 {
+
 	public class AddTransactionViewModel : ViewModelBase
 	{
+
 		/// <summary>
 		/// Gets or sets the name associated with the transaction.
 		/// </summary>
@@ -78,12 +80,10 @@ namespace PortfolioTracker.ViewModels
 			}
 		}
 
-		// TODO: bind to combobox
-		// TODO: figure out data type
 		/// <summary>
 		/// Gets or sets the currency of the transaction.
 		/// </summary>
-		private CurrencyModel _currency;
+		private CurrencyModel _currency = new CurrencyModel();
 		public string Currency
 		{
 			get
