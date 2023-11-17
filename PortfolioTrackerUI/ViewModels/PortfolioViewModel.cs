@@ -1,5 +1,4 @@
 ﻿using PortfolioTracker.Models;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace PortfolioTracker.ViewModels;
@@ -18,7 +17,18 @@ public class PortfolioViewModel : ViewModelBase
 	/// <summary>
 	/// A list of all assets currently held in the portfolio.
 	/// </summary>
-	public List<Holding> Holdings => _portfolio.Holdings;
+	public ObservableCollection<HoldingViewModel> Holdings
+	{
+		get
+		{
+			ObservableCollection<HoldingViewModel> result = new ObservableCollection<HoldingViewModel>();
+			foreach (Holding holding in _portfolio.Holdings)
+			{
+				result.Add(new HoldingViewModel(holding));
+			}
+			return result;
+		}
+	}
 	/// <summary>
 	/// A record of all trades recorded in this portfolio.
 	/// </summary>

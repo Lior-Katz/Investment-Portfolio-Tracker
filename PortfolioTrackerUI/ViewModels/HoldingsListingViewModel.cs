@@ -18,9 +18,9 @@ namespace PortfolioTracker.ViewModels
 		/// Initializes a new instance of the <see cref="HoldingsListingViewModel"/> class, with an ObservableCollection of HoldingViewModels.
 		/// <param name="holdingViewModels">An ObservableCollection of HoldingViewModels to be shown on the view.</param>
 		/// </summary>
-		public HoldingsListingViewModel(ObservableCollection<HoldingViewModel> holdingViewModels)
+		public HoldingsListingViewModel(PortfolioViewModel portfolioViewModel)
 		{
-			_holdings = holdingViewModels;
+			_holdings = portfolioViewModel.Holdings;
 		}
 
 
