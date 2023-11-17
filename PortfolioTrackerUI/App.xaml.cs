@@ -21,11 +21,11 @@ namespace PortfolioTracker
 		protected override void OnStartup(StartupEventArgs e)
 		{
 			NavigationStore navigationStore = new NavigationStore();
-			navigationStore.CurrentViewModel = new DashboardViewModel(navigationStore);
+			navigationStore.CurrentViewModel = new DashboardViewModel(_portfolio, navigationStore);
 
 			MainWindow = new MainWindow()
 			{
-				DataContext = new MainViewModel(navigationStore)
+				DataContext = new MainViewModel(navigationStore, _portfolio)
 			};
 
 			MainWindow.Show();

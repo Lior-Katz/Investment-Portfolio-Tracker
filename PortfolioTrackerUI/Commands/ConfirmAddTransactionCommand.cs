@@ -16,7 +16,7 @@ namespace PortfolioTracker.Commands
 		/// <summary>
 		/// The portfolio to which the new transaction should be added
 		/// </summary>
-		private readonly Portfolio _portfolio;
+		private readonly PortfolioViewModel _portfolio;
 
 
 
@@ -26,7 +26,7 @@ namespace PortfolioTracker.Commands
 		/// </summary>
 		/// <param name="addTransactionViewModel">The ViewModel that contains the information of the trade, through binding to user input fields</param>
 		/// <param name="portfolio">The portfolio that the trade should be added to</param>
-		public ConfirmAddTransactionCommand(AddTransactionViewModel addTransactionViewModel, Portfolio portfolio, NavigationStore navigationStore) : base(navigationStore, () => new TransactionHistoryViewModel(navigationStore))
+		public ConfirmAddTransactionCommand(AddTransactionViewModel addTransactionViewModel, PortfolioViewModel portfolio, NavigationStore navigationStore) : base(navigationStore, () => new TransactionHistoryViewModel(portfolio, navigationStore))
 		{
 			this._addTransactionViewModel = addTransactionViewModel;
 			this._portfolio = portfolio;
@@ -68,7 +68,7 @@ namespace PortfolioTracker.Commands
 					 taxPaid.ToString(),
 						commissionPaid.ToString());
 
-			_portfolio.addTrade(trade);
+			_portfolio.addTransaction(trade);
 
 			base.Execute(parameter);
 		}

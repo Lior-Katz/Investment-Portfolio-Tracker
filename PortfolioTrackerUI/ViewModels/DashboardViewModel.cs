@@ -18,17 +18,17 @@ public class DashboardViewModel : ViewModelBase
 	public ICommand NavigateToDistributionsCommand { get; }
 	public CurrencyViewModel SelectedCurrency { get; } = new CurrencyViewModel();
 
-	public DashboardViewModel(/*ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels*/ NavigationStore navigationStore)
+	public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
 	{
-		//this._mostInfluentialholdings = mostInfluential_holdingViewModels;
-		_mostInfluentialholdings = new ObservableCollection<HoldingViewModel>();
+		this._mostInfluentialholdings = portfolioViewModel.MostInfluentialHoldings;
+
 		NavigateToAllHoldingsCommand = new NavigateCommand<HoldingsListingViewModel>(navigationStore, () => new HoldingsListingViewModel());
-		NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(navigationStore));
-		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => new TransactionHistoryViewModel(navigationStore));
+		NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(portfolioViewModel, navigationStore));
+		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => new TransactionHistoryViewModel(portfolioViewModel, navigationStore));
 		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel());
 	}
 
-	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, CurrencyViewModel selectedCurrency)
+	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, NavigationStore navigationStore, CurrencyViewModel selectedCurrency)
 	{
 		this._mostInfluentialholdings = mostInfluential_holdingViewModels;
 		this.SelectedCurrency = selectedCurrency;

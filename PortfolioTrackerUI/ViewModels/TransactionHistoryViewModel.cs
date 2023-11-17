@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace PortfolioTracker.ViewModels
 {
-	class TransactionHistoryViewModel : ViewModelBase
+	public class TransactionHistoryViewModel : ViewModelBase
 	{
 		private readonly ObservableCollection<TradeViewModel> _transactions;
 
@@ -17,13 +17,11 @@ namespace PortfolioTracker.ViewModels
 		/// Initializes a new instance of the <see cref="TransactionHistoryViewModel"/> class, with an ObservableCollection of TradeViewModels.
 		/// <param name="holdingViewModels">An ObservableCollection of TradeViewModels to be shown on the view.</param>
 		/// </summary>
-		public TransactionHistoryViewModel(/*ObservableCollection<TradeViewModel> tradeViewModels*/ NavigationStore navigationStore)
+		public TransactionHistoryViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
 		{
-			// TODO: get actual trades
-			//_transactions = tradeViewModels;
-			_transactions = new ObservableCollection<TradeViewModel>();
+			_transactions = portfolioViewModel.Trades;
 
-			NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(navigationStore));
+			NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(portfolioViewModel, navigationStore));
 		}
 	}
 }

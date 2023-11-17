@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace PortfolioTracker.ViewModels;
-internal class PortfolioViewModel : ViewModelBase
+public class PortfolioViewModel : ViewModelBase
 {
 	private readonly Portfolio _portfolio;
 
@@ -52,4 +52,8 @@ internal class PortfolioViewModel : ViewModelBase
 	{
 		this._portfolio = portfolio;
 	}
+
+	public void addTransaction(Trade trade) => _portfolio.addTrade(trade);
+
+	public void removeTransaction(Trade trade) => _portfolio.removeTrade(trade);
 }

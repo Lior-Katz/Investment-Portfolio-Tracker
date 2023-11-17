@@ -10,10 +10,10 @@ namespace PortfolioTracker.ViewModels
 		private readonly NavigationStore _navigationStore;
 
 		public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
-		public MainViewModel(NavigationStore navigationStore)
+		public MainViewModel(NavigationStore navigationStore, PortfolioViewModel portfolioViewModel)
 		{
 			_navigationStore = navigationStore;
-			_bannerViewModel = new BannerViewModel(navigationStore);
+			_bannerViewModel = new BannerViewModel(navigationStore, portfolioViewModel);
 
 			_navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
 		}
