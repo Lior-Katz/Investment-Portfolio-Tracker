@@ -31,5 +31,10 @@ public class CurrencyModel
 			_selectedCurrency = currency;
 		}
 	}
+
+	public CurrencyModel(int index = 0)
+	{
+		_selectedCurrency = (Currency) index;
+	}
 	public override string ToString() => _selectedCurrency.ToString();
 }
