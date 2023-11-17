@@ -66,7 +66,8 @@
 					  Width="100"
 					  Margin="20"
 					  HorizontalAlignment="Center"
-					  SelectedItem="{Binding Currency, UpdateSourceTrigger=PropertyChanged}">
+					  SelectedValuePath="Content"
+					  SelectedValue="{Binding Currency, UpdateSourceTrigger=PropertyChanged}">
 				<ComboBoxItem Content="USD" />
 				<ComboBoxItem Content="NIS" />
 			</ComboBox>

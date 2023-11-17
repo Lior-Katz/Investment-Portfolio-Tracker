@@ -16,7 +16,7 @@ public class DashboardViewModel : ViewModelBase
 	public ICommand NavigateToAddTransactionCommand { get; }
 
 	public ICommand NavigateToDistributionsCommand { get; }
-	public CurrencyViewModel SelectedCurrency { get; } = new CurrencyViewModel();
+	public CurrencyModel SelectedCurrency { get; }
 
 	public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
 	{
@@ -28,7 +28,7 @@ public class DashboardViewModel : ViewModelBase
 		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel());
 	}
 
-	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, NavigationStore navigationStore, CurrencyViewModel selectedCurrency)
+	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, NavigationStore navigationStore, CurrencyModel selectedCurrency)
 	{
 		this._mostInfluentialholdings = mostInfluential_holdingViewModels;
 		this.SelectedCurrency = selectedCurrency;

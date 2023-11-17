@@ -83,16 +83,16 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// Gets or sets the currency of the transaction.
 		/// </summary>
-		private string _currency;
+		private CurrencyModel _currency;
 		public string Currency
 		{
 			get
 			{
-				return _currency;
+				return _currency?.ToString();
 			}
 			set
 			{
-				_currency = value;
+				_currency = new CurrencyModel(value);
 				OnPropertyChanged(nameof(Currency));
 			}
 		}

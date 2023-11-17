@@ -136,7 +136,7 @@
 						<GridViewColumn.CellTemplate>
 							<DataTemplate>
 								<TextBlock HorizontalAlignment="Center"
-										   Text=""
+										   Text="{Binding Currency}"
 										   Padding="30 0" />
 							</DataTemplate>
 						</GridViewColumn.CellTemplate>

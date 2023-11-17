@@ -3,7 +3,7 @@ using System;
 
 namespace PortfolioTracker.ViewModels
 {
-	internal class TradeViewModel : ViewModelBase
+	public class TradeViewModel : ViewModelBase
 	{
 		/// <summary>
 		/// The Trade object that the ViewModel represents.
@@ -63,6 +63,11 @@ namespace PortfolioTracker.ViewModels
 		/// Total commission paid on the trade
 		/// </summary>
 		public decimal Commission => _trade.Commission;
+
+		/// <summary>
+		/// The currency of the payment
+		/// </summary>
+		public CurrencyModel Currency => _trade.Currency;
 
 		/// <summary>
 		/// The total value of this transaction, based on the rate.

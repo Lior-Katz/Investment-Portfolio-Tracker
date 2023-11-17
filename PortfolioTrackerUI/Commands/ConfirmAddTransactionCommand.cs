@@ -66,7 +66,8 @@ namespace PortfolioTracker.Commands
 					 _addTransactionViewModel.Quantity.ToString(),
 					 _addTransactionViewModel.Rate.ToString(),
 					 taxPaid.ToString(),
-						commissionPaid.ToString());
+						commissionPaid.ToString(),
+						   new CurrencyModel(_addTransactionViewModel.Currency));
 
 			_portfolio.addTransaction(trade);
 

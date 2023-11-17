@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PortfolioTracker.ViewModels;
+using System;
 
 namespace PortfolioTracker.Models
 {
@@ -50,6 +51,11 @@ namespace PortfolioTracker.Models
 		public decimal Commission { get; set; }
 
 		/// <summary>
+		/// The currency of the payment
+		/// </summary>
+		public CurrencyModel Currency { get; set; }
+
+		/// <summary>
 		/// The total value of this transaction, based on the rate.
 		/// Calculated as the product of the rate and the quantity.
 		/// </summary>
@@ -66,13 +72,12 @@ namespace PortfolioTracker.Models
 		/// <param name="price">The price per unit of the asset in the trade.</param>
 		/// <param name="tax">The tax amount associated with the trade.</param>
 		/// <param name="commission">The commission amount associated with the trade.</param>
-		public Trade(string name, /*string ticker,*/ bool isBuyOrder, DateOnly date, string quantity, string price, string tax, string commission)
+		public Trade(string name, /*string ticker,*/ bool isBuyOrder, DateOnly date, string quantity, string price, string tax, string commission, CurrencyModel currency)
 		{
 			this.Name = name;
 			//this.Ticker = ticker;
 			this.IsBuyOrder = isBuyOrder;
 			this.Date = date;
-
 			decimal quantityValue, priceValue, taxValue, commissionValue;
 			decimal.TryParse(quantity, out quantityValue);
 			decimal.TryParse(price, out priceValue);
@@ -83,6 +88,7 @@ namespace PortfolioTracker.Models
 			this.Price = priceValue;
 			this.Tax = taxValue;
 			this.Commission = commissionValue;
+			this.Currency = currency;
 		}
 
 		/// <summary>
