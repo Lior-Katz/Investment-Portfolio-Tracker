@@ -1,11 +1,12 @@
 ﻿using PortfolioTracker.Models;
+using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
 using System;
 using System.ComponentModel;
 
 namespace PortfolioTracker.Commands
 {
-	public class ConfirmAddTransactionCommand : CommandsBase
+	public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryViewModel>
 	{
 		/// <summary>
 		/// The view model that contains the input from the user through the AddTransactionView
@@ -17,13 +18,15 @@ namespace PortfolioTracker.Commands
 		/// </summary>
 		private readonly Portfolio _portfolio;
 
+
+
 		/// <summary>
 		/// Initializes a new instance of ConfirmAddTransactionCommand with the porfolio to add the transaction to,
 		/// and the the ViewModel that contains the transaction information.
 		/// </summary>
 		/// <param name="addTransactionViewModel">The ViewModel that contains the information of the trade, through binding to user input fields</param>
 		/// <param name="portfolio">The portfolio that the trade should be added to</param>
-		public ConfirmAddTransactionCommand(AddTransactionViewModel addTransactionViewModel, Portfolio portfolio)
+		public ConfirmAddTransactionCommand(AddTransactionViewModel addTransactionViewModel, Portfolio portfolio, NavigationStore navigationStore) : base(navigationStore, () => new TransactionHistoryViewModel(navigationStore))
 		{
 			this._addTransactionViewModel = addTransactionViewModel;
 			this._portfolio = portfolio;
@@ -66,6 +69,8 @@ namespace PortfolioTracker.Commands
 						commissionPaid.ToString());
 
 			_portfolio.addTrade(trade);
+
+			base.Execute(parameter);
 		}
 
 		/// <summary>

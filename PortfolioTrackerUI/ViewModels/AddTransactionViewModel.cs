@@ -170,7 +170,7 @@ namespace PortfolioTracker.ViewModels
 		{
 			//TODO- get actual portfolio
 			Portfolio portfolio = new Portfolio("");
-			ConfirmCommand = new ConfirmAddTransactionCommand(this, portfolio);
+			ConfirmCommand = new ConfirmAddTransactionCommand(this, portfolio, navigationStore);
 			CancelCommand = new NavigateCommand<DashboardViewModel>(navigationStore, () => new DashboardViewModel(navigationStore));
 		}
 	}
