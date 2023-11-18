@@ -8,7 +8,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// Unique identifier
 		/// </summary>
-		public int Id { get; private set; }
+		public int Id { get; set; }
 		/// <summary>
 		/// Asset Name
 		/// </summary>
@@ -21,6 +21,8 @@ namespace PortfolioTracker.Models
 		/// Number of shares held.
 		/// </summary>
 		public decimal Quantity { get; set; }
+
+
 		/// <summary>
 		/// List of all trades of this asset.
 		/// </summary>
@@ -137,13 +139,13 @@ namespace PortfolioTracker.Models
 		}
 
 		// TODO: implement
-		private decimal getCurrentPrice(string ticker) => throw new NotImplementedException();
+		private decimal getCurrentPrice(string ticker) => 1;
 
 		// TODO: implement
-		private decimal getDailyChange(string ticker, decimal quantity, decimal value) => throw new NotImplementedException();
+		private decimal getDailyChange(string ticker, decimal quantity, decimal value) => 1;
 
 		// TODO: implement
-		private decimal getPercentOfPortfolio(int id) => throw new NotImplementedException();
+		private decimal getPercentOfPortfolio(int id) => 1;
 
 		/// <summary>
 		/// Adds a transaction to the holding's list of transactions, if it doesn't exist already.

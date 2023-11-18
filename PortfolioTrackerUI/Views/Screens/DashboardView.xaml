@@ -32,7 +32,7 @@
 					   Foreground="DarkBlue">
 					Most Influential Holdings
 				</Label>
-				<DataGrid Name="mostInfluentialHoldings"
+				<!--<DataGrid Name="mostInfluentialHoldings"
 						  Grid.Row="1"
 						  Background="LightGray">
 					<DataGrid.Columns>
@@ -48,7 +48,95 @@
 											Width="19*"></DataGridTextColumn>
 					</DataGrid.Columns>
 
-				</DataGrid>
+				</DataGrid>-->
+
+				<ListView
+					Grid.Row="1"
+					Margin="25 0"
+					Background="DimGray"
+					ItemsSource="{Binding MostInfluentialHoldings}">
+					<ListView.ItemContainerStyle>
+						<Style
+							TargetType="ListViewItem">
+							<Setter
+								Property="HorizontalContentAlignment"
+								Value="Stretch" />
+						</Style>
+					</ListView.ItemContainerStyle>
+					<ListView.View>
+						<GridView>
+							<GridViewColumn
+								Header="Name">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock
+											HorizontalAlignment="Center"
+											Text="{Binding Name}"
+											Padding="20 0" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+
+							<GridViewColumn
+								Header="Current Price">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock
+											HorizontalAlignment="Center"
+											Text="{Binding CurrentPrice}"
+											Padding="20 0" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+
+							<GridViewColumn
+								Header="Today's change %">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock
+											HorizontalAlignment="Center"
+											Text="{Binding DailyChangePercentage}"
+											Padding="20 0" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+
+							<GridViewColumn
+								Header="Today's change">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock
+											HorizontalAlignment="Center"
+											Padding="20 0">
+											<TextBlock.Text>
+												<MultiBinding
+													StringFormat="{}{0}">
+													<Binding
+														Path="DailyChange" />
+													<!--<Binding
+														Path="Currency" />-->
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+
+							<GridViewColumn
+								Header="Value">
+								<GridViewColumn.CellTemplate>
+									<DataTemplate>
+										<TextBlock
+											HorizontalAlignment="Center"
+											Text="{Binding Value}"
+											Padding="20 0" />
+									</DataTemplate>
+								</GridViewColumn.CellTemplate>
+							</GridViewColumn>
+							
+						</GridView>
+					</ListView.View>
+				</ListView>
 			</Grid>
 
 			<Grid Grid.Column="1"
