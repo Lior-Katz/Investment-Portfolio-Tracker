@@ -15,42 +15,11 @@ public class PortfolioViewModel : ViewModelBase
 	/// </summary>
 	public string Name => _portfolio.Name;
 
-	public decimal Value
-	{
-		get
-		{
-			decimal res = 0;
-			foreach (HoldingViewModel holdingViewModel in this.Holdings)
-			{
-				res += holdingViewModel.Value;
-			}
-			return res;
-		}
-	}
+	public decimal Value => _portfolio.Value;
 
-	public decimal DailyChange
-	{
-		get
-		{
-			decimal res = 0;
-			foreach (HoldingViewModel holdingViewModel in this.Holdings)
-			{
-				res += holdingViewModel.DailyChange;
-			}
+	public decimal DailyChange => _portfolio.DailyChange;
 
-			return res;
-		}
-	}
-
-	public decimal DailyChangePercentage
-	{
-		get
-		{
-			if (Value == 0)
-				return 0;
-			return (DailyChange / Value) * 100;
-		}
-	}
+	public decimal DailyChangePercentage => _portfolio.DailyChangePercentage;
 
 	/// <summary>
 	/// A list of all assets currently held in the portfolio.
