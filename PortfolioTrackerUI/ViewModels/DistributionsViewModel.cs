@@ -6,8 +6,8 @@ public class DistributionsViewModel : ViewModelBase
 	private readonly ObservableCollection<HoldingViewModel> _holdings;
 	public ObservableCollection<HoldingViewModel> Holdings;
 
-	public DistributionsViewModel(ObservableCollection<HoldingViewModel> holdingViewModels)
+	public DistributionsViewModel(PortfolioViewModel portfolioViewModel)
 	{
-		this._holdings = holdingViewModels;
+		this._holdings = portfolioViewModel.Holdings;
 	}
 }
