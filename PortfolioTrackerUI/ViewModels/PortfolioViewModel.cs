@@ -14,6 +14,44 @@ public class PortfolioViewModel : ViewModelBase
 	/// The name of the portfolio.
 	/// </summary>
 	public string Name => _portfolio.Name;
+
+	public decimal Value
+	{
+		get
+		{
+			decimal res = 0;
+			foreach (HoldingViewModel holdingViewModel in this.Holdings)
+			{
+				res += holdingViewModel.Value;
+			}
+			return res;
+		}
+	}
+
+	public decimal DailyChange
+	{
+		get
+		{
+			decimal res = 0;
+			foreach (HoldingViewModel holdingViewModel in this.Holdings)
+			{
+				res += holdingViewModel.DailyChange;
+			}
+
+			return res;
+		}
+	}
+
+	public decimal DailyChangePercentage
+	{
+		get
+		{
+			if (Value == 0)
+				return 0;
+			return (DailyChange / Value) * 100;
+		}
+	}
+
 	/// <summary>
 	/// A list of all assets currently held in the portfolio.
 	/// </summary>
@@ -61,11 +99,39 @@ public class PortfolioViewModel : ViewModelBase
 	public PortfolioViewModel(Portfolio portfolio)
 	{
 		this._portfolio = portfolio;
+
+		//_portfolio.PropertyChanged += OnPortfolioChanged;
+		//Holdings.CollectionChanged += OnCollectionChanged;
+		//Trades.CollectionChanged += OnCollectionChanged;
 	}
 
-	public bool AddTransaction(Trade trade) => _portfolio.AddTrade(trade);
-
+	public bool AddTransaction(Trade trade)
+	{
+		bool res = _portfolio.AddTrade(trade);
+		onPortfolioChanged(nameof(Trades));
+		return res;
+	}
 	public void RemoveTransaction(Trade trade) => _portfolio.RemoveTrade(trade);
 
-	public void AddToHoldings(Holding holding) => _portfolio.AddToHoldings(holding);
+	public void AddToHoldings(Holding holding)
+	{
+		_portfolio.AddToHoldings(holding);
+		onPortfolioChanged(nameof(Holdings));
+	}
+	//private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+	//{
+	//	OnPropertyChanged(nameof(Value));
+	//}
+	//private void OnPortfolioChanged(object? sender, PropertyChangedEventArgs e)
+	//{
+	//	OnPropertyChanged(nameof(Value));
+	//}
+
+	private void onPortfolioChanged(string propertyName)
+	{
+		OnPropertyChanged(nameof(Value));
+		OnPropertyChanged(nameof(DailyChangePercentage));
+		OnPropertyChanged(nameof(DailyChange));
+	}
+
 }
