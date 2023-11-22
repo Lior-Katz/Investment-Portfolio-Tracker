@@ -36,6 +36,43 @@ namespace PortfolioTracker.Models
 			Trades = new List<Trade>();
 		}
 
+		public decimal Value
+		{
+			get
+			{
+				decimal res = 0;
+				foreach (Holding holding in this.Holdings)
+				{
+					res += holding.Value;
+				}
+				return res;
+			}
+		}
+
+		public decimal DailyChange
+		{
+			get
+			{
+				decimal res = 0;
+				foreach (Holding holding in this.Holdings)
+				{
+					res += holding.DailyChange;
+				}
+
+				return res;
+			}
+		}
+
+		public decimal DailyChangePercentage
+		{
+			get
+			{
+				if (Value == 0)
+					return 0;
+				return (DailyChange / Value) * 100;
+			}
+		}
+
 		/// <summary>
 		/// Adds a transaction to the portfolio's list of transactions, if it doesn't exist already.
 		/// If the transaction already exists, nothing is done.
@@ -48,10 +85,12 @@ namespace PortfolioTracker.Models
 			if (trade == null)
 				throw new NullReferenceException("null trade added");
 
-			if (Trades.Contains(trade))
-				throw new ArgumentException("Trade already exists");
+			//if (Trades.Contains(trade))
+			//	throw new ArgumentException("Trade already exists");
 
 			Trades.Add(trade);
+
+
 
 			// Search for a holding with a matching ticker symbol
 			Holding matchingHolding = Holdings.FirstOrDefault(holding => holding.Ticker == trade.Ticker);
@@ -151,6 +190,13 @@ namespace PortfolioTracker.Models
 			matchingHolding.Quantity += trade.Quantity;
 			matchingHolding.Trades.Add(trade);
 		}
+
+		public void AddTradeToDatabase(ref Trade trade)
+		{
+			// TODO: actually update db
+		}
+
+
 
 
 
