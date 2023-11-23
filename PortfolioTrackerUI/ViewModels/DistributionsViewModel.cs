@@ -37,86 +37,126 @@ public class DistributionsViewModel : ViewModelBase
 	{
 		//this._holdings = portfolioViewModel.Holdings;
 
-		Dictionary<string, decimal> assetTypeDict = new Dictionary<string, decimal>();
-		Dictionary<string, decimal> marketDict = new Dictionary<string, decimal>();
-		Dictionary<string, decimal> sectorDict = new Dictionary<string, decimal>();
+		getDistributionDict(portfolioViewModel, out Dictionary<string, decimal> assetTypeDict, out Dictionary<string, decimal> marketDict, out Dictionary<string, decimal> sectorDict);
+
+
+		_assetTypePieChart = getPieChartFromDict("Asset Type", assetTypeDict);
+
+
+		_sectorPieChart = getPieChartFromDict("Sector", sectorDict);
+
+		_marketPieChart = getPieChartFromDict("Market", marketDict);
+		//_marketPieChart = testChart();
+	}
+
+
+
+	private static void getDistributionDict(PortfolioViewModel portfolioViewModel, out Dictionary<string, decimal> assetTypeDict, out Dictionary<string, decimal> marketDict, out Dictionary<string, decimal> sectorDict)
+	{
+		assetTypeDict = new Dictionary<string, decimal>();
+		marketDict = new Dictionary<string, decimal>();
+		sectorDict = new Dictionary<string, decimal>();
 
 		foreach (HoldingViewModel holdingViewModel in portfolioViewModel.Holdings)
 		{
 			decimal percentage = portfolioViewModel.GetPercentageOfPortfolio(holdingViewModel.Id);
-			if (assetTypeDict.ContainsKey(holdingViewModel.Type))
-			{
-				assetTypeDict[holdingViewModel.Type] += percentage;
-			}
-			else
-			{
-				assetTypeDict.Add(holdingViewModel.Type, percentage);
-			}
-
-			if (marketDict.ContainsKey(holdingViewModel.Market))
-			{
-				marketDict[holdingViewModel.Market] += percentage;
-			}
-			else
-			{
-				marketDict.Add(holdingViewModel.Market, percentage);
-			}
-
-			if (sectorDict.ContainsKey(holdingViewModel.Sector))
-			{
-				sectorDict[holdingViewModel.Sector] += percentage;
-			}
-			else
-			{
-				sectorDict.Add(holdingViewModel.Sector, percentage);
-			}
+			updateDict(assetTypeDict, holdingViewModel.Type, percentage);
+			updateDict(marketDict, holdingViewModel.Market, percentage);
+			updateDict(sectorDict, holdingViewModel.Sector, percentage);
 		}
+	}
 
-		//List<PieSeries<decimal> series = new ISeries();
-		//ObservableCollection<PieSeries<decimal>> arr = assetTypeDict.Select(pair => new PieSeries<decimal>
-		//{
-		//	Values = new[] {pair.Value},
-		//	Name = pair.Key
-		//}).ToList();
-		//List<PieSeries<decimal>> parr = assetTypeDict.Select(pair => new PieSeries<decimal>
-		//{
-		//	Values = new[] { pair.Value },
-		//	Name = pair.Key
-		//}).ToList();
-		//ObservableCollection<PieSeries<decimal>> arr = new ObservableCollection<PieSeries<decimal>>(parr);
+	private static void updateDict(Dictionary<string, decimal> dict, string key, decimal percentage)
+	{
+		if (dict.ContainsKey(key))
+		{
+			dict[key] += percentage;
+		}
+		else
+		{
+			dict.Add(key, percentage);
+		}
+	}
 
-		_assetTypePieChart = new PieChartViewModel(new ObservableCollection<PieSeries<decimal>>(assetTypeDict.Select(pair => new PieSeries<decimal>
+	private static PieChartViewModel getPieChartFromDict(string chartName, Dictionary<string, decimal> dict)
+	{
+		return new PieChartViewModel(new ObservableCollection<PieSeries<decimal>>(dict.Select(pair => new PieSeries<decimal>
 		{
 			Values = new[] { pair.Value },
-			Name = pair.Key
+			Name = pair.Key,
+			Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 1 },
+			HoverPushout = 8,
+
 		})),
-		new LabelVisual
-		{
-			Text = "Asset Type",
-			TextSize = 25,
-			Padding = new LiveChartsCore.Drawing.Padding(15),
-			Paint = new SolidColorPaint(SKColors.DarkSlateGray)
-		});
+	   new LabelVisual
+	   {
+		   Text = chartName,
+		   TextSize = 25,
+		   Padding = new LiveChartsCore.Drawing.Padding(15),
+		   Paint = new SolidColorPaint(SKColors.DarkSlateGray)
+	   });
+	}
 
 
-		_sectorPieChart = new PieChartViewModel(new ObservableCollection<PieSeries<decimal>>(sectorDict.Select(pair => new PieSeries<decimal>
+	private PieChartViewModel testChart()
+	{
+		return new PieChartViewModel(new[]
 		{
-			Values = new[] { pair.Value },
-			Name = pair.Key
-		})),
-		 new LabelVisual
-		 {
-			 Text = "Sector",
-			 TextSize = 25,
-			 Padding = new LiveChartsCore.Drawing.Padding(15),
-			 Paint = new SolidColorPaint(SKColors.DarkSlateGray)
-		 });
+			new PieSeries<int> {
+				Values = new[]{ 2 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "abc"
+			},
 
-		_marketPieChart = new PieChartViewModel(new ObservableCollection<PieSeries<decimal>>(marketDict.Select(pair => new PieSeries<decimal>
-		{
-			Values = new[] { pair.Value },
-			Name = pair.Key
-		})), new LabelVisual
+			new PieSeries<int> { Values = new[]{ 4 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "def"
+			},
+
+			new PieSeries<int> { Values = new[]{ 1 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "hij"
+			},
+
+			new PieSeries<int> { Values = new[]{ 4 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "klm"
+			},
+
+			new PieSeries<int> { Values = new[]{ 3 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "nop"
+			},
+
+			new PieSeries<int> { Values = new[]{ 1 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "qrs"
+			},
+
+			new PieSeries<int> { Values = new[]{ 4 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "tuv"
+			},
+
+			new PieSeries<int> { Values = new[]{ 3 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "wx"
+			},
+
+			new PieSeries<int> { Values = new[]{ 3 },
+				Stroke = new SolidColorPaint(SKColors.Black) { StrokeThickness = 0.5F },
+				HoverPushout = 8,
+				Name = "yz"
+			},
+		}, new LabelVisual
 		{
 			Text = "Market",
 			TextSize = 25,
