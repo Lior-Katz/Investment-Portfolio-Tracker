@@ -18,19 +18,7 @@ namespace PortfolioTracker.ViewModels
 		}
 
 
-
-		//private int _share = 15;
-		//public int Share
-		//{
-		//	get
-		//	{
-		//		return _share;
-		//	}
-		//	set
-		//	{
-		//		_share = value;
-		//		OnPropertyChanged(nameof(Share));
-		//	}
-		//}
+		// TODO: figure out color change
+		//public SolidColorPaint LegendBackgroundPaint { get; set; } = new SolidColorPaint(new SKColor(205, 194, 209));
 	}
 }
