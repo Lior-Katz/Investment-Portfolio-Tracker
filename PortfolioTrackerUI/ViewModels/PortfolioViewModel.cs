@@ -87,6 +87,10 @@ public class PortfolioViewModel : ViewModelBase
 		_portfolio.AddToHoldings(holding);
 		onPortfolioChanged(nameof(Holdings));
 	}
+
+	public decimal GetPercentageOfPortfolio(int id) => _portfolio.GetPercentageOfPortfolio(id);
+
+
 	//private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	//{
 	//	OnPropertyChanged(nameof(Value));

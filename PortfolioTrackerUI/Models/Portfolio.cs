@@ -196,7 +196,11 @@ namespace PortfolioTracker.Models
 			// TODO: actually update db
 		}
 
-
+		// TODO: implement
+		public int GetPercentageOfPortfolio(int id)
+		{
+			throw new NotImplementedException();
+		}
 
 
 
