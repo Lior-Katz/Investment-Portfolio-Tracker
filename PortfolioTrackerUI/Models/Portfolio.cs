@@ -85,8 +85,8 @@ namespace PortfolioTracker.Models
 			if (trade == null)
 				throw new NullReferenceException("null trade added");
 
-			//if (Trades.Contains(trade))
-			//	throw new ArgumentException("Trade already exists");
+			if (Trades.Contains(trade))
+				throw new ArgumentException("Trade already exists");
 
 			Trades.Add(trade);
 
@@ -102,6 +102,7 @@ namespace PortfolioTracker.Models
 			else
 			{
 				// holding with same ticker already exist
+				// TODO: this doesn't actually change the holding
 				UpdateHoldingWithTrade(ref matchingHolding, trade);
 				return true;
 			}
@@ -135,7 +136,7 @@ namespace PortfolioTracker.Models
 			// potentially use dialog if this is a first time buy
 			//Holding holding = new Holding(trade.Name, trade.Ticker, trade.Quantity, trade.Date, 0, 0, 0, 0, "", "", "");
 
-			// TODO: comparison workd by ID but no ID yet
+			// TODO: comparison works by ID but no ID yet
 			if (Holdings.Contains(holding))
 				throw new ArgumentException("Holding already exists");
 
@@ -199,7 +200,8 @@ namespace PortfolioTracker.Models
 		// TODO: implement
 		public int GetPercentageOfPortfolio(int id)
 		{
-			throw new NotImplementedException();
+			//throw new NotImplementedException();
+			return 1;
 		}
 
 
