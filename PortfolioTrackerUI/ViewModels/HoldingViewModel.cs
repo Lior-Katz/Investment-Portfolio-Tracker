@@ -39,7 +39,7 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// Initial date when this asset was aquired.
 		/// </summary>
-		public DateOnly AquisitionDate => _holding.AquisitionDate;
+		public DateOnly AquisitionDate => _holding.AcquisitionDate;
 
 		/// <summary>
 		/// The periodical payout of this asset.
@@ -95,7 +95,7 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// The portion of the the total value of the portfolio that this asset represents, expressed as a percantage.
 		/// </summary>
-		public decimal PercentofPortfolio => _holding.PercentofPortfolio;
+		public decimal PercentofPortfolio => _holding.PercentOfPortfolio;
 
 		/// <summary>
 		/// Initializes a new instance of HoldingViewModel that represents the holding.

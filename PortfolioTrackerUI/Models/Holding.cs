@@ -30,7 +30,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// Initial date when this asset was aquired.
 		/// </summary>
-		public DateOnly AquisitionDate { get; set; }
+		public DateOnly AcquisitionDate { get; set; }
 		/// <summary>
 		/// The periodical payout of this asset.
 		/// </summary>
@@ -90,7 +90,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// The portion of the the total value of the portfolio that this asset represents, expressed as a percantage.
 		/// </summary>
-		public decimal PercentofPortfolio => getPercentOfPortfolio(Id);
+		public decimal PercentOfPortfolio => getPercentOfPortfolio(Id);
 
 
 		/// <summary>
@@ -99,20 +99,20 @@ namespace PortfolioTracker.Models
 		/// <param name="name">Asset name </param>
 		/// <param name="ticker">Ticker symbol</param>
 		/// <param name="quantity">Quantity held</param>
-		/// <param name="aquisitionDate">Initial date of aquisition</param>
+		/// <param name="acquisitionDate">Initial date of acquisition</param>
 		/// <param name="payout">The periodic payout</param>
 		/// <param name="type">Type of investment vehicle</param>
-		/// <param name="secotr">Sector</param>
+		/// <param name="sector">Sector</param>
 		/// <param name="market">Market</param>
-		public Holding(string name, string ticker, decimal quantity, DateOnly aquisitionDate, decimal yield, decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string secotr, string market)
+		public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, decimal yield, decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string sector, string market)
 		{
 			this.Name = name;
 			this.Ticker = ticker;
 			this.Quantity = quantity;
-			this.AquisitionDate = aquisitionDate;
-			this.Payout = new Payout(yield, payoutTax, payoutCommission, payoutPeriodInMonths, aquisitionDate);
+			this.AcquisitionDate = acquisitionDate;
+			this.Payout = new Payout(yield, payoutTax, payoutCommission, payoutPeriodInMonths, acquisitionDate);
 			this.Type = type;
-			this.Sector = secotr;
+			this.Sector = sector;
 			this.Market = market;
 		}
 
