@@ -74,11 +74,10 @@ public class PortfolioViewModel : ViewModelBase
 		//Trades.CollectionChanged += OnCollectionChanged;
 	}
 
-	public bool AddTransaction(Trade trade)
+	public void AddTransaction(Trade trade)
 	{
-		bool res = _portfolio.AddTrade(trade);
+		_portfolio.AddTrade(trade);
 		onPortfolioChanged(nameof(Trades));
-		return res;
 	}
 	public void RemoveTransaction(Trade trade) => _portfolio.RemoveTrade(trade);
 
@@ -90,6 +89,7 @@ public class PortfolioViewModel : ViewModelBase
 
 	public decimal GetPercentageOfPortfolio(int id) => _portfolio.GetPercentageOfPortfolio(id);
 
+	public bool isHoldingExist(string ticker) => _portfolio.isHoldingExist(ticker);
 
 	//private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
 	//{

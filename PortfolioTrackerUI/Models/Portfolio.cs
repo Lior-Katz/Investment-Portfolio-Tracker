@@ -80,7 +80,7 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		/// <param name="trade">The transaction to add to the list.</param>
 		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
-		public bool AddTrade(Trade trade)
+		public void AddTrade(Trade trade)
 		{
 			if (trade == null)
 				throw new NullReferenceException("null trade added");
@@ -94,17 +94,12 @@ namespace PortfolioTracker.Models
 
 			// Search for a holding with a matching ticker symbol
 			Holding matchingHolding = Holdings.FirstOrDefault(holding => holding.Ticker == trade.Ticker);
-			if (matchingHolding == null)
+			if (matchingHolding != null)
 			{
-				// holding with same ticker doesn't exist
-				return false;
-			}
-			else
-			{
-				// holding with same ticker already exist
+				// holding with same ticker already exists
 				// TODO: this doesn't actually change the holding
+
 				UpdateHoldingWithTrade(ref matchingHolding, trade);
-				return true;
 			}
 		}
 
@@ -204,7 +199,10 @@ namespace PortfolioTracker.Models
 			return 1;
 		}
 
-
+		public bool isHoldingExist(string ticker)
+		{
+			return Holdings.FirstOrDefault(holding => holding.Ticker == ticker, null) != null;
+		}
 
 
 		// TODO: allow tracking of historical portfolio performance. 
