@@ -1,6 +1,7 @@
 ﻿using PortfolioTracker.Models;
 using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
+using PortfolioTracker.Views.UserControls;
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -13,6 +14,8 @@ namespace PortfolioTracker.Commands
 		/// The view model that contains the input from the user through the AddTransactionView
 		/// </summary>
 		private readonly AddTransactionViewModel _addTransactionViewModel;
+
+		private readonly AddTransactionDialogViewModel _addTransactionDialogViewModel = new AddTransactionDialogViewModel();
 
 		/// <summary>
 		/// The portfolio to which the new transaction should be added
@@ -58,6 +61,10 @@ namespace PortfolioTracker.Commands
 		/// <param name="parameter">This parameter is not used, and can be set to null.</param>
 		public override void Execute(object? parameter)
 		{
+			bool isHoldingExist = _portfolio.isHoldingExist(_addTransactionViewModel.Ticker);
+			if (!checkFirstTransactionDetails(_addTransactionViewModel.Ticker, isHoldingExist))
+				return;
+
 			decimal taxPaid = _addTransactionViewModel.TaxRate * _addTransactionViewModel.Rate * _addTransactionViewModel.Quantity;
 			decimal commissionPaid = _addTransactionViewModel.CommissionRate * _addTransactionViewModel.Rate * _addTransactionViewModel.Quantity;
 
@@ -71,27 +78,54 @@ namespace PortfolioTracker.Commands
 						commissionPaid.ToString(),
 						   new CurrencyModel(_addTransactionViewModel.Currency));
 
-			if (!_portfolio.AddTransaction(trade))
-			{
-				// TODO: recieve more information for first time buy
-				MessageBox.Show("First time buy- more info required");
+			_portfolio.AddTransaction(trade);
 
-				Holding holding = new Holding(_addTransactionViewModel.Name,
+			if (isHoldingExist)
+			{
+				base.Execute(parameter);
+				return;
+			}
+
+
+			Holding holding = new Holding(_addTransactionViewModel.Name,
 					_addTransactionViewModel.Ticker,
 					 _addTransactionViewModel.Quantity,
 					 DateOnly.FromDateTime(_addTransactionViewModel.Date),
-					 0,
-					 0,
-					 0,
-					 0,
-					 "",
-					 "",
-					  "");
-				holding.addTrade(trade);
-				_portfolio.AddToHoldings(holding);
-			}
+					 _addTransactionDialogViewModel.PayoutYield,
+					 _addTransactionDialogViewModel.PayoutTax,
+					 _addTransactionDialogViewModel.PayoutCommission,
+					 _addTransactionDialogViewModel.PayoutPeriod,
+					 _addTransactionDialogViewModel.AssetType,
+					 _addTransactionDialogViewModel.Sector,
+					  _addTransactionDialogViewModel.Market);
+
+			holding.addTrade(trade);
+			_portfolio.AddToHoldings(holding);
 
 			base.Execute(parameter);
+		}
+
+		private bool checkFirstTransactionDetails(string ticker, bool isHoldingExist)
+		{
+			if (!isHoldingExist)
+			{
+				if (!getAdditionalInfo())
+				{
+					MessageBox.Show("Must fill details to add transaction.");
+					return false;
+				}
+			}
+			return true;
+		}
+
+		private bool getAdditionalInfo()
+		{
+			AddTransactionDialog dialog = new AddTransactionDialog()
+			{
+				DataContext = _addTransactionDialogViewModel
+			};
+
+			return dialog.ShowDialog() ?? false;
 		}
 
 		/// <summary>
