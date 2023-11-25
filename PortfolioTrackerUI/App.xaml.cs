@@ -1,4 +1,5 @@
 ﻿using PortfolioTracker.Models;
+using PortfolioTracker.Services;
 using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
 using System.Windows;
@@ -14,7 +15,7 @@ namespace PortfolioTracker
 		public App()
 		{
 			_portfolio = new PortfolioViewModel(new Portfolio("MyPortfolio"));
-
+			_portfolio.Id = 1;
 
 			// TODO: populate with data from db
 		}
@@ -22,6 +23,11 @@ namespace PortfolioTracker
 		{
 			NavigationStore navigationStore = new NavigationStore();
 			navigationStore.CurrentViewModel = new DashboardViewModel(_portfolio, navigationStore);
+
+			if (DataService.isPortfoliosEmpty())
+			{
+				_portfolio.Id = DataService.WriteData(_portfolio);
+			}
 
 			MainWindow = new MainWindow()
 			{
