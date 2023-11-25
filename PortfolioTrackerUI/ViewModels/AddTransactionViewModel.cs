@@ -49,17 +49,17 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the transaction is a buy order(true) or a sell order(false).
 		/// </summary>
-		private bool isBuyOrder;
-		public bool IsBuyOrder
+		private string _orderType;
+		public string OrderType
 		{
 			get
 			{
-				return isBuyOrder;
+				return _orderType;
 			}
 			set
 			{
-				isBuyOrder = value;
-				OnPropertyChanged(nameof(IsBuyOrder));
+				_orderType = value;
+				OnPropertyChanged(nameof(OrderType));
 			}
 		}
 

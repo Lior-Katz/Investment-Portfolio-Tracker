@@ -33,17 +33,7 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// A string representation of the transaction type- <c>Buy</c> or <c>Sell</c>.
 		/// </summary>
-		public string OrderType
-		{
-			get
-			{
-				if (_trade.IsBuyOrder)
-				{
-					return "Buy";
-				}
-				return "Sell";
-			}
-		}
+		public string OrderType => _trade.OrderType;
 
 		/// <summary>
 		/// The date when the trade took place.
