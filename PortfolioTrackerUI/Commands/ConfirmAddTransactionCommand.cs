@@ -70,7 +70,7 @@ namespace PortfolioTracker.Commands
 
 			Trade trade = new Trade(_addTransactionViewModel.Name,
 				_addTransactionViewModel.Ticker,
-				 _addTransactionViewModel.IsBuyOrder,
+				 _addTransactionViewModel.OrderType,
 				   DateOnly.FromDateTime(_addTransactionViewModel.Date),
 					 _addTransactionViewModel.Quantity.ToString(),
 					 _addTransactionViewModel.Rate.ToString(),
@@ -78,7 +78,7 @@ namespace PortfolioTracker.Commands
 						commissionPaid.ToString(),
 						   new CurrencyModel(_addTransactionViewModel.Currency));
 
-			_portfolio.AddTransaction(trade);
+			trade = _portfolio.AddTransaction(trade);
 
 			if (isHoldingExist)
 			{
