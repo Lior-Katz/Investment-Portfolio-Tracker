@@ -39,7 +39,7 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// Initial date when this asset was aquired.
 		/// </summary>
-		public DateOnly AquisitionDate => _holding.AcquisitionDate;
+		public DateOnly AcquisitionDate => _holding.AcquisitionDate;
 
 		/// <summary>
 		/// The periodical payout of this asset.
