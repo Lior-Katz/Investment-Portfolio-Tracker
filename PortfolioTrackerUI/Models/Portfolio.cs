@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PortfolioTracker.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,10 +7,12 @@ namespace PortfolioTracker.Models
 {
 	public class Portfolio
 	{
+
+
 		/// <summary>
 		/// The unique identifier of the portfolio.
 		/// </summary>
-		public int Id { get; private set; }
+		public int Id { get; set; }
 		/// <summary>
 		/// The name of the portfolio.
 		/// </summary>
@@ -80,13 +83,15 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		/// <param name="trade">The transaction to add to the list.</param>
 		/// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
-		public void AddTrade(Trade trade)
+		public Trade AddTrade(Trade trade)
 		{
 			if (trade == null)
 				throw new NullReferenceException("null trade added");
 
-			if (Trades.Contains(trade))
-				throw new ArgumentException("Trade already exists");
+			//if (Trades.Contains(trade))
+			//	throw new ArgumentException("Trade already exists");
+
+			trade.Id = DataService.WriteData(this.Id, trade);
 
 			Trades.Add(trade);
 
@@ -101,6 +106,8 @@ namespace PortfolioTracker.Models
 
 				UpdateHoldingWithTrade(ref matchingHolding, trade);
 			}
+
+			return trade;
 		}
 
 
@@ -127,13 +134,11 @@ namespace PortfolioTracker.Models
 			if (holding == null)
 				throw new NullReferenceException();
 
-			// TODO: find a way to get the real info
-			// potentially use dialog if this is a first time buy
-			//Holding holding = new Holding(trade.Name, trade.Ticker, trade.Quantity, trade.Date, 0, 0, 0, 0, "", "", "");
-
 			// TODO: comparison works by ID but no ID yet
-			if (Holdings.Contains(holding))
-				throw new ArgumentException("Holding already exists");
+			//if (Holdings.Contains(holding))
+			//	throw new ArgumentException("Holding already exists");
+
+			holding.Id = DataService.WriteData(this.Id, holding);
 
 			Holdings.Add(holding);
 		}
@@ -195,8 +200,7 @@ namespace PortfolioTracker.Models
 		// TODO: implement
 		public int GetPercentageOfPortfolio(int id)
 		{
-			//throw new NotImplementedException();
-			return 1;
+			throw new NotImplementedException();
 		}
 
 		public bool isHoldingExist(string ticker)
