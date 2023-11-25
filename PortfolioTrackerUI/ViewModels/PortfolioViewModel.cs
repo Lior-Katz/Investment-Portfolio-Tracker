@@ -9,7 +9,11 @@ public class PortfolioViewModel : ViewModelBase
 	/// <summary>
 	/// The unique identifier of the portfolio.
 	/// </summary>
-	public int Id => _portfolio.Id;
+	public int Id
+	{
+		get => _portfolio.Id;
+		set => _portfolio.Id = value;
+	}
 	/// <summary>
 	/// The name of the portfolio.
 	/// </summary>
@@ -74,10 +78,11 @@ public class PortfolioViewModel : ViewModelBase
 		//Trades.CollectionChanged += OnCollectionChanged;
 	}
 
-	public void AddTransaction(Trade trade)
+	public Trade AddTransaction(Trade trade)
 	{
-		_portfolio.AddTrade(trade);
+		Trade res = _portfolio.AddTrade(trade);
 		onPortfolioChanged(nameof(Trades));
+		return res;
 	}
 	public void RemoveTransaction(Trade trade) => _portfolio.RemoveTrade(trade);
 
