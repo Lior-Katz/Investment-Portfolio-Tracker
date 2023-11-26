@@ -75,5 +75,8 @@ namespace PortfolioTracker.ViewModels
 		/// </summary>
 		/// <param name="trade">The trade to represent.</param>
 		public TradeViewModel(Trade trade) => this._trade = trade;
+
+		public Trade ToTrade() => _trade;
+
 	}
 }
