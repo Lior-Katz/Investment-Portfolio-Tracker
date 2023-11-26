@@ -44,7 +44,7 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// The periodical payout of this asset.
 		/// </summary>
-		public Payout Payout => _holding.Payout;
+		public Payout? Payout => _holding.Payout;
 
 		/// <summary>
 		/// The type of investment vehicle.
@@ -106,5 +106,6 @@ namespace PortfolioTracker.ViewModels
 			_holding = holding;
 		}
 
+		public Holding ToHolding() => _holding;
 	}
 }

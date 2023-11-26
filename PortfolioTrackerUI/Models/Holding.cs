@@ -34,7 +34,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// The periodical payout of this asset.
 		/// </summary>
-		public Payout Payout { get; set; }
+		public Payout? Payout { get; set; }
 		/// <summary>
 		/// The type of investment vehicle.
 		/// </summary>
@@ -104,13 +104,16 @@ namespace PortfolioTracker.Models
 		/// <param name="type">Type of investment vehicle</param>
 		/// <param name="sector">Sector</param>
 		/// <param name="market">Market</param>
-		public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, decimal yield, decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string sector, string market)
+		public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, decimal yield, decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string sector, string market, DateOnly? payoutLastPaid = null)
 		{
+			if (yield > 0 && payoutLastPaid == null)
+				throw new ArgumentException(nameof(payoutLastPaid) + " is null, while yield > 0");
+
 			this.Name = name;
 			this.Ticker = ticker;
 			this.Quantity = quantity;
 			this.AcquisitionDate = acquisitionDate;
-			this.Payout = new Payout(yield, payoutTax, payoutCommission, payoutPeriodInMonths, acquisitionDate);
+			this.Payout = yield > 0 ? new Payout(yield, payoutTax, payoutCommission, payoutPeriodInMonths, payoutLastPaid != null ? payoutLastPaid.Value : acquisitionDate) : null;
 			this.Type = type;
 			this.Sector = sector;
 			this.Market = market;
