@@ -1,5 +1,4 @@
-﻿using PortfolioTracker.Models;
-using PortfolioTracker.Services;
+﻿using PortfolioTracker.Services;
 using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
 using System.Windows;
@@ -14,8 +13,7 @@ namespace PortfolioTracker
 		private readonly PortfolioViewModel _portfolio;
 		public App()
 		{
-			_portfolio = new PortfolioViewModel(new Portfolio("MyPortfolio"));
-			_portfolio.Id = 1;
+			_portfolio = DataService.RetrievePortfolio(1);
 
 			// TODO: populate with data from db
 		}
@@ -38,5 +36,14 @@ namespace PortfolioTracker
 
 			base.OnStartup(e);
 		}
+
+		//private PortfolioViewModel initPortfolio(string name)
+		//{
+
+		//	Portfolio portfolio = 
+
+
+
+		//}
 	}
 }
