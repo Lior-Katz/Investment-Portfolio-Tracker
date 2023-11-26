@@ -20,11 +20,11 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// A list of all assets currently held in the portfolio.
 		/// </summary>
-		public List<Holding> Holdings { get; } = new List<Holding>();
+		public List<Holding> Holdings { get; set; } = new List<Holding>();
 		/// <summary>
 		/// A record of all trades recorded in this portfolio.
 		/// </summary>
-		public List<Trade> Trades { get; } = new List<Trade>();
+		public List<Trade> Trades { get; set; } = new List<Trade>();
 
 		public List<Holding> MostInfluentialHoldings => GetMostInfluentialHoldings();
 

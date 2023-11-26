@@ -1,5 +1,6 @@
 ﻿using PortfolioTracker.Models;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace PortfolioTracker.ViewModels;
 public class PortfolioViewModel : ViewModelBase
@@ -30,14 +31,10 @@ public class PortfolioViewModel : ViewModelBase
 	/// </summary>
 	public ObservableCollection<HoldingViewModel> Holdings
 	{
-		get
+		get => new ObservableCollection<HoldingViewModel>(_portfolio.Holdings.Select(holding => new HoldingViewModel(holding)).ToList());
+		set
 		{
-			ObservableCollection<HoldingViewModel> result = new ObservableCollection<HoldingViewModel>();
-			foreach (Holding holding in _portfolio.Holdings)
-			{
-				result.Add(new HoldingViewModel(holding));
-			}
-			return result;
+			_portfolio.Holdings = value.Select(holdingViewModel => holdingViewModel.ToHolding()).ToList();
 		}
 	}
 	/// <summary>
@@ -45,14 +42,10 @@ public class PortfolioViewModel : ViewModelBase
 	/// </summary>
 	public ObservableCollection<TradeViewModel> Trades
 	{
-		get
+		get => new ObservableCollection<TradeViewModel>(_portfolio.Trades.Select(trade => new TradeViewModel(trade)).ToList());
+		set
 		{
-			ObservableCollection<TradeViewModel> result = new ObservableCollection<TradeViewModel>();
-			foreach (Trade trade in _portfolio.Trades)
-			{
-				result.Add(new TradeViewModel(trade));
-			}
-			return result;
+			_portfolio.Trades = value.Select(tradeViewModel => tradeViewModel.ToTrade()).ToList();
 		}
 	}
 
