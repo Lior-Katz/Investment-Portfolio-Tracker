@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Linq;
 
 namespace PortfolioTracker.Services
 {
@@ -57,7 +58,7 @@ namespace PortfolioTracker.Services
 				}
 			}
 
-			//portfolio.Trades = RetrieveTransactions(portfolio.Id);
+			portfolio.Trades = RetrieveTransactions(portfolio.Id);
 			portfolio.Holdings = RetrieveHoldings(portfolio.Id);
 			return portfolio;
 		}
@@ -67,7 +68,7 @@ namespace PortfolioTracker.Services
 			ObservableCollection<HoldingViewModel> holdings = new ObservableCollection<HoldingViewModel>();
 			using (SqlConnection connection = new SqlConnection(ConnectionString))
 			{
-				string retrieveQuery = "SELECT id, portfolioId, name, ticker, quantity, acquisitionDate, type, sector, market, payoutYield, payoutTax, payoutCommission, payoutPeriod, payoutLastPaid FROM Holdings WHERE portfolioId = @portfolioId";
+				string retrieveQuery = "SELECT id, name, ticker, quantity, acquisitionDate, type, sector, market, payoutYield, payoutTax, payoutCommission, payoutPeriod, payoutLastPaid FROM Holdings WHERE portfolioId = @portfolioId";
 
 				connection.Open();
 
@@ -93,14 +94,58 @@ namespace PortfolioTracker.Services
 							int payoutPeriod = reader.IsDBNull(reader.GetOrdinal("payoutPeriod")) ? 0 : reader.GetInt32(reader.GetOrdinal("payoutPeriod"));
 							DateOnly? payoutLastPaid = reader.IsDBNull(reader.GetOrdinal("payoutLastPaid")) ? null : DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
 
-							holdings.Add(new HoldingViewModel(new Holding(name, ticker, quantity, acquisitionDate, payoutYield, payoutTax, payoutCommission, payoutPeriod, type, sector, market, payoutLastPaid)));
+							HoldingViewModel holdingToAdd = new HoldingViewModel(new Holding(name, ticker, quantity, acquisitionDate, payoutYield, payoutTax, payoutCommission, payoutPeriod, type, sector, market, payoutLastPaid, getHoldingTrades(ticker), id));
+
+							holdings.Add(holdingToAdd);
+
+
 						}
 					}
 				}
 			}
 			return holdings;
 		}
-		private static List<TradeViewModel> RetrieveTransactions(int id) => throw new NotImplementedException();
+
+		private static ObservableCollection<TradeViewModel> RetrieveTransactions(int portfolioId)
+		{
+			ObservableCollection<TradeViewModel> trades = new ObservableCollection<TradeViewModel>();
+			foreach (Trade trade in getTradesWithCondition(
+				"portfolioId = @portfolioId",
+				new (string, object)[] { ("@portfolioId", portfolioId) }))
+			{
+				trades.Add(new TradeViewModel(trade));
+			}
+			//using (SqlConnection connection = new SqlConnection(ConnectionString))
+			//{
+			//	connection.Open();
+			//	string getTransactionsQuery = "SELECT id, date, name, ticker, quantity, price, tax, commission, orderType, currency FROM Transactions WHERE portfolioId = @portfolioId";
+
+			//	using (SqlCommand command = new SqlCommand(getTransactionsQuery, connection))
+			//	{
+			//		command.Parameters.AddWithValue("@portfolioId", portfolioId);
+			//		using (SqlDataReader reader = command.ExecuteReader())
+			//		{
+			//			while (reader.Read())
+			//			{
+			//				int id = reader.GetInt32(reader.GetOrdinal("id"));
+			//				DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("date")));
+			//				string name = reader.GetString(reader.GetOrdinal("name"));
+			//				string ticker = reader.GetString(reader.GetOrdinal("ticker"));
+			//				decimal quantity = reader.GetDecimal(reader.GetOrdinal("quantity"));
+			//				decimal price = reader.GetDecimal(reader.GetOrdinal("price"));
+			//				decimal tax = reader.IsDBNull(reader.GetOrdinal("tax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("tax"));
+			//				decimal commission = reader.IsDBNull(reader.GetOrdinal("commission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("commission"));
+			//				string orderType = reader.GetString(reader.GetOrdinal("orderType"));
+			//				string currency = reader.GetString(reader.GetOrdinal("currency"));
+
+			//				trades.Add(new TradeViewModel(new Trade(name, ticker, orderType, date, quantity, price, tax, commission, new CurrencyModel(currency))));
+			//			}
+			//		}
+			//	}
+			//}
+
+			return trades;
+		}
 
 		public static int WriteData(PortfolioViewModel portfolio)
 		{
@@ -175,5 +220,63 @@ namespace PortfolioTracker.Services
 
 			}
 		}
+
+		private static List<Trade> getHoldingTrades(string ticker)
+		{
+			return getTradesWithCondition(
+				 "ticker = @ticker",
+				  new (string, object)[] { ("@ticker", ticker) }).ToList();
+		}
+
+		/// <summary>
+		/// Retrieves the trades the satisfy <paramref name="condition"/> from database.
+		/// </summary>
+		/// <param name="condition">A string representing the condition to impose on the retrieved trades.</param>
+		/// <param name="queryParams">An array of (string paramName, object value), that represent the value to be passed into paramName placeholder in the condition.</param>
+		/// <returns>An iterator of <see cref="Trade" /> objects that represent the trades retrieved.</returns>
+		/// <remarks>
+		/// <paramref name="condition"/> must be an SQL Server conditional statement, without WHERE keyword, and names of parameters must be "@paramName".
+		/// paramName of <paramref name="queryParams"/> must be a string "@paramName". value is the value to use in place of @paramName
+		/// </remarks>
+		/// <example>
+		/// getTradesWithCondition("myFirstColumn = @myNum OR mySecondColumn = @myStr", [("@myNum", 5), ("@myStr", "hello"))
+		/// </example>
+		private static IEnumerable<Trade> getTradesWithCondition(string condition, params (string paramName, object value)[] queryParams)
+		{
+			using (SqlConnection connection = new SqlConnection(ConnectionString))
+			{
+				connection.Open();
+				//string getTransactionsQuery = "SELECT id, date, name, ticker, quantity, price, tax, commission, orderType, currency FROM Transactions WHERE portfolioId = @portfolioId";
+				string getTransactionsQuery = "SELECT id, date, name, ticker, quantity, price, tax, commission, orderType, currency FROM Transactions WHERE " + condition;
+
+				using (SqlCommand command = new SqlCommand(getTransactionsQuery, connection))
+				{
+					//command.Parameters.AddWithValue("@portfolioId", portfolioId);
+					foreach ((string paramName, object value) tup in queryParams)
+					{
+						command.Parameters.AddWithValue(tup.paramName, tup.value);
+					}
+					using (SqlDataReader reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							int id = reader.GetInt32(reader.GetOrdinal("id"));
+							DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("date")));
+							string name = reader.GetString(reader.GetOrdinal("name"));
+							string ticker = reader.GetString(reader.GetOrdinal("ticker"));
+							decimal quantity = reader.GetDecimal(reader.GetOrdinal("quantity"));
+							decimal price = reader.GetDecimal(reader.GetOrdinal("price"));
+							decimal tax = reader.IsDBNull(reader.GetOrdinal("tax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("tax"));
+							decimal commission = reader.IsDBNull(reader.GetOrdinal("commission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("commission"));
+							string orderType = reader.GetString(reader.GetOrdinal("orderType"));
+							string currency = reader.GetString(reader.GetOrdinal("currency"));
+
+							yield return new Trade(id, name, ticker, orderType, date, quantity, price, tax, commission, new CurrencyModel(currency));
+						}
+					}
+				}
+			}
+		}
+
 	}
 }

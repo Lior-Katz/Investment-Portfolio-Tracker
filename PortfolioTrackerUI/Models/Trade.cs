@@ -96,6 +96,20 @@ namespace PortfolioTracker.Models
 			this.Currency = currency;
 		}
 
+		public Trade(int id, string name, string ticker, string orderType, DateOnly date, decimal quantity, decimal price, decimal tax, decimal commission, CurrencyModel currency)
+		{
+			this.Id = id;
+			this.Name = name;
+			this.Ticker = ticker;
+			this.OrderType = orderType;
+			this.Date = date;
+			this.Quantity = quantity;
+			this.Price = price;
+			this.Tax = tax;
+			this.Commission = commission;
+			this.Currency = currency;
+		}
+
 		/// <summary>
 		/// Determines whether two Trade objects are equal based on their IDs.
 		/// </summary>
