@@ -104,11 +104,12 @@ namespace PortfolioTracker.Models
 		/// <param name="type">Type of investment vehicle</param>
 		/// <param name="sector">Sector</param>
 		/// <param name="market">Market</param>
-		public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, decimal yield, decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string sector, string market, DateOnly? payoutLastPaid = null)
+		public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, decimal yield, decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string sector, string market, DateOnly? payoutLastPaid = null, List<Trade>? trades = null, int id = 0)
 		{
 			if (yield > 0 && payoutLastPaid == null)
 				throw new ArgumentException(nameof(payoutLastPaid) + " is null, while yield > 0");
 
+			this.Id = id;
 			this.Name = name;
 			this.Ticker = ticker;
 			this.Quantity = quantity;
@@ -117,6 +118,9 @@ namespace PortfolioTracker.Models
 			this.Type = type;
 			this.Sector = sector;
 			this.Market = market;
+
+			if (trades != null)
+				this.Trades = trades;
 		}
 
 		/// <summary>
