@@ -85,7 +85,7 @@ public class PortfolioViewModel : ViewModelBase
 		onPortfolioChanged(nameof(Holdings));
 	}
 
-	public decimal GetPercentageOfPortfolio(int id) => _portfolio.GetPercentageOfPortfolio(id);
+	public decimal GetPercentageOfPortfolio(int holdingId) => _portfolio.GetPercentageOfPortfolio(holdingId);
 
 	public bool isHoldingExist(string ticker) => _portfolio.isHoldingExist(ticker);
 

@@ -93,11 +93,6 @@ namespace PortfolioTracker.ViewModels
 		public decimal DailyChange => _holding.DailyChange;
 
 		/// <summary>
-		/// The portion of the the total value of the portfolio that this asset represents, expressed as a percantage.
-		/// </summary>
-		public decimal PercentofPortfolio => _holding.PercentOfPortfolio;
-
-		/// <summary>
 		/// Initializes a new instance of HoldingViewModel that represents the holding.
 		/// </summary>
 		/// <param name="holding">The holding to represent.</param>

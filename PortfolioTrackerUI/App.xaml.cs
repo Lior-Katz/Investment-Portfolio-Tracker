@@ -13,7 +13,7 @@ namespace PortfolioTracker
 		private readonly PortfolioViewModel _portfolio;
 		public App()
 		{
-			_portfolio = DataService.RetrievePortfolio(1);
+			_portfolio = DataService.RetrievePortfolio(2);
 
 			// TODO: populate with data from db
 		}
@@ -22,10 +22,6 @@ namespace PortfolioTracker
 			NavigationStore navigationStore = new NavigationStore();
 			navigationStore.CurrentViewModel = new DashboardViewModel(_portfolio, navigationStore);
 
-			if (DataService.isPortfoliosEmpty())
-			{
-				_portfolio.Id = DataService.WriteData(_portfolio);
-			}
 
 			MainWindow = new MainWindow()
 			{
@@ -36,14 +32,5 @@ namespace PortfolioTracker
 
 			base.OnStartup(e);
 		}
-
-		//private PortfolioViewModel initPortfolio(string name)
-		//{
-
-		//	Portfolio portfolio = 
-
-
-
-		//}
 	}
 }
