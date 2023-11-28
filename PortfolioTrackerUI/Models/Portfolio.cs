@@ -134,10 +134,6 @@ namespace PortfolioTracker.Models
 			if (holding == null)
 				throw new NullReferenceException();
 
-			// TODO: comparison works by ID but no ID yet
-			//if (Holdings.Contains(holding))
-			//	throw new ArgumentException("Holding already exists");
-
 			holding.Id = DataService.WriteData(this.Id, holding);
 
 			Holdings.Add(holding);
@@ -192,15 +188,10 @@ namespace PortfolioTracker.Models
 			matchingHolding.Trades.Add(trade);
 		}
 
-		public void AddTradeToDatabase(ref Trade trade)
+		public decimal GetPercentageOfPortfolio(int holdingId)
 		{
-			// TODO: actually update db
-		}
-
-		// TODO: implement
-		public int GetPercentageOfPortfolio(int id)
-		{
-			throw new NotImplementedException();
+			Holding? match = this.Holdings.Find(holding => holding.Id == holdingId);
+			return match != null ? match.Value / this.Value : 0;
 		}
 
 		public bool isHoldingExist(string ticker)
