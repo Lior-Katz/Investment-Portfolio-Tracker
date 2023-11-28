@@ -128,7 +128,7 @@ namespace PortfolioTracker.Services
 					command.Parameters.AddWithValue("@price", trade.Price);
 					command.Parameters.AddWithValue("@tax", trade.Tax);
 					command.Parameters.AddWithValue("@commission", trade.Commission);
-					command.Parameters.AddWithValue("@orderType", "Sell" /*trade.OrderType*/);
+					command.Parameters.AddWithValue("@orderType", trade.IsBuyOrder ? "Buy" : "Sell");
 					command.Parameters.AddWithValue("@currency", trade.Currency.ToString());
 
 
@@ -241,10 +241,10 @@ namespace PortfolioTracker.Services
 							decimal price = reader.GetDecimal(reader.GetOrdinal("price"));
 							decimal tax = reader.IsDBNull(reader.GetOrdinal("tax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("tax"));
 							decimal commission = reader.IsDBNull(reader.GetOrdinal("commission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("commission"));
-							string orderType = reader.GetString(reader.GetOrdinal("orderType"));
+							bool isBuyOrder = reader.GetString(reader.GetOrdinal("orderType")) == "Sell" ? true : false;
 							string currency = reader.GetString(reader.GetOrdinal("currency"));
 
-							yield return new Trade(id, name, ticker, orderType, date, quantity, price, tax, commission, new CurrencyModel(currency));
+							yield return new Trade(id, name, ticker, isBuyOrder, date, quantity, price, tax, commission, new CurrencyModel(currency));
 						}
 					}
 				}

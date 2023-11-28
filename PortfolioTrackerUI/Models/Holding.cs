@@ -136,9 +136,9 @@ namespace PortfolioTracker.Models
 			{
 				decimal value = trade.Quantity * trade.Price;
 				value += value * trade.Commission + value * trade.Tax;
-				if (trade.OrderType == "Buy")
+				if (trade.IsBuyOrder)
 					totalSpent += value;
-				else if (trade.OrderType == "Sell")
+				else if (!trade.IsBuyOrder)
 					totalMade += value;
 			}
 

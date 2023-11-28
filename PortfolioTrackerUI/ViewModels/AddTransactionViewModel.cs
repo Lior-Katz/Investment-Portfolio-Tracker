@@ -49,17 +49,17 @@ namespace PortfolioTracker.ViewModels
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the transaction is a buy order(true) or a sell order(false).
 		/// </summary>
-		private string _orderType;
-		public string OrderType
+		private bool _isBuyOrder;
+		public bool IsBuyOrder
 		{
 			get
 			{
-				return _orderType;
+				return _isBuyOrder;
 			}
 			set
 			{
-				_orderType = value;
-				OnPropertyChanged(nameof(OrderType));
+				_isBuyOrder = value;
+				OnPropertyChanged(nameof(IsBuyOrder));
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace PortfolioTracker.ViewModels
 		{
 			get
 			{
-				return _currency?.ToString();
+				return _currency.ToString();
 			}
 			set
 			{
@@ -177,7 +177,7 @@ namespace PortfolioTracker.ViewModels
 		/// </summary>
 		public ICommand CancelCommand { get; }
 
-		// TODO: maybe change parameter to be PortfolioViewModel
+		// TODO: Update documentation
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AddTransactionViewModel"/> class.
 		/// </summary>

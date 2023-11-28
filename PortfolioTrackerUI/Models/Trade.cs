@@ -28,7 +28,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// Indicates whether the transaction is a buy order (true) or a sell order (false).
 		/// </summary>
-		public string OrderType { get; set; }
+		public bool IsBuyOrder { get; set; }
 
 		/// <summary>
 		/// The date when the trade took place.
@@ -77,11 +77,11 @@ namespace PortfolioTracker.Models
 		/// <param name="price">The price per unit of the asset in the trade.</param>
 		/// <param name="tax">The tax amount associated with the trade.</param>
 		/// <param name="commission">The commission amount associated with the trade.</param>
-		public Trade(string name, string ticker, string orderType, DateOnly date, string quantity, string price, string tax, string commission, CurrencyModel currency)
+		public Trade(string name, string ticker, bool orderType, DateOnly date, string quantity, string price, string tax, string commission, CurrencyModel currency)
 		{
 			this.Name = name;
 			this.Ticker = ticker;
-			this.OrderType = orderType;
+			this.IsBuyOrder = orderType;
 			this.Date = date;
 			decimal quantityValue, priceValue, taxValue, commissionValue;
 			decimal.TryParse(quantity, out quantityValue);
@@ -96,12 +96,12 @@ namespace PortfolioTracker.Models
 			this.Currency = currency;
 		}
 
-		public Trade(int id, string name, string ticker, string orderType, DateOnly date, decimal quantity, decimal price, decimal tax, decimal commission, CurrencyModel currency)
+		public Trade(int id, string name, string ticker, bool orderType, DateOnly date, decimal quantity, decimal price, decimal tax, decimal commission, CurrencyModel currency)
 		{
 			this.Id = id;
 			this.Name = name;
 			this.Ticker = ticker;
-			this.OrderType = orderType;
+			this.IsBuyOrder = orderType;
 			this.Date = date;
 			this.Quantity = quantity;
 			this.Price = price;

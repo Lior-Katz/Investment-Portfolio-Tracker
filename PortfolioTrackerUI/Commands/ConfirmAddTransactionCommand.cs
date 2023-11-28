@@ -70,7 +70,7 @@ namespace PortfolioTracker.Commands
 
 			Trade trade = new Trade(_addTransactionViewModel.Name,
 				_addTransactionViewModel.Ticker,
-				 _addTransactionViewModel.OrderType,
+				 _addTransactionViewModel.IsBuyOrder,
 				   DateOnly.FromDateTime(_addTransactionViewModel.Date),
 					 _addTransactionViewModel.Quantity.ToString(),
 					 _addTransactionViewModel.Rate.ToString(),
