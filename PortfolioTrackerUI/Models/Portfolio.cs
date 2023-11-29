@@ -91,7 +91,7 @@ namespace PortfolioTracker.Models
 			//if (Trades.Contains(trade))
 			//	throw new ArgumentException("Trade already exists");
 
-			trade.Id = DataService.WriteData(this.Id, trade);
+			trade.Id = DataService.WriteToSQL(this.Id, trade);
 
 			Trades.Add(trade);
 
@@ -134,7 +134,7 @@ namespace PortfolioTracker.Models
 			if (holding == null)
 				throw new NullReferenceException();
 
-			holding.Id = DataService.WriteData(this.Id, holding);
+			holding.Id = DataService.WriteToSQL(this.Id, holding);
 
 			Holdings.Add(holding);
 		}

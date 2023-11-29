@@ -14,8 +14,6 @@ namespace PortfolioTracker
 		public App()
 		{
 			_portfolio = DataService.RetrievePortfolio(2);
-
-			// TODO: populate with data from db
 		}
 		protected override void OnStartup(StartupEventArgs e)
 		{
