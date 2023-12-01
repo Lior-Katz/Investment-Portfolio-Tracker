@@ -25,7 +25,7 @@ namespace PortfolioTracker.Commands
 
 
 		/// <summary>
-		/// Initializes a new instance of ConfirmAddTransactionCommand with the porfolio to add the transaction to,
+		/// Initializes a new instance of ConfirmAddTransactionCommand with the portfolio to add the transaction to,
 		/// and the the ViewModel that contains the transaction information.
 		/// </summary>
 		/// <param name="addTransactionViewModel">The ViewModel that contains the information of the trade, through binding to user input fields</param>
@@ -61,9 +61,13 @@ namespace PortfolioTracker.Commands
 		/// <param name="parameter">This parameter is not used, and can be set to null.</param>
 		public override void Execute(object? parameter)
 		{
+			// Check if there is already a holding with a matching ticker symbol in the portfolio.
 			bool isHoldingExist = _portfolio.isHoldingExist(_addTransactionViewModel.Ticker);
-			if (!checkFirstTransactionDetails(_addTransactionViewModel.Ticker, isHoldingExist))
+
+			if (!isHoldingExist && !getAdditionalInfo())
+			{
 				return;
+			}
 
 			decimal taxPaid = _addTransactionViewModel.TaxRate * _addTransactionViewModel.Rate * _addTransactionViewModel.Quantity;
 			decimal commissionPaid = _addTransactionViewModel.CommissionRate * _addTransactionViewModel.Rate * _addTransactionViewModel.Quantity;
@@ -105,19 +109,10 @@ namespace PortfolioTracker.Commands
 			base.Execute(parameter);
 		}
 
-		private bool checkFirstTransactionDetails(string ticker, bool isHoldingExist)
-		{
-			if (!isHoldingExist)
-			{
-				if (!getAdditionalInfo())
-				{
-					MessageBox.Show("Must fill details to add transaction.");
-					return false;
-				}
-			}
-			return true;
-		}
-
+		/// <summary>
+		/// Prompts the user to input additional info for holdings that do not appear in the portfolio yet.
+		/// </summary>
+		/// <returns></returns>
 		private bool getAdditionalInfo()
 		{
 			AddTransactionDialog dialog = new AddTransactionDialog()
@@ -125,11 +120,16 @@ namespace PortfolioTracker.Commands
 				DataContext = _addTransactionDialogViewModel
 			};
 
-			return dialog.ShowDialog() ?? false;
+			if (dialog.ShowDialog() == false)
+			{
+				MessageBox.Show("Must fill details to add transaction.");
+				return false;
+			}
+			return true;
 		}
 
 		/// <summary>
-		/// Handels the property changes in AddTransactionViewModel by checking if they affect the value of CanExecute.
+		/// Handles the property changes in AddTransactionViewModel by checking if they affect the value of CanExecute.
 		/// </summary>
 		/// <param name="sender">The object that triggered the event. Not used and can be set to null.</param>
 		/// <param name="e">Event arguments containing information about the event. Not used and can be set to null.</param>

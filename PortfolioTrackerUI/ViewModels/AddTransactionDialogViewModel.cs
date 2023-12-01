@@ -2,19 +2,6 @@
 {
 	class AddTransactionDialogViewModel : ViewModelBase
 	{
-		//private string _ticker = "";
-		//public string Ticker
-		//{
-		//	get
-		//	{
-		//		return _ticker;
-		//	}
-		//	set
-		//	{
-		//		_ticker = value;
-		//		OnPropertyChanged(nameof(Ticker));
-		//	}
-		//}
 
 		private decimal _payoutYield;
 		public decimal PayoutYield
@@ -114,9 +101,5 @@
 				OnPropertyChanged(nameof(Market));
 			}
 		}
-
-		//public Payout Payout => new Payout(PayoutYield, PayoutTax, PayoutCommission, PayoutPeriod, DateOnly.FromDateTime(DateTime.Today));
-
-
 	}
 }

@@ -9,10 +9,12 @@ using System.Linq;
 
 namespace PortfolioTracker.Services
 {
+	/// <summary>
+	/// This class provides data services for interacting with a portfolio tracking system.
+	/// </summary>
 	public static class DataService
 	{
 		private static string ConnectionString { get; } = ConfigurationManager.ConnectionStrings["sqlConnectionString"].ConnectionString;
-
 
 		public static bool isPortfoliosEmpty()
 		{
@@ -25,6 +27,11 @@ namespace PortfolioTracker.Services
 			return (int) command.ExecuteScalar() == 0;
 		}
 
+		/// <summary>
+		/// Retrieves a portfolio from the database based on the provided ID.
+		/// </summary>
+		/// <param name="id">The ID of the portfolio to retrieve.</param>
+		/// <returns>A  <see cref="PortfolioViewModel" /> representing the retrieved portfolio.</returns>
 		public static PortfolioViewModel RetrievePortfolio(int id)
 		{
 			PortfolioViewModel portfolio;
@@ -39,21 +46,28 @@ namespace PortfolioTracker.Services
 
 			if (reader.Read())
 			{
+				// Portfolio exists in the database
 				portfolio = new PortfolioViewModel(new Portfolio(reader.GetString(reader.GetOrdinal("name"))));
 				portfolio.Id = id;
 			}
 			else
 			{
+				// Portfolio does not exist, create a new one with default values
 				portfolio = new PortfolioViewModel(new Portfolio("Untitled Portfolio"));
 				portfolio.Id = WriteToSQL(portfolio);
 			}
 
+			// Retrieve associated transactions and holdings
 			portfolio.Trades = RetrieveTransactions(portfolio.Id);
 			portfolio.Holdings = RetrieveHoldings(portfolio.Id);
 			return portfolio;
 		}
 
-
+		/// <summary>
+		/// Writes a portfolio to the database and returns the generated ID.
+		/// </summary>
+		/// <param name="portfolio">The PortfolioViewModel to write to the database.</param>
+		/// <returns>The generated ID of the written portfolio.</returns>
 		public static int WriteToSQL(PortfolioViewModel portfolio)
 		{
 			using SqlConnection connection = new SqlConnection(ConnectionString);
@@ -62,14 +76,21 @@ namespace PortfolioTracker.Services
 
 			string query = "INSERT INTO Portfolios (name) OUTPUT INSERTED.id VALUES (@Name)";
 
-			using SqlCommand command = new SqlCommand(query, connection);
-			command.Parameters.AddWithValue("@Name", portfolio.Name);
+			using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
+			{
+				["@Name"] = portfolio.Name
+			});
 
-			// return generated id
+			// Return the generated id
 			return (int) command.ExecuteScalar();
 		}
 
-
+		/// <summary>
+		/// Writes a holding to the database and returns the generated ID.
+		/// </summary>
+		/// <param name="portfolioId">The ID of the portfolio associated with the holding.</param>
+		/// <param name="holding">The Holding object to write to the database.</param>
+		/// <returns>The generated ID of the written holding.</returns>
 		public static int WriteToSQL(int portfolioId, Holding holding)
 		{
 			string query = "INSERT INTO Holdings (portfolioId, name, ticker, quantity, acquisitionDate, type, sector, market) OUTPUT INSERTED.id VALUES (@portfolioId, @name, @ticker, @quantity, @acquisitionDate, @type, @sector, @market)";
@@ -89,20 +110,16 @@ namespace PortfolioTracker.Services
 				["@market"] = holding.Market
 			});
 
-			//command.Parameters.AddWithValue("@portfolioId", portfolioId);
-			//command.Parameters.AddWithValue("@name", holding.Name);
-			//command.Parameters.AddWithValue("@ticker", holding.Ticker);
-			//command.Parameters.AddWithValue("@quantity", holding.Quantity);
-			//command.Parameters.AddWithValue("@acquisitionDate", holding.AcquisitionDate.ToDateTime(TimeOnly.MinValue));
-			//command.Parameters.AddWithValue("@type", holding.Type);
-			//command.Parameters.AddWithValue("@sector", holding.Sector);
-			//command.Parameters.AddWithValue("@market", holding.Market);
-
-			// return generated id
+			// Return the generated id
 			return (int) command.ExecuteScalar();
 		}
 
-
+		/// <summary>
+		/// Writes a trade to the database and returns the generated ID.
+		/// </summary>
+		/// <param name="portfolioId">The ID of the portfolio associated with the trade.</param>
+		/// <param name="trade">The Trade object to write to the database.</param>
+		/// <returns>The generated ID of the written trade.</returns>
 		public static int WriteToSQL(int portfolioId, Trade trade)
 		{
 			string query = "INSERT INTO Transactions (portfolioId, date, name, ticker, quantity, price, tax, commission, orderType, currency) OUTPUT INSERTED.id VALUES (@portfolioId, @date, @name, @ticker, @quantity, @price, @tax, @commission, @orderType, @currency)";
@@ -123,10 +140,15 @@ namespace PortfolioTracker.Services
 				["@currency"] = trade.Currency.ToString(),
 			});
 
-			// return generated id
+			// Return the generated id
 			return (int) command.ExecuteScalar();
 		}
 
+		/// <summary>
+		/// Retrieves holdings from the database associated with a specific portfolio.
+		/// </summary>
+		/// <param name="portfolioId">The ID of the portfolio.</param>
+		/// <returns>An ObservableCollection of  <see cref="HoldingViewModel" /> representing the retrieved holdings.</returns>
 		private static ObservableCollection<HoldingViewModel> RetrieveHoldings(int portfolioId)
 		{
 			ObservableCollection<HoldingViewModel> holdings = new ObservableCollection<HoldingViewModel>();
@@ -141,11 +163,16 @@ namespace PortfolioTracker.Services
 
 			while (reader.Read())
 			{
-				holdings.Add(createHoldingViewModelFromSQLReader(reader));
+				holdings.Add(CreateHoldingViewModelFromSQLReader(reader));
 			}
 			return holdings;
 		}
 
+		/// <summary>
+		/// Retrieves transactions from the database associated with a specific portfolio.
+		/// </summary>
+		/// <param name="portfolioId">The ID of the portfolio.</param>
+		/// <returns>An ObservableCollection of  <see cref="TradeViewModel" /> representing the retrieved transactions.</returns>
 		private static ObservableCollection<TradeViewModel> RetrieveTransactions(int portfolioId)
 		{
 			ObservableCollection<TradeViewModel> trades = new ObservableCollection<TradeViewModel>();
@@ -158,104 +185,128 @@ namespace PortfolioTracker.Services
 			return trades;
 		}
 
+		/// <summary>
+		/// Writes a payout for a holding to the database and returns the generated ID.
+		/// </summary>
+		/// <param name="holding">The Holding object for which to write a payout.</param>
+		/// <param name="date">The date of the payout.</param>
+		/// <returns>The generated ID of the written payout.</returns>
 		public static int WriteToSQL(Holding holding, DateOnly date)
 		{
 			string writePayoutQuery = "INSERT INTO Payouts (holdingId, amount, date, tax, commission) OUTPUT INSERTED.id VALUES (@holdingId, @amount, @date, @tax, @commission)";
-			
+
 			using SqlConnection connection = new SqlConnection(ConnectionString);
 			connection.Open();
 			using SqlCommand command = CreateCommand(writePayoutQuery, connection, new Dictionary<string, object>
-				{
+			{
 
 				["@holdingId"] = holding.Id,
 				["@amount"] = holding.Value * holding.Payout?.Yield,
 				["@date"] = date,
 				["@tax"] = holding.Payout?.Tax,
 				["@commission"] = holding.Payout?.Commission
-				});
+			});
 
 			return (int) command.ExecuteScalar();
-	}
-
-	private static List<Trade> getHoldingTrades(string ticker)
-	{
-		return getTradesWithCondition(
-			 "ticker = @ticker",
-			  new (string, object)[] { ("@ticker", ticker) }).ToList();
-	}
-
-	/// <summary>
-	/// Retrieves the trades the satisfy <paramref name="condition"/> from database.
-	/// </summary>
-	/// <param name="condition">A string representing the condition to impose on the retrieved trades.</param>
-	/// <param name="queryParams">An array of (string paramName, object value), that represent the value to be passed into paramName placeholder in the condition.</param>
-	/// <returns>An iterator of <see cref="Trade" /> objects that represent the trades retrieved.</returns>
-	/// <remarks>
-	/// <paramref name="condition"/> must be an SQL Server conditional statement, without WHERE keyword, and names of parameters must be "@paramName".
-	/// paramName of <paramref name="queryParams"/> must be a string "@paramName". value is the value to use in place of @paramName.
-	/// </remarks>
-	/// <example>
-	/// getTradesWithCondition("myFirstColumn = @myNum OR mySecondColumn = @myStr", [("@myNum", 5), ("@myStr", "hello"))
-	/// </example>
-	private static IEnumerable<Trade> getTradesWithCondition(string condition, params (string paramName, object value)[] queryParams)
-	{
-		string getTransactionsQuery = "SELECT id, date, name, ticker, quantity, price, tax, commission, orderType, currency FROM Transactions WHERE " + condition;
-
-		using SqlConnection connection = new SqlConnection(ConnectionString);
-		connection.Open();
-		using SqlCommand command = new SqlCommand(getTransactionsQuery, connection);
-
-		foreach ((string paramName, object value) tup in queryParams)
-		{
-			command.Parameters.AddWithValue(tup.paramName, tup.value);
 		}
-		using SqlDataReader reader = command.ExecuteReader();
 
-		while (reader.Read())
+		/// <summary>
+		/// Retrieves trades for a holding based on its ticker from the database.
+		/// </summary>
+		/// <param name="ticker">The ticker symbol of the holding.</param>
+		/// <returns>A list of  <see cref="Trade" /> objects associated with the specified holding.</returns>
+		private static List<Trade> getHoldingTrades(string ticker)
+		{
+			return getTradesWithCondition(
+				 "ticker = @ticker",
+				  new (string, object)[] { ("@ticker", ticker) }).ToList();
+		}
+
+		/// <summary>
+		/// Retrieves the trades the satisfy <paramref name="condition"/> from database.
+		/// </summary>
+		/// <param name="condition">A string representing the condition to impose on the retrieved trades.</param>
+		/// <param name="queryParams">An array of (string paramName, object value), that represent the value to be passed into paramName placeholder in the condition.</param>
+		/// <returns>An IEnumerable of <see cref="Trade" /> objects that represent the trades retrieved.</returns>
+		/// <remarks>
+		/// <paramref name="condition"/> must be an SQL Server conditional statement, without WHERE keyword, and names of parameters must be "@paramName".
+		/// paramName of <paramref name="queryParams"/> must be a string "@paramName". value is the value to use in place of @paramName.
+		/// </remarks>
+		/// <example>
+		/// getTradesWithCondition("myFirstColumn = @myNum OR mySecondColumn = @myStr", [("@myNum", 5), ("@myStr", "hello"))
+		/// </example>
+		private static IEnumerable<Trade> getTradesWithCondition(string condition, params (string paramName, object value)[] queryParams)
+		{
+			string getTransactionsQuery = "SELECT id, date, name, ticker, quantity, price, tax, commission, orderType, currency FROM Transactions WHERE " + condition;
+
+			using SqlConnection connection = new SqlConnection(ConnectionString);
+			connection.Open();
+			using SqlCommand command = new SqlCommand(getTransactionsQuery, connection);
+
+			foreach ((string paramName, object value) tup in queryParams)
+			{
+				command.Parameters.AddWithValue(tup.paramName, tup.value);
+			}
+			using SqlDataReader reader = command.ExecuteReader();
+
+			while (reader.Read())
+			{
+				int id = reader.GetInt32(reader.GetOrdinal("id"));
+				DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("date")));
+				string name = reader.GetString(reader.GetOrdinal("name"));
+				string ticker = reader.GetString(reader.GetOrdinal("ticker"));
+				decimal quantity = reader.GetDecimal(reader.GetOrdinal("quantity"));
+				decimal price = reader.GetDecimal(reader.GetOrdinal("price"));
+				decimal tax = reader.IsDBNull(reader.GetOrdinal("tax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("tax"));
+				decimal commission = reader.IsDBNull(reader.GetOrdinal("commission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("commission"));
+				bool isBuyOrder = reader.GetString(reader.GetOrdinal("orderType")) == "Sell" ? true : false;
+				string currency = reader.GetString(reader.GetOrdinal("currency"));
+
+				yield return new Trade(id, name, ticker, isBuyOrder, date, quantity, price, tax, commission, new CurrencyModel(currency));
+			}
+		}
+
+		/// <summary>
+		/// Creates a HoldingViewModel from the data retrieved from the SQL database.
+		/// </summary>
+		/// <param name="reader">The SqlDataReader containing the holding data.</param>
+		/// <returns>A  <see cref="HoldingViewModel" /> representing the retrieved holding.</returns>
+		private static HoldingViewModel CreateHoldingViewModelFromSQLReader(SqlDataReader reader)
 		{
 			int id = reader.GetInt32(reader.GetOrdinal("id"));
-			DateOnly date = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("date")));
 			string name = reader.GetString(reader.GetOrdinal("name"));
 			string ticker = reader.GetString(reader.GetOrdinal("ticker"));
 			decimal quantity = reader.GetDecimal(reader.GetOrdinal("quantity"));
-			decimal price = reader.GetDecimal(reader.GetOrdinal("price"));
-			decimal tax = reader.IsDBNull(reader.GetOrdinal("tax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("tax"));
-			decimal commission = reader.IsDBNull(reader.GetOrdinal("commission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("commission"));
-			bool isBuyOrder = reader.GetString(reader.GetOrdinal("orderType")) == "Sell" ? true : false;
-			string currency = reader.GetString(reader.GetOrdinal("currency"));
+			DateOnly acquisitionDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
+			string type = reader.IsDBNull(reader.GetOrdinal("type")) ? "" : reader.GetString(reader.GetOrdinal("type"));
+			string sector = reader.IsDBNull(reader.GetOrdinal("sector")) ? "" : reader.GetString(reader.GetOrdinal("sector"));
+			string market = reader.IsDBNull(reader.GetOrdinal("market")) ? "" : reader.GetString(reader.GetOrdinal("market"));
+			decimal payoutYield = reader.IsDBNull(reader.GetOrdinal("payoutYield")) ? 0 : reader.GetDecimal(reader.GetOrdinal("payoutYield"));
+			decimal payoutTax = reader.IsDBNull(reader.GetOrdinal("payoutTax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("payoutTax"));
+			decimal payoutCommission = reader.IsDBNull(reader.GetOrdinal("payoutCommission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("payoutCommission"));
+			int payoutPeriod = reader.IsDBNull(reader.GetOrdinal("payoutPeriod")) ? 0 : reader.GetInt32(reader.GetOrdinal("payoutPeriod"));
+			DateOnly? payoutLastPaid = reader.IsDBNull(reader.GetOrdinal("payoutLastPaid")) ? null : DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
 
-			yield return new Trade(id, name, ticker, isBuyOrder, date, quantity, price, tax, commission, new CurrencyModel(currency));
+			return new HoldingViewModel(new Holding(name, ticker, quantity, acquisitionDate, payoutYield, payoutTax, payoutCommission, payoutPeriod, type, sector, market, payoutLastPaid, getHoldingTrades(ticker), id));
 		}
-	}
-	private static HoldingViewModel createHoldingViewModelFromSQLReader(SqlDataReader reader)
-	{
-		int id = reader.GetInt32(reader.GetOrdinal("id"));
-		string name = reader.GetString(reader.GetOrdinal("name"));
-		string ticker = reader.GetString(reader.GetOrdinal("ticker"));
-		decimal quantity = reader.GetDecimal(reader.GetOrdinal("quantity"));
-		DateOnly acquisitionDate = DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
-		string type = reader.IsDBNull(reader.GetOrdinal("type")) ? "" : reader.GetString(reader.GetOrdinal("type"));
-		string sector = reader.IsDBNull(reader.GetOrdinal("sector")) ? "" : reader.GetString(reader.GetOrdinal("sector"));
-		string market = reader.IsDBNull(reader.GetOrdinal("market")) ? "" : reader.GetString(reader.GetOrdinal("market"));
-		decimal payoutYield = reader.IsDBNull(reader.GetOrdinal("payoutYield")) ? 0 : reader.GetDecimal(reader.GetOrdinal("payoutYield"));
-		decimal payoutTax = reader.IsDBNull(reader.GetOrdinal("payoutTax")) ? 0 : reader.GetDecimal(reader.GetOrdinal("payoutTax"));
-		decimal payoutCommission = reader.IsDBNull(reader.GetOrdinal("payoutCommission")) ? 0 : reader.GetDecimal(reader.GetOrdinal("payoutCommission"));
-		int payoutPeriod = reader.IsDBNull(reader.GetOrdinal("payoutPeriod")) ? 0 : reader.GetInt32(reader.GetOrdinal("payoutPeriod"));
-		DateOnly? payoutLastPaid = reader.IsDBNull(reader.GetOrdinal("payoutLastPaid")) ? null : DateOnly.FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
 
-		return new HoldingViewModel(new Holding(name, ticker, quantity, acquisitionDate, payoutYield, payoutTax, payoutCommission, payoutPeriod, type, sector, market, payoutLastPaid, getHoldingTrades(ticker), id));
-	}
-
-	private static SqlCommand CreateCommand(string query, SqlConnection connection, Dictionary<string, object> dictionary)
-	{
-		SqlCommand command = new SqlCommand(query, connection);
-
-		foreach ((string parameterName, object value) in dictionary)
+		/// <summary>
+		/// Creates a SqlCommand with parameters from a dictionary.
+		/// </summary>
+		/// <param name="query">The SQL query string.</param>
+		/// <param name="connection">The SqlConnection to use.</param>
+		/// <param name="dictionary">A dictionary of parameters and their values.</param>
+		/// <returns>A  <see cref="SqlCommand" /> with the specified parameters.</returns>
+		private static SqlCommand CreateCommand(string query, SqlConnection connection, Dictionary<string, object> dictionary)
 		{
-			command.Parameters.AddWithValue(parameterName, value);
-		}
+			SqlCommand command = new SqlCommand(query, connection);
 
-		return command;
+			foreach ((string parameterName, object value) in dictionary)
+			{
+				command.Parameters.AddWithValue(parameterName, value);
+			}
+
+			return command;
+		}
 	}
-}
 }
