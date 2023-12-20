@@ -59,16 +59,18 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		public decimal AveragePrice => getAveragePrice(Trades, Quantity);
 
+		private decimal _currentPrice { get => FinancialDataService.GetLastPrice(this.Ticker); }
 		/// <summary>
 		/// The current market price of this asset.
 		/// </summary>
-		public decimal CurrentPrice => GetCurrentPrice();
+		public decimal CurrentPrice => Math.Round(_currentPrice, 2);
 
+		private decimal _value { get => _currentPrice * Quantity; }
 		/// <summary>
 		/// The total investment value of this asset, based on its current market price.
 		/// Calculated as the product of the current price and the quantity.
 		/// </summary>
-		public decimal Value => CurrentPrice * Quantity;
+		public decimal Value => Math.Round(_value, 2);
 
 		/// <summary>
 		/// The daily change in the value of the asset, expressed as a percentage of its current total value.
@@ -79,14 +81,15 @@ namespace PortfolioTracker.Models
 			{
 				if (Value == 0)
 					return 0;
-				return (DailyChange / Value) * 100;
+				return Math.Round((_dailyChange / _value) * 100, 2);
 			}
 		}
 
+		private decimal _dailyChange => FinancialDataService.GetDailyChange(Ticker) * Quantity;
 		/// <summary>
 		/// The daily change in the value of the asset.
 		/// </summary>
-		public decimal DailyChange => getDailyChange();
+		public decimal DailyChange => Math.Round(_dailyChange);
 
 		/// <summary>
 		/// The portion of the the total value of the portfolio that this asset represents, expressed as a percantage.
@@ -143,12 +146,9 @@ namespace PortfolioTracker.Models
 					totalMade += value;
 			}
 
-			return (totalSpent - totalMade) / quantity;
+			return Math.Round((totalSpent - totalMade) / quantity, 2);
 		}
 
-		private decimal GetCurrentPrice() => FinancialDataService.GetLastPrice(this.Ticker);
-
-		private decimal getDailyChange() => FinancialDataService.GetDailyChange(this.Ticker) * this.Quantity;
 
 		// TODO: implement
 		private decimal getPercentOfPortfolio(int id) => 1;

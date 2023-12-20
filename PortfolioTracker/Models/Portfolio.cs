@@ -48,7 +48,7 @@ namespace PortfolioTracker.Models
 				{
 					res += holding.Value;
 				}
-				return res;
+				return Math.Round(res, 2);
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace PortfolioTracker.Models
 					res += holding.DailyChange;
 				}
 
-				return res;
+				return Math.Round(res, 2);
 			}
 		}
 
@@ -72,7 +72,7 @@ namespace PortfolioTracker.Models
 			{
 				if (Value == 0)
 					return 0;
-				return (DailyChange / Value) * 100;
+				return Math.Round((DailyChange / Value) * 100, 2);
 			}
 		}
 
