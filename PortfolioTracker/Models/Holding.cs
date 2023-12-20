@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PortfolioTracker.Services;
+using System;
 using System.Collections.Generic;
 
 namespace PortfolioTracker.Models
@@ -61,7 +62,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// The current market price of this asset.
 		/// </summary>
-		public decimal CurrentPrice => getCurrentPrice(Ticker);
+		public decimal CurrentPrice => GetCurrentPrice();
 
 		/// <summary>
 		/// The total investment value of this asset, based on its current market price.
@@ -85,7 +86,7 @@ namespace PortfolioTracker.Models
 		/// <summary>
 		/// The daily change in the value of the asset.
 		/// </summary>
-		public decimal DailyChange => getDailyChange(Ticker, Quantity, Value);
+		public decimal DailyChange => getDailyChange();
 
 		/// <summary>
 		/// The portion of the the total value of the portfolio that this asset represents, expressed as a percantage.
@@ -145,11 +146,9 @@ namespace PortfolioTracker.Models
 			return (totalSpent - totalMade) / quantity;
 		}
 
-		// TODO: implement
-		private decimal getCurrentPrice(string ticker) => 1;
+		private decimal GetCurrentPrice() => FinancialDataService.GetLastPrice(this.Ticker);
 
-		// TODO: implement
-		private decimal getDailyChange(string ticker, decimal quantity, decimal value) => 1;
+		private decimal getDailyChange() => FinancialDataService.GetDailyChange(this.Ticker) * this.Quantity;
 
 		// TODO: implement
 		private decimal getPercentOfPortfolio(int id) => 1;
