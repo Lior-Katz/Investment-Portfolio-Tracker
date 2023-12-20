@@ -6,8 +6,8 @@ using System.Windows.Input;
 namespace PortfolioTracker.ViewModels;
 public class DashboardViewModel : ViewModelBase
 {
-	private readonly ObservableCollection<HoldingViewModel> _mostInfluentialholdings;
-	public ObservableCollection<HoldingViewModel> MostInfluentialHoldings => _mostInfluentialholdings;
+	private readonly ObservableCollection<HoldingViewModel> _mostInfluentialHoldings;
+	public ObservableCollection<HoldingViewModel> MostInfluentialHoldings => _mostInfluentialHoldings;
 
 	public ICommand NavigateToAllHoldingsCommand { get; }
 
@@ -18,19 +18,23 @@ public class DashboardViewModel : ViewModelBase
 	public ICommand NavigateToDistributionsCommand { get; }
 	public CurrencyModel SelectedCurrency { get; }
 
+	public LineGraphViewModel HistoricValuesLineGraph { get; }
+
 	public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
 	{
-		this._mostInfluentialholdings = portfolioViewModel.MostInfluentialHoldings;
+		this._mostInfluentialHoldings = portfolioViewModel.MostInfluentialHoldings;
 
 		NavigateToAllHoldingsCommand = new NavigateCommand<HoldingsListingViewModel>(navigationStore, () => new HoldingsListingViewModel(portfolioViewModel));
 		NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(portfolioViewModel, navigationStore));
 		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => new TransactionHistoryViewModel(portfolioViewModel, navigationStore));
 		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel(portfolioViewModel));
+
+		HistoricValuesLineGraph = new LineGraphViewModel();
 	}
 
-	DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, NavigationStore navigationStore, CurrencyModel selectedCurrency)
+	public DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels, NavigationStore navigationStore, CurrencyModel selectedCurrency)
 	{
-		this._mostInfluentialholdings = mostInfluential_holdingViewModels;
+		this._mostInfluentialHoldings = mostInfluential_holdingViewModels;
 		this.SelectedCurrency = selectedCurrency;
 	}
 
