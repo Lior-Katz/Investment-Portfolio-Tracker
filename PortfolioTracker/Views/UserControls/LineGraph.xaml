@@ -9,6 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 		<lvc:CartesianChart Series="{Binding Series}"
-							Title="{Binding Title}" />
+							Title="{Binding Title}"
+							XAxes="{Binding XAxes}" />
 	</Grid>
 </UserControl>
