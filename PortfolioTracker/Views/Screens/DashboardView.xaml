@@ -4,6 +4,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:local="clr-namespace:PortfolioTracker.Views.Screens"
+			 xmlns:usercontrols="clr-namespace:PortfolioTracker.Views.UserControls"
 			 mc:Ignorable="d"
 			 Name="Dashboard"
 			 Background="DimGray"
@@ -152,9 +153,7 @@
 				</Label>
 				<Grid Grid.Row="1"
 					  Background="LightGray">
-					<Label FontSize="40"
-						   HorizontalAlignment="Center"
-						   VerticalAlignment="Center">CHART</Label>
+					<usercontrols:LineGraph DataContext="{Binding HistoricValuesLineGraph, UpdateSourceTrigger=PropertyChanged}" />
 				</Grid>
 
 				<ComboBox Grid.Row="2"
