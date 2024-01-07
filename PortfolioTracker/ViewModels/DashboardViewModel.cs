@@ -46,7 +46,8 @@ public class DashboardViewModel : ViewModelBase
 		return new LineGraphViewModel(new ISeries[]
 		{
 			new LineSeries<decimal>{
-				Values = dateValuePairs.ConvertAll(x => x.Value)
+				Values = dateValuePairs.ConvertAll(x => x.Value),
+				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}"
 			}
 		},
 		new List<Axis>
