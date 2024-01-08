@@ -1,4 +1,5 @@
 ﻿using LiveChartsCore;
+using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using PortfolioTracker.Commands;
 using PortfolioTracker.Services;
@@ -39,33 +40,36 @@ public class DashboardViewModel : ViewModelBase
 		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel(portfolioViewModel));
 
 		HistoricValuesLineGraph = GetHistoricalValuesLineGraph(portfolioViewModel);
-		AddComparisonLineGraph(new string[] { "VOO" });
+		AddComparisonLineGraph(new string[] { "VOO", "QQQ" });
 
 	}
 
 	private void AddComparisonLineGraph(string[] comparisons)
 	{
-		List<List<decimal>> comparisonValues = new List<List<decimal>>();
+		List<KeyValuePair<string, List<decimal>>> comparisonValues = new List<KeyValuePair<string, List<decimal>>>();
 
 		foreach (string ticker in comparisons)
 		{
 			List<KeyValuePair<DateTime, decimal>> rawData = FinancialDataService.GetHistoricalValue<DateTime>(ticker, graphTimeSpan).ToList();
-			List<decimal> dataWithEmptyDatesFilled = new List<decimal>();
+			KeyValuePair<string, List<decimal>> dataWithEmptyDatesFilled = new KeyValuePair<string, List<decimal>>(ticker, new List<decimal>());
 			for (int days = graphTimeSpan.Days; days >= 0; --days)
 			{
 				DateTime date = DateTime.Now - new TimeSpan(days, 0, 0, 0);
-				dataWithEmptyDatesFilled.Add(getLastValueBeforeDate(rawData, date));
+				dataWithEmptyDatesFilled.Value.Add(getLastValueBeforeDate(rawData, date));
 			}
 			comparisonValues.Add(dataWithEmptyDatesFilled);
 		}
-		foreach (List<decimal> comparison in comparisonValues)
+		foreach (KeyValuePair<string, List<decimal>> comparison in comparisonValues)
 		{
 			HistoricValuesLineGraph.Series = HistoricValuesLineGraph.Series.Append(new LineSeries<decimal>
 			{
-				Values = comparison,
+				Name = comparison.Key,
+				Values = comparison.Value,
 				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}"
 			}).ToArray();
 		}
+
+		HistoricValuesLineGraph.LegendPosition = LegendPosition.Top;
 	}
 
 	private LineGraphViewModel GetHistoricalValuesLineGraph(PortfolioViewModel portfolioViewModel)
@@ -75,6 +79,7 @@ public class DashboardViewModel : ViewModelBase
 		return new LineGraphViewModel(new ISeries[]
 		{
 			new LineSeries<decimal>{
+				Name = portfolioViewModel.Name,
 				Values = dateValuePairs.ConvertAll(x => x.Value),
 				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}"
 			}

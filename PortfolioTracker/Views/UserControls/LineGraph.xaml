@@ -10,6 +10,7 @@
     <Grid>
 		<lvc:CartesianChart Series="{Binding Series}"
 							Title="{Binding Title}"
-							XAxes="{Binding XAxes}" />
+							XAxes="{Binding XAxes}"
+							LegendPosition="{Binding LegendPosition}"/>
 	</Grid>
 </UserControl>
