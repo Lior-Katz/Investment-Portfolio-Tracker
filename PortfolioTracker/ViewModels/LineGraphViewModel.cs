@@ -17,6 +17,8 @@ namespace PortfolioTracker.ViewModels
 
 		public LegendPosition LegendPosition { get; set; } = LegendPosition.Hidden;
 
+		public ZoomAndPanMode ZoomAndPanMode { get; set; } = ZoomAndPanMode.None;
+
 		public LineGraphViewModel(ISeries[] series, List<Axis> xAxes)
 		{
 			this.Series = series;
@@ -45,5 +47,37 @@ namespace PortfolioTracker.ViewModels
 			this.LegendPosition = legendPosition;
 		}
 
+		public LineGraphViewModel(ISeries[] series, List<Axis> xAxes, ZoomAndPanMode zoomAndPanMode)
+		{
+			this.Series = series;
+			this.XAxes = xAxes;
+			this.ZoomAndPanMode = zoomAndPanMode;
+		}
+
+		public LineGraphViewModel(ISeries[] series, List<Axis> xAxes, LabelVisual title, ZoomAndPanMode zoomAndPanMode)
+		{
+			this.Series = series;
+			this.XAxes = xAxes;
+			this.Title = title;
+			this.ZoomAndPanMode = zoomAndPanMode;
+		}
+
+		public LineGraphViewModel(ISeries[] series, List<Axis> xAxes, LegendPosition legendPosition, ZoomAndPanMode zoomAndPanMode)
+		{
+			this.Series = series;
+			this.XAxes = xAxes;
+			this.LegendPosition = legendPosition;
+			this.ZoomAndPanMode = zoomAndPanMode;
+		}
+
+		public LineGraphViewModel(ISeries[] series, List<Axis> xAxes, LabelVisual title, LegendPosition legendPosition, ZoomAndPanMode zoomAndPanMode)
+		{
+			this.Series = series;
+			this.XAxes = xAxes;
+			this.Title = title;
+			this.LegendPosition = legendPosition;
+			this.ZoomAndPanMode = zoomAndPanMode;
+		}
 	}
 }
+

@@ -65,7 +65,8 @@ public class DashboardViewModel : ViewModelBase
 			{
 				Name = comparison.Key,
 				Values = comparison.Value,
-				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}"
+				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}",
+				GeometrySize = 0
 			}).ToArray();
 		}
 
@@ -81,7 +82,8 @@ public class DashboardViewModel : ViewModelBase
 			new LineSeries<decimal>{
 				Name = portfolioViewModel.Name,
 				Values = dateValuePairs.ConvertAll(x => x.Value),
-				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}"
+				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}",
+				GeometrySize = 0
 			}
 		},
 		new List<Axis>
@@ -89,12 +91,12 @@ public class DashboardViewModel : ViewModelBase
 			new Axis{
 				Labels = dateValuePairs.ConvertAll(x => x.Key.ToString("d"))
 			}
-		});
+		},
+		ZoomAndPanMode.X);
 	}
 
 	private List<KeyValuePair<DateTime, decimal>> GetDateValueList(PortfolioViewModel portfolioViewModel)
 	{
-		//TimeSpan graphTimeSpan = new TimeSpan(0);
 		List<List<KeyValuePair<DateTime, decimal>>> AllSecuritiesData = new List<List<KeyValuePair<DateTime, decimal>>>();
 
 		List<string> tickers = portfolioViewModel.Holdings.Select(holding => holding.Ticker).ToList();
