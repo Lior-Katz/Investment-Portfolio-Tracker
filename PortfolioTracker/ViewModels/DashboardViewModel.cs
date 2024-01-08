@@ -26,6 +26,9 @@ public class DashboardViewModel : ViewModelBase
 
 	public LineGraphViewModel HistoricValuesLineGraph { get; }
 
+	private TimeSpan historicalDataTimeSpan { get; set; } = new TimeSpan(40, 0, 0, 0);
+	private TimeSpan graphTimeSpan { get; set; } = new TimeSpan(0);
+
 	public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
 	{
 		this._mostInfluentialHoldings = portfolioViewModel.MostInfluentialHoldings;
@@ -35,13 +38,39 @@ public class DashboardViewModel : ViewModelBase
 		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => new TransactionHistoryViewModel(portfolioViewModel, navigationStore));
 		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel(portfolioViewModel));
 
-		HistoricValuesLineGraph = GetHistoricalValuesLineGraph(portfolioViewModel,
-			new TimeSpan(365, 0, 0, 0));
+		HistoricValuesLineGraph = GetHistoricalValuesLineGraph(portfolioViewModel);
+		AddComparisonLineGraph(new string[] { "VOO" });
+
 	}
 
-	private LineGraphViewModel GetHistoricalValuesLineGraph(PortfolioViewModel portfolioViewModel, TimeSpan timeSpan)
+	private void AddComparisonLineGraph(string[] comparisons)
 	{
-		List<KeyValuePair<DateTime, decimal>> dateValuePairs = GetDateValueList(portfolioViewModel, timeSpan);
+		List<List<decimal>> comparisonValues = new List<List<decimal>>();
+
+		foreach (string ticker in comparisons)
+		{
+			List<KeyValuePair<DateTime, decimal>> rawData = FinancialDataService.GetHistoricalValue<DateTime>(ticker, graphTimeSpan).ToList();
+			List<decimal> dataWithEmptyDatesFilled = new List<decimal>();
+			for (int days = graphTimeSpan.Days; days >= 0; --days)
+			{
+				DateTime date = DateTime.Now - new TimeSpan(days, 0, 0, 0);
+				dataWithEmptyDatesFilled.Add(getLastValueBeforeDate(rawData, date));
+			}
+			comparisonValues.Add(dataWithEmptyDatesFilled);
+		}
+		foreach (List<decimal> comparison in comparisonValues)
+		{
+			HistoricValuesLineGraph.Series = HistoricValuesLineGraph.Series.Append(new LineSeries<decimal>
+			{
+				Values = comparison,
+				YToolTipLabelFormatter = (chartPoint) => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}"
+			}).ToArray();
+		}
+	}
+
+	private LineGraphViewModel GetHistoricalValuesLineGraph(PortfolioViewModel portfolioViewModel)
+	{
+		List<KeyValuePair<DateTime, decimal>> dateValuePairs = GetDateValueList(portfolioViewModel);
 
 		return new LineGraphViewModel(new ISeries[]
 		{
@@ -58,9 +87,9 @@ public class DashboardViewModel : ViewModelBase
 		});
 	}
 
-	private List<KeyValuePair<DateTime, decimal>> GetDateValueList(PortfolioViewModel portfolioViewModel, TimeSpan interval)
+	private List<KeyValuePair<DateTime, decimal>> GetDateValueList(PortfolioViewModel portfolioViewModel)
 	{
-		TimeSpan graphTimeSpan = new TimeSpan(0);
+		//TimeSpan graphTimeSpan = new TimeSpan(0);
 		List<List<KeyValuePair<DateTime, decimal>>> AllSecuritiesData = new List<List<KeyValuePair<DateTime, decimal>>>();
 
 		List<string> tickers = portfolioViewModel.Holdings.Select(holding => holding.Ticker).ToList();
@@ -69,7 +98,7 @@ public class DashboardViewModel : ViewModelBase
 		{
 			DateTime acquisitionDate = portfolioViewModel.Holdings.ToList().Find(holding => holding.Ticker == ticker).AcquisitionDate.ToDateTime(TimeOnly.MinValue);
 
-			TimeSpan timeSpan = TimeSpan.FromTicks(Math.Min(interval.Ticks, (DateTime.Now - acquisitionDate).Ticks));
+			TimeSpan timeSpan = TimeSpan.FromTicks(Math.Min(historicalDataTimeSpan.Ticks, (DateTime.Now - acquisitionDate).Ticks));
 			graphTimeSpan = TimeSpan.FromTicks(Math.Max(graphTimeSpan.Ticks, timeSpan.Ticks));
 
 			// create a list of the value of the security on each date
@@ -84,7 +113,7 @@ public class DashboardViewModel : ViewModelBase
 			DateTime date = DateTime.Now - new TimeSpan(days, 0, 0, 0);
 
 
-			// a list of the values of every security on a specific date
+			// a list of the dataWithEmptyDatesFilled of every security on a specific date
 			// for every security in AllSecuritiesData, find the pair corresponding to the specific date, and get its value.
 			List<decimal> valuesOnDate = AllSecuritiesData.ConvertAll(securityData => getLastValueBeforeDate(securityData, date));
 
