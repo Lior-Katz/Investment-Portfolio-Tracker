@@ -9,10 +9,13 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using Accessibility;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PortfolioTracker.ViewModels;
 public class DashboardViewModel : ViewModelBase
 {
+	private readonly IFinancialDataService _financialDataService;
 	private readonly ObservableCollection<HoldingViewModel> _mostInfluentialHoldings;
 	public ObservableCollection<HoldingViewModel> MostInfluentialHoldings => _mostInfluentialHoldings;
 
@@ -28,16 +31,17 @@ public class DashboardViewModel : ViewModelBase
 	public LineGraphViewModel HistoricValuesLineGraph { get; }
 
 	private TimeSpan historicalDataTimeSpan { get; set; } = new TimeSpan(40, 0, 0, 0);
-	private TimeSpan graphTimeSpan { get; set; } = new TimeSpan(0);
+	private TimeSpan graphTimeSpan { get; set; } = new TimeSpan(10, 0, 0,0);
 
-	public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
+	public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore, IFinancialDataService financialDataService)
 	{
 		this._mostInfluentialHoldings = portfolioViewModel.MostInfluentialHoldings;
+		this._financialDataService = financialDataService;
 
-		NavigateToAllHoldingsCommand = new NavigateCommand<HoldingsListingViewModel>(navigationStore, () => new HoldingsListingViewModel(portfolioViewModel));
-		NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => new AddTransactionViewModel(portfolioViewModel, navigationStore));
-		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => new TransactionHistoryViewModel(portfolioViewModel, navigationStore));
-		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () => new DistributionsViewModel(portfolioViewModel));
+		NavigateToAllHoldingsCommand = new NavigateCommand<HoldingsListingViewModel>(navigationStore, () => App.AppHost.Services.GetRequiredService<HoldingsListingViewModel>());
+		NavigateToAddTransactionCommand = new NavigateCommand<AddTransactionViewModel>(navigationStore, () => App.AppHost.Services.GetRequiredService<AddTransactionViewModel>());
+		NavigateToTransactionHistoryCommand = new NavigateCommand<TransactionHistoryViewModel>(navigationStore, () => App.AppHost.Services.GetRequiredService<TransactionHistoryViewModel>());
+		NavigateToDistributionsCommand = new NavigateCommand<DistributionsViewModel>(navigationStore, () =>  App.AppHost.Services.GetRequiredService<DistributionsViewModel>());
 
 		HistoricValuesLineGraph = GetHistoricalValuesLineGraph(portfolioViewModel);
 		AddComparisonLineGraph(new string[] { "VOO", "QQQ" });
@@ -50,7 +54,7 @@ public class DashboardViewModel : ViewModelBase
 
 		foreach (string ticker in comparisons)
 		{
-			List<KeyValuePair<DateTime, decimal>> rawData = FinancialDataService.GetHistoricalValue<DateTime>(ticker, graphTimeSpan).ToList();
+			List<KeyValuePair<DateTime, decimal>> rawData = _financialDataService.GetHistoricalValue<DateTime>(ticker, graphTimeSpan).ToList();
 			KeyValuePair<string, List<decimal>> dataWithEmptyDatesFilled = new KeyValuePair<string, List<decimal>>(ticker, new List<decimal>());
 			for (int days = graphTimeSpan.Days; days >= 0; --days)
 			{
@@ -109,7 +113,7 @@ public class DashboardViewModel : ViewModelBase
 			graphTimeSpan = TimeSpan.FromTicks(Math.Max(graphTimeSpan.Ticks, timeSpan.Ticks));
 
 			// create a list of the value of the security on each date
-			List<KeyValuePair<DateTime, decimal>> historicalSecurityValues = FinancialDataService.GetHistoricalValue<DateTime>(ticker, timeSpan).ToList();
+			List<KeyValuePair<DateTime, decimal>> historicalSecurityValues = _financialDataService.GetHistoricalValue<DateTime>(ticker, timeSpan).ToList();
 
 			AllSecuritiesData.Add(historicalSecurityValues);
 		}
@@ -133,7 +137,7 @@ public class DashboardViewModel : ViewModelBase
 
 	private decimal getLastValueBeforeDate(List<KeyValuePair<DateTime, decimal>> securityData, DateTime date)
 	{
-		if (date.Date < securityData.First().Key.Date)
+		if (securityData.Count == 0 || date.Date < securityData.First().Key.Date)
 		{
 			return 0;
 		}

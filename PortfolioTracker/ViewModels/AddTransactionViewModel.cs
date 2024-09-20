@@ -2,6 +2,7 @@
 using PortfolioTracker.Stores;
 using System;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 
 /// <summary>
 /// ViewModel for adding a new transaction, derived from the base ViewModel class.
@@ -185,7 +186,7 @@ namespace PortfolioTracker.ViewModels
 		public AddTransactionViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
 		{
 			ConfirmCommand = new ConfirmAddTransactionCommand(this, portfolioViewModel, navigationStore);
-			CancelCommand = new NavigateCommand<DashboardViewModel>(navigationStore, () => new DashboardViewModel(portfolioViewModel, navigationStore));
+			CancelCommand = new NavigateCommand<DashboardViewModel>(navigationStore, () => App.AppHost.Services.GetRequiredService<DashboardViewModel>());
 		}
 	}
 }

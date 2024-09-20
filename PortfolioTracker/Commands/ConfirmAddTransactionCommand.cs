@@ -5,6 +5,7 @@ using PortfolioTracker.Views.UserControls;
 using System;
 using System.ComponentModel;
 using System.Windows;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PortfolioTracker.Commands
 {
@@ -23,17 +24,20 @@ namespace PortfolioTracker.Commands
 		private readonly PortfolioViewModel _portfolio;
 
 
-
-		/// <summary>
-		/// Initializes a new instance of ConfirmAddTransactionCommand with the portfolio to add the transaction to,
-		/// and the the ViewModel that contains the transaction information.
-		/// </summary>
-		/// <param name="addTransactionViewModel">The ViewModel that contains the information of the trade, through binding to user input fields</param>
-		/// <param name="portfolio">The portfolio that the trade should be added to</param>
-		public ConfirmAddTransactionCommand(AddTransactionViewModel addTransactionViewModel, PortfolioViewModel portfolio, NavigationStore navigationStore) : base(navigationStore, () => new TransactionHistoryViewModel(portfolio, navigationStore))
-		{
-			this._addTransactionViewModel = addTransactionViewModel;
-			this._portfolio = portfolio;
+        /// <summary>
+        /// Initializes a new instance of ConfirmAddTransactionCommand with the portfolio to add the transaction to,
+        /// and the the ViewModel that contains the transaction information.
+        /// </summary>
+        /// <param name="addTransactionViewModel">The ViewModel that contains the information of the trade, through binding to user input fields</param>
+        /// <param name="portfolio">The portfolio that the trade should be added to</param>
+        public ConfirmAddTransactionCommand(AddTransactionViewModel addTransactionViewModel,
+                                            PortfolioViewModel portfolio,
+                                            NavigationStore navigationStore)
+            : base(navigationStore,
+                   () => App.AppHost.Services.GetRequiredService<TransactionHistoryViewModel>())
+        {
+            this._addTransactionViewModel = addTransactionViewModel;
+            this._portfolio = portfolio;
 
 			// subscribe to onPropertyChanged Event of AddTransactionViewModel for updating canExecute
 			_addTransactionViewModel.PropertyChanged += OnViewModelPropertyChanged;

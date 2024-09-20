@@ -1,6 +1,7 @@
 ﻿using PortfolioTracker.Services;
 using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PortfolioTracker.Models
 {
@@ -59,7 +60,7 @@ namespace PortfolioTracker.Models
 		/// </summary>
 		public decimal AveragePrice => getAveragePrice(Trades, Quantity);
 
-		private decimal _currentPrice { get => FinancialDataService.GetLastPrice(this.Ticker); }
+		private decimal _currentPrice { get => App.AppHost.Services.GetRequiredService<IFinancialDataService>().GetLastPrice(this.Ticker); }
 		/// <summary>
 		/// The current market price of this asset.
 		/// </summary>
@@ -85,7 +86,7 @@ namespace PortfolioTracker.Models
 			}
 		}
 
-		private decimal _dailyChange => FinancialDataService.GetDailyChange(Ticker) * Quantity;
+		private decimal _dailyChange => App.AppHost.Services.GetRequiredService<IFinancialDataService>().GetDailyChange(Ticker) * Quantity;
 		/// <summary>
 		/// The daily change in the value of the asset.
 		/// </summary>

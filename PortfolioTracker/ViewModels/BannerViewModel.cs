@@ -1,6 +1,7 @@
 ﻿using PortfolioTracker.Commands;
 using PortfolioTracker.Stores;
 using System.Windows.Input;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace PortfolioTracker.ViewModels
 {
@@ -17,7 +18,7 @@ namespace PortfolioTracker.ViewModels
 		{
 			_portfolioViewModel = portfolioViewModel;
 			this.NavigateToDashboardCommand = new NavigateCommand<DashboardViewModel>(navigationStore,
-				() => new DashboardViewModel(portfolioViewModel, navigationStore));
+				() => App.AppHost.Services.GetRequiredService<DashboardViewModel>());
 		}
 
 	}
