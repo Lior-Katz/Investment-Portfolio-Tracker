@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace PortfolioTracker.Services
 {
-	public class FinancialDataService
+	public class FinancialDataService : IFinancialDataService
 	{
 		// TODO: handle exceptions for invalid ticker
-		public static decimal GetLastPrice(string ticker)
+		public decimal GetLastPrice(string ticker)
 		{
 			FyResult result = Ticker.Build(ticker)
 					.SetPeriod(Period.OneDay)
@@ -16,7 +16,7 @@ namespace PortfolioTracker.Services
 					.Get();
 			return result.Quotes[0].Close;
 		}
-		public static IEnumerable<decimal> GetLastPrice(IEnumerable<string> tickers)
+		public IEnumerable<decimal> GetLastPrice(IEnumerable<string> tickers)
 		{
 			foreach (var ticker in tickers)
 			{
@@ -24,7 +24,7 @@ namespace PortfolioTracker.Services
 			}
 		}
 
-		public static decimal GetDailyChange(string ticker)
+		public decimal GetDailyChange(string ticker)
 		{
 			FyResult result = Ticker.Build(ticker)
 			.SetPeriod(Period.OneDay)
@@ -34,7 +34,7 @@ namespace PortfolioTracker.Services
 			return result.Quotes[0].Close - result.Quotes[0].Open;
 		}
 
-		public static IEnumerable<decimal> GetDailyChange(IEnumerable<string> tickers)
+		public IEnumerable<decimal> GetDailyChange(IEnumerable<string> tickers)
 		{
 			foreach (var ticker in tickers)
 			{
@@ -42,7 +42,7 @@ namespace PortfolioTracker.Services
 			}
 		}
 
-		public static IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateTime startDate)
+		public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateTime startDate)
 		{
 			FyResult result = Ticker.Build(ticker)
 			.SetStartDate(startDate)
@@ -66,12 +66,12 @@ namespace PortfolioTracker.Services
 			}
 		}
 
-		public static IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateOnly startDate)
+		public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateOnly startDate)
 		{
 			return GetHistoricalValue<TDate>(ticker, startDate.ToDateTime(new TimeOnly(0)));
 		}
 
-		public static IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, TimeSpan interval)
+		public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, TimeSpan interval)
 		{
 			return GetHistoricalValue<TDate>(ticker, DateTime.Now - interval);
 		}
