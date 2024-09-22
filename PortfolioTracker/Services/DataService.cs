@@ -6,6 +6,8 @@ using System.Collections.ObjectModel;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using PortfolioTracker.Utils.QueryBuilder;
+using SqlCommandBuilder = PortfolioTracker.Utils.QueryBuilder.SqlCommandBuilder;
 
 namespace PortfolioTracker.Services
 {
@@ -70,16 +72,27 @@ namespace PortfolioTracker.Services
 		/// <returns>The generated ID of the written portfolio.</returns>
 		public static int WriteToSQL(PortfolioViewModel portfolio)
 		{
-			using SqlConnection connection = new SqlConnection(ConnectionString);
-
-			connection.Open();
-
-			string query = "INSERT INTO Portfolios (name) OUTPUT INSERTED.id VALUES (@Name)";
-
-			using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-			{
-				["@Name"] = portfolio.Name
-			});
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			//
+			// connection.Open();
+			//
+			// string query = "INSERT INTO Portfolios (name, CreatedDate) OUTPUT INSERTED.id VALUES (@Name, @CreatedDate)";
+			//
+			// using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
+			// {
+			// 	["@Name"] = portfolio.Name,
+			// 	["@CreatedDate"] = portfolio.createdDate
+			// });
+			
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                                  .Insert(new Dictionary<string, object>
+			                                                          {
+				                                                          ["name"] = portfolio.Name,
+				                                                          ["CreatedDate"] = portfolio.createdDate
+			                                                          })
+			                                                  .Into("Portfolios")
+			                                                  .Output(new List<string>{"INSERTED.id"})
+			                                                  .BuildCommand();
 
 			// Return the generated id
 			return (int) command.ExecuteScalar();
@@ -93,22 +106,40 @@ namespace PortfolioTracker.Services
 		/// <returns>The generated ID of the written holding.</returns>
 		public static int WriteToSQL(int portfolioId, Holding holding)
 		{
-			string query = "INSERT INTO Holdings (portfolioId, name, ticker, quantity, acquisitionDate, type, sector, market) OUTPUT INSERTED.id VALUES (@portfolioId, @name, @ticker, @quantity, @acquisitionDate, @type, @sector, @market)";
+			// string query = "INSERT INTO Holdings (portfolioId, name, ticker, quantity, acquisitionDate, type, sector, market) OUTPUT INSERTED.id VALUES (@portfolioId, @name, @ticker, @quantity, @acquisitionDate, @type, @sector, @market)";
+			//
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			// connection.Open();
+			//
+			// using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
+			// {
+			// 	["@portfolioId"] = portfolioId,
+			// 	["@name"] = holding.Name,
+			// 	["@ticker"] = holding.Ticker,
+			// 	["@quantity"] = holding.Quantity,
+			// 	["@acquisitionDate"] = holding.AcquisitionDate.ToDateTime(TimeOnly.MinValue),
+			// 	["@type"] = holding.Type,
+			// 	["@sector"] = holding.Sector,
+			// 	["@market"] = holding.Market
+			// });
 
-			using SqlConnection connection = new SqlConnection(ConnectionString);
-			connection.Open();
-
-			using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-			{
-				["@portfolioId"] = portfolioId,
-				["@name"] = holding.Name,
-				["@ticker"] = holding.Ticker,
-				["@quantity"] = holding.Quantity,
-				["@acquisitionDate"] = holding.AcquisitionDate.ToDateTime(TimeOnly.MinValue),
-				["@type"] = holding.Type,
-				["@sector"] = holding.Sector,
-				["@market"] = holding.Market
-			});
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                                  .Insert(new Dictionary<string, object>
+			                                                          {
+				                                                          ["@portfolioId"] = portfolioId,
+				                                                          ["@name"] = holding.Name,
+				                                                          ["@ticker"] = holding.Ticker,
+				                                                          ["@quantity"] = holding.Quantity,
+				                                                          ["@acquisitionDate"] =
+					                                                          holding.AcquisitionDate
+						                                                          .ToDateTime(TimeOnly.MinValue),
+				                                                          ["@type"] = holding.Type,
+				                                                          ["@sector"] = holding.Sector,
+				                                                          ["@market"] = holding.Market
+			                                                          })
+			                                                  .Into("Holdings")
+			                                                  .Output(new List<string> { "INSERTED.id" })
+			                                                  .BuildCommand();
 
 			// Return the generated id
 			return (int) command.ExecuteScalar();
@@ -122,27 +153,69 @@ namespace PortfolioTracker.Services
 		/// <returns>The generated ID of the written trade.</returns>
 		public static int WriteToSQL(int portfolioId, Trade trade)
 		{
-			string query = "INSERT INTO Transactions (portfolioId, date, name, ticker, quantity, price, tax, commission, orderType, currency) OUTPUT INSERTED.id VALUES (@portfolioId, @date, @name, @ticker, @quantity, @price, @tax, @commission, @orderType, @currency)";
-
-			using SqlConnection connection = new SqlConnection(ConnectionString);
-			connection.Open();
-			using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-			{
-				["@portfolioId"] = portfolioId,
-				["@date"] = trade.Date.ToDateTime(TimeOnly.MinValue),
-				["@name"] = trade.Name,
-				["@ticker"] = trade.Ticker,
-				["@quantity"] = trade.Quantity,
-				["@price"] = trade.Price,
-				["@tax"] = trade.Tax,
-				["@commission"] = trade.Commission,
-				["@orderType"] = trade.IsBuyOrder ? "Buy" : "Sell",
-				["@currency"] = trade.Currency.ToString(),
-			});
+			// string query = "INSERT INTO Transactions (portfolioId, date, name, ticker, quantity, price, tax, commission, orderType, currency) OUTPUT INSERTED.id VALUES (@portfolioId, @date, @name, @ticker, @quantity, @price, @tax, @commission, @orderType, @currency)";
+			//
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			// connection.Open();
+			// using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
+			// {
+			// 	["@portfolioId"] = portfolioId,
+			// 	["@date"] = trade.Date.ToDateTime(TimeOnly.MinValue),
+			// 	["@name"] = trade.Name,
+			// 	["@ticker"] = trade.Ticker,
+			// 	["@quantity"] = trade.Quantity,
+			// 	["@price"] = trade.Price,
+			// 	["@tax"] = trade.Tax,
+			// 	["@commission"] = trade.Commission,
+			// 	["@orderType"] = trade.IsBuyOrder ? "Buy" : "Sell",
+			// 	["@currency"] = trade.Currency.ToString()
+			// });
+			
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                            .Insert(new Dictionary<string, object>
+			                                                    {
+				                                                    ["portfolioId"] = portfolioId,
+				                                                    ["date"] = trade.Date.ToDateTime(TimeOnly.MinValue),
+				                                                    ["name"] = trade.Name,
+				                                                    ["ticker"] = trade.Ticker,
+				                                                    ["quantity"] = trade.Quantity,
+				                                                    ["price"] = trade.Price,
+				                                                    ["tax"] = trade.Tax,
+				                                                    ["commission"] = trade.Commission,
+				                                                    ["orderType"] = trade.IsBuyOrder ? "Buy" : "Sell",
+				                                                    ["currency"] = trade.Currency.ToString()
+			                                                    })
+			                                            .Into("Transactions")
+			                                            .Output(new List<string> { "INSERTED.id" })
+			                                            .BuildCommand();
 
 			// Return the generated id
 			return (int) command.ExecuteScalar();
 		}
+
+		public static void WriteToSQL(int portfolioId, List<KeyValuePair<DateTime, decimal>> historicalValues)
+		{
+			// string query = "INSERT INTO ValueHistory (portfolioId, date, value) VALUES (@portfolioId, @date, @value)";
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			// connection.Open();
+			// using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
+			// 	                                                    {
+			// 		                                                    ["@portfolioId"] = portfolioId,
+			// 		                                                    ["@date"] = null,
+			// 		                                                    ["@value"] = null
+			// 	                                                    });
+			
+			SqlCommand cmd = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                        .Insert(new Dictionary<string, object>
+			                                                {
+				                                                ["portfolioId"] = portfolioId,
+				                                                ["date"] = null,
+				                                                ["value"] = null
+			                                                })
+			                                        .Into("ValueHistory")
+			                                        .BuildCommand();
+		}
+		
 
 		/// <summary>
 		/// Retrieves holdings from the database associated with a specific portfolio.
@@ -152,13 +225,23 @@ namespace PortfolioTracker.Services
 		private static ObservableCollection<HoldingViewModel> RetrieveHoldings(int portfolioId)
 		{
 			ObservableCollection<HoldingViewModel> holdings = new ObservableCollection<HoldingViewModel>();
-			string retrieveQuery = "SELECT id, name, ticker, quantity, acquisitionDate, type, sector, market, payoutYield, payoutTax, payoutCommission, payoutPeriod, payoutLastPaid FROM Holdings WHERE portfolioId = @portfolioId";
-
-			using SqlConnection connection = new SqlConnection(ConnectionString);
-			connection.Open();
-
-			using SqlCommand command = new SqlCommand(retrieveQuery, connection);
+			// string retrieveQuery = "SELECT id, name, ticker, quantity, acquisitionDate, type, sector, market, payoutYield, payoutTax, payoutCommission, payoutPeriod, payoutLastPaid FROM Holdings WHERE portfolioId = @portfolioId";
+			//
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			// connection.Open();
+			//
+			// using SqlCommand command = new SqlCommand(retrieveQuery, connection);
+			
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                                  .Select(new List<string>
+			                                                          {
+				                                                          "id", "name", "ticker", "quantity", "acquisitionDate", "type", "sector", "market", "payoutYield", "payoutTax", "payoutCommission", "payoutPeriod", "payoutLastPaid"
+			                                                          })
+			                                                  .From("Holdings")
+			                                                  .Where(new SelectQueryBuilder.SearchPredicate("portfolioId", QueryOperator.EQUALS, "@portfolioId"))
+			                                                  .BuildCommand();
 			command.Parameters.AddWithValue("@portfolioId", portfolioId);
+			
 			using SqlDataReader reader = command.ExecuteReader();
 
 			while (reader.Read())
@@ -185,6 +268,30 @@ namespace PortfolioTracker.Services
 			return trades;
 		}
 
+		private static IEnumerable<KeyValuePair<DateTime, decimal>> retrieveHistoricalValues(int portfolioId)
+		{
+			// string retrieveQuery = "SELECT date, value FROM ValueHistory WHERE portfolioId = @portfolioId";
+			//
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			// connection.Open();
+			// using SqlCommand command = new SqlCommand(retrieveQuery, connection);
+			
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                            .Select(new List<string> { "date", "value" })
+			                                            .From("ValueHistory")
+			                                            .Where(new SelectQueryBuilder.SearchPredicate("portfolioId", QueryOperator.EQUALS, "@portfolioId"))
+			                                            .BuildCommand();
+			
+			command.Parameters.AddWithValue("@portfolioId", portfolioId);
+
+			using SqlDataReader reader = command.ExecuteReader();
+
+			while (reader.Read())
+			{
+				yield return new KeyValuePair<DateTime, decimal>(reader.GetDateTime(reader.GetOrdinal("date")), reader.GetDecimal(reader.GetOrdinal("value")));
+			}
+		}
+
 		/// <summary>
 		/// Writes a payout for a holding to the database and returns the generated ID.
 		/// </summary>
@@ -193,19 +300,32 @@ namespace PortfolioTracker.Services
 		/// <returns>The generated ID of the written payout.</returns>
 		public static int WriteToSQL(Holding holding, DateOnly date)
 		{
-			string writePayoutQuery = "INSERT INTO Payouts (holdingId, amount, date, tax, commission) OUTPUT INSERTED.id VALUES (@holdingId, @amount, @date, @tax, @commission)";
-
-			using SqlConnection connection = new SqlConnection(ConnectionString);
-			connection.Open();
-			using SqlCommand command = CreateCommand(writePayoutQuery, connection, new Dictionary<string, object>
-			{
-
-				["@holdingId"] = holding.Id,
-				["@amount"] = holding.Value * holding.Payout?.Yield,
-				["@date"] = date,
-				["@tax"] = holding.Payout?.Tax,
-				["@commission"] = holding.Payout?.Commission
-			});
+			// string writePayoutQuery = "INSERT INTO Payouts (holdingId, amount, date, tax, commission) OUTPUT INSERTED.id VALUES (@holdingId, @amount, @date, @tax, @commission)";
+			//
+			// using SqlConnection connection = new SqlConnection(ConnectionString);
+			// connection.Open();
+			// using SqlCommand command = CreateCommand(writePayoutQuery, connection, new Dictionary<string, object>
+			// {
+			//
+			// 	["@holdingId"] = holding.Id,
+			// 	["@amount"] = holding.Value * holding.Payout?.Yield,
+			// 	["@date"] = date,
+			// 	["@tax"] = holding.Payout?.Tax,
+			// 	["@commission"] = holding.Payout?.Commission
+			// });
+			
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                                  .Insert(new Dictionary<string, object>
+			                                                          {
+				                                                          ["holdingId"] = holding.Id,
+				                                                          ["amount"] = holding.Value * holding.Payout?.Yield,
+				                                                          ["date"] = date,
+				                                                          ["tax"] = holding.Payout?.Tax,
+				                                                          ["commission"] = holding.Payout?.Commission
+			                                                          })
+			                                                  .Into("Payouts")
+			                                                  .Output(new List<string> { "INSERTED.id" })
+			                                                  .BuildCommand();
 
 			return (int) command.ExecuteScalar();
 		}
