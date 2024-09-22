@@ -1,4 +1,6 @@
-﻿using PortfolioTracker.Models;
+﻿using System;
+using System.Collections.Generic;
+using PortfolioTracker.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
 
@@ -19,6 +21,8 @@ public class PortfolioViewModel : ViewModelBase
 	/// The name of the portfolio.
 	/// </summary>
 	public string Name => _portfolio.Name;
+	
+	public DateTime createdDate => _portfolio.CreatedDate;
 
 	public decimal Value => _portfolio.Value;
 
@@ -46,6 +50,15 @@ public class PortfolioViewModel : ViewModelBase
 		set
 		{
 			_portfolio.Trades = value.Select(tradeViewModel => tradeViewModel.ToTrade()).ToList();
+		}
+	}
+	
+	public List<KeyValuePair<DateTime, decimal>> HistoricalValue
+	{
+		get => _portfolio.HistoricalValue;
+		set
+		{
+			_portfolio.HistoricalValue = value.ToList();
 		}
 	}
 

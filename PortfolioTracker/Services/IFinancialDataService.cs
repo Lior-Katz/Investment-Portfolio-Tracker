@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PortfolioTracker.ViewModels;
 
 namespace PortfolioTracker.Services;
 
@@ -12,4 +13,6 @@ public interface IFinancialDataService
     IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateTime startDate);
     IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateOnly startDate);
     IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, TimeSpan interval);
+    void CompleteHistory(PortfolioViewModel portfolioViewModel);
+    decimal getValueOnDate(string ticker, DateTime date);
 }

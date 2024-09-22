@@ -17,6 +17,8 @@ namespace PortfolioTracker.Models
 		/// The name of the portfolio.
 		/// </summary>
 		public string Name { get; set; } = string.Empty;
+		
+		public DateTime CreatedDate { get; set; } = DateTime.Today;
 		/// <summary>
 		/// A list of all assets currently held in the portfolio.
 		/// </summary>
@@ -25,6 +27,8 @@ namespace PortfolioTracker.Models
 		/// A record of all trades recorded in this portfolio.
 		/// </summary>
 		public List<Trade> Trades { get; set; } = new List<Trade>();
+		
+		public List<KeyValuePair<DateTime, decimal>> HistoricalValue { get; set; } = new List<KeyValuePair<DateTime, decimal>>();
 
 		public List<Holding> MostInfluentialHoldings => GetMostInfluentialHoldings();
 
@@ -32,11 +36,11 @@ namespace PortfolioTracker.Models
 		/// Constructor
 		/// </summary>
 		/// <param name="name">Portfolio Name</param>
-		public Portfolio(string name)
+		/// <param name="createdDate">The date the portfolio was created</param>
+		public Portfolio(string name, DateTime createdDate)
 		{
 			this.Name = name;
-			Holdings = new List<Holding>();
-			Trades = new List<Trade>();
+			this.CreatedDate = createdDate;
 		}
 
 		public decimal Value

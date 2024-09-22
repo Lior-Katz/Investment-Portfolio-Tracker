@@ -79,7 +79,7 @@ public class DashboardViewModel : ViewModelBase
 
 	private LineGraphViewModel GetHistoricalValuesLineGraph(PortfolioViewModel portfolioViewModel)
 	{
-		List<KeyValuePair<DateTime, decimal>> dateValuePairs = GetDateValueList(portfolioViewModel);
+		List<KeyValuePair<DateTime, decimal>> dateValuePairs = portfolioViewModel.HistoricalValue.ToList();
 
 		return new LineGraphViewModel(new ISeries[]
 		{
@@ -99,41 +99,41 @@ public class DashboardViewModel : ViewModelBase
 		ZoomAndPanMode.X);
 	}
 
-	private List<KeyValuePair<DateTime, decimal>> GetDateValueList(PortfolioViewModel portfolioViewModel)
-	{
-		List<List<KeyValuePair<DateTime, decimal>>> AllSecuritiesData = new List<List<KeyValuePair<DateTime, decimal>>>();
-
-		List<string> tickers = portfolioViewModel.Holdings.Select(holding => holding.Ticker).ToList();
-
-		foreach (string ticker in tickers)
-		{
-			DateTime acquisitionDate = portfolioViewModel.Holdings.ToList().Find(holding => holding.Ticker == ticker).AcquisitionDate.ToDateTime(TimeOnly.MinValue);
-
-			TimeSpan timeSpan = TimeSpan.FromTicks(Math.Min(historicalDataTimeSpan.Ticks, (DateTime.Now - acquisitionDate).Ticks));
-			graphTimeSpan = TimeSpan.FromTicks(Math.Max(graphTimeSpan.Ticks, timeSpan.Ticks));
-
-			// create a list of the value of the security on each date
-			List<KeyValuePair<DateTime, decimal>> historicalSecurityValues = _financialDataService.GetHistoricalValue<DateTime>(ticker, timeSpan).ToList();
-
-			AllSecuritiesData.Add(historicalSecurityValues);
-		}
-
-		List<KeyValuePair<DateTime, decimal>> dateValuePairs = new List<KeyValuePair<DateTime, decimal>>(); // a list of the total value on each date
-		for (int days = graphTimeSpan.Days; days >= 0; --days)
-		{
-			DateTime date = DateTime.Now - new TimeSpan(days, 0, 0, 0);
-
-
-			// a list of the dataWithEmptyDatesFilled of every security on a specific date
-			// for every security in AllSecuritiesData, find the pair corresponding to the specific date, and get its value.
-			List<decimal> valuesOnDate = AllSecuritiesData.ConvertAll(securityData => getLastValueBeforeDate(securityData, date));
-
-			// sum over every value on this specific date.
-			dateValuePairs.Add(new KeyValuePair<DateTime, decimal>(date, valuesOnDate.Sum()));
-
-		}
-		return dateValuePairs;
-	}
+	// private List<KeyValuePair<DateTime, decimal>> GetDateValueList(PortfolioViewModel portfolioViewModel)
+	// {
+	// 	List<List<KeyValuePair<DateTime, decimal>>> allSecuritiesData = new List<List<KeyValuePair<DateTime, decimal>>>();
+	//
+	// 	List<string> tickers = portfolioViewModel.Holdings.Select(holding => holding.Ticker).ToList();
+	//
+	// 	foreach (string ticker in tickers)
+	// 	{
+	// 		DateTime acquisitionDate = portfolioViewModel.Holdings.ToList().Find(holding => holding.Ticker == ticker).AcquisitionDate.ToDateTime(TimeOnly.MinValue);
+	//
+	// 		TimeSpan timeSpan = TimeSpan.FromTicks(Math.Min(historicalDataTimeSpan.Ticks, (DateTime.Now - acquisitionDate).Ticks));
+	// 		graphTimeSpan = TimeSpan.FromTicks(Math.Max(graphTimeSpan.Ticks, timeSpan.Ticks));
+	//
+	// 		// create a list of the value of the security on each date
+	// 		List<KeyValuePair<DateTime, decimal>> historicalSecurityValues = _financialDataService.GetHistoricalValue<DateTime>(ticker, timeSpan).ToList();
+	//
+	// 		allSecuritiesData.Add(historicalSecurityValues);
+	// 	}
+	//
+	// 	List<KeyValuePair<DateTime, decimal>> dateValuePairs = new List<KeyValuePair<DateTime, decimal>>(); // a list of the total value on each date
+	// 	for (int days = graphTimeSpan.Days; days >= 0; --days)
+	// 	{
+	// 		DateTime date = DateTime.Now - new TimeSpan(days, 0, 0, 0);
+	//
+	//
+	// 		// a list of the dataWithEmptyDatesFilled of every security on a specific date
+	// 		// for every security in AllSecuritiesData, find the pair corresponding to the specific date, and get its value.
+	// 		List<decimal> valuesOnDate = allSecuritiesData.ConvertAll(securityData => getLastValueBeforeDate(securityData, date));
+	//
+	// 		// sum over every value on this specific date.
+	// 		dateValuePairs.Add(new KeyValuePair<DateTime, decimal>(date, valuesOnDate.Sum()));
+	//
+	// 	}
+	// 	return dateValuePairs;
+	// }
 
 	private decimal getLastValueBeforeDate(List<KeyValuePair<DateTime, decimal>> securityData, DateTime date)
 	{

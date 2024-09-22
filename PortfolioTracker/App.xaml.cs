@@ -34,6 +34,8 @@ namespace PortfolioTracker
         {
             await AppHost!.StartAsync();
 
+            AppHost.Services.GetRequiredService<IFinancialDataService>().CompleteHistory(AppHost.Services.GetRequiredService<PortfolioViewModel>());
+
             AppHost.Services.GetRequiredService<NavigationStore>().CurrentViewModel =
                 AppHost.Services.GetRequiredService<DashboardViewModel>();
 
@@ -49,9 +51,15 @@ namespace PortfolioTracker
 
         protected override async void OnExit(ExitEventArgs e)
         {
+            saveHistoryOnExit(AppHost.Services.GetRequiredService<PortfolioViewModel>());
             await AppHost!.StopAsync();
             AppHost.Dispose();
             base.OnExit(e);
+        }
+
+        private void saveHistoryOnExit(PortfolioViewModel portfolio)
+        {
+            
         }
 
         private static void InitServices(IServiceCollection services)
@@ -65,7 +73,7 @@ namespace PortfolioTracker
                 throw new InvalidOperationException($"Type {implementationTypeName} not found.");
             }
             services.AddSingleton(typeof(IFinancialDataService), implementationType);
-            services.AddSingleton<PortfolioViewModel>(provider => DataService.RetrievePortfolio(2));
+            services.AddSingleton<PortfolioViewModel>(provider => DataService.InitPortfolio(2));
             services.AddSingleton<NavigationStore>();
 
             services.AddSingleton<MainViewModel>();

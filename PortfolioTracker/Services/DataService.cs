@@ -34,34 +34,49 @@ namespace PortfolioTracker.Services
 		/// </summary>
 		/// <param name="id">The ID of the portfolio to retrieve.</param>
 		/// <returns>A  <see cref="PortfolioViewModel" /> representing the retrieved portfolio.</returns>
-		public static PortfolioViewModel RetrievePortfolio(int id)
+		public static PortfolioViewModel InitPortfolio(int id)
+		{
+			PortfolioViewModel portfolio = RetrievePortfolio(id);
+
+			// Retrieve associated transactions and holdings
+			portfolio.Trades = RetrieveTransactions(portfolio.Id);
+			portfolio.Holdings = RetrieveHoldings(portfolio.Id);
+
+			// Retrieve historical value
+			List<KeyValuePair<DateTime,decimal>> portfolioHistoricalValue = retrieveHistoricalValues(portfolio.Id).ToList();
+			portfolioHistoricalValue.Sort();
+			portfolio.HistoricalValue = portfolioHistoricalValue;
+			
+			return portfolio;
+		}
+
+		private static PortfolioViewModel RetrievePortfolio(int id)
 		{
 			PortfolioViewModel portfolio;
-			string retrieveQuery = "SELECT name FROM Portfolios WHERE id = @id";
-
-			using SqlConnection connection = new SqlConnection(ConnectionString);
-			connection.Open();
-			using SqlCommand command = new SqlCommand(retrieveQuery, connection);
+			using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+			                                            .Select(new List<string> { "name", "CreationDate" })
+			                                            .From("Portfolios")
+			                                            .Where(new SelectQueryBuilder.SearchPredicate("id",
+				                                                   QueryOperator.EQUALS, "@id"))
+			                                            .BuildCommand();
 			command.Parameters.AddWithValue("@id", id);
+
 
 			using SqlDataReader reader = command.ExecuteReader();
 
 			if (reader.Read())
 			{
 				// Portfolio exists in the database
-				portfolio = new PortfolioViewModel(new Portfolio(reader.GetString(reader.GetOrdinal("name"))));
+				portfolio = new PortfolioViewModel(new Portfolio(reader.GetString(reader.GetOrdinal("name")), reader.GetDateTime(reader.GetOrdinal("CreationDate"))));
 				portfolio.Id = id;
 			}
 			else
 			{
 				// Portfolio does not exist, create a new one with default values
-				portfolio = new PortfolioViewModel(new Portfolio("Untitled Portfolio"));
+				portfolio = new PortfolioViewModel(new Portfolio("Untitled Portfolio", DateTime.Today));
 				portfolio.Id = WriteToSQL(portfolio);
 			}
 
-			// Retrieve associated transactions and holdings
-			portfolio.Trades = RetrieveTransactions(portfolio.Id);
-			portfolio.Holdings = RetrieveHoldings(portfolio.Id);
 			return portfolio;
 		}
 

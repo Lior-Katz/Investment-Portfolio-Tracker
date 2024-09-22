@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using PortfolioTracker.ViewModels;
 
 namespace PortfolioTracker.Services;
 
@@ -48,7 +50,27 @@ public class MockFinancialDataService : IFinancialDataService
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)DateTime.Now.AddDays(i - timeSpan.Days), random.Next(0, 110));
         }
     }
-    
+
+    public void CompleteHistory(PortfolioViewModel portfolioViewModel)
+    {
+        IEnumerable<KeyValuePair<DateTime,decimal>> historicalValue = portfolioViewModel.HistoricalValue;
+        DateTime lastUpdated = historicalValue.Count() > 0 ? historicalValue.Last().Key : portfolioViewModel.createdDate.AddDays(-1);
+        for (DateTime date = lastUpdated.AddDays(1); date <= DateTime.Today; date = date.AddDays(1))
+        {
+            decimal value = 0;
+            foreach (String ticker in portfolioViewModel.Holdings.Select(holding => holding.Ticker))
+            {
+                value += getValueOnDate(ticker, date);
+            }
+        }
+    }
+
+    public decimal getValueOnDate(string ticker, DateTime date)
+    {
+        Random random = new Random();
+        return random.Next(0, 110);
+    }
+
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateTime startDate, TimeSpan timeSpan)
     {
         for (int i = 0; i < timeSpan.Days; i++)
