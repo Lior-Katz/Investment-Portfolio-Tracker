@@ -1,88 +1,92 @@
-﻿using PortfolioTracker.Models;
-using System;
+﻿using System;
+using PortfolioTracker.Models;
 
-namespace PortfolioTracker.ViewModels
+namespace PortfolioTracker.ViewModels;
+
+public class TradeViewModel : ViewModelBase
 {
-	public class TradeViewModel : ViewModelBase
-	{
-		/// <summary>
-		/// The Trade object that the ViewModel represents.
-		/// </summary>
-		private readonly Trade _trade;
+	/// <summary>
+	///     The Trade object that the ViewModel represents.
+	/// </summary>
+	private readonly Trade _trade;
 
-		/// <summary>
-		/// Unique identifier.
-		/// </summary>
-		public int Id => _trade.Id;
+	/// <summary>
+	///     Initializes a new instance of TradeViewModel that represents the holding.
+	/// </summary>
+	/// <param name="trade">The trade to represent.</param>
+	public TradeViewModel(Trade trade)
+    {
+        _trade = trade;
+    }
 
-		/// <summary>
-		/// The name of the asset traded.
-		/// </summary>
-		public string Name => _trade.Name;
+	/// <summary>
+	///     Unique identifier.
+	/// </summary>
+	public int Id => _trade.Id;
 
-		/// <summary>
-		/// 3 or 4 letter ticker symbol
-		/// </summary>
-		public string Ticker => _trade.Ticker;
+	/// <summary>
+	///     The name of the asset traded.
+	/// </summary>
+	public string Name => _trade.Name;
 
-		///// <summary>
-		///// The ticker symbol of the asset traded.
-		///// </summary>
-		//public string Ticker => _trade.Ticker;
+	/// <summary>
+	///     3 or 4 letter ticker symbol
+	/// </summary>
+	public string Ticker => _trade.Ticker;
 
-		/// <summary>
-		/// A string representation of the transaction type- <c>Buy</c> or <c>Sell</c>.
-		/// </summary>
-		public string OrderType
-		{
-			get => _trade.IsBuyOrder ? "Buy" : "Sell";
+    ///// <summary>
+    ///// The ticker symbol of the asset traded.
+    ///// </summary>
+    //public string Ticker => _trade.Ticker;
 
-			set => _trade.IsBuyOrder = value == "Buy" ? true : false;
-		}
+    /// <summary>
+    ///     A string representation of the transaction type- <c>Buy</c> or <c>Sell</c>.
+    /// </summary>
+    public string OrderType
+    {
+        get => _trade.IsBuyOrder ? "Buy" : "Sell";
+
+        set => _trade.IsBuyOrder = value == "Buy" ? true : false;
+    }
 
 
-		/// <summary>
-		/// The date when the trade took place.
-		/// </summary>
-		public DateOnly Date => _trade.Date;
+    /// <summary>
+    ///     The date when the trade took place.
+    /// </summary>
+    public DateOnly Date => _trade.Date;
 
-		/// <summary>
-		/// The amount of shares traded.
-		/// </summary>
-		public decimal Quantity => _trade.Quantity;
+    /// <summary>
+    ///     The amount of shares traded.
+    /// </summary>
+    public decimal Quantity => _trade.Quantity;
 
-		/// The price per share.
-		/// </summary>
-		public decimal Price => _trade.Price;
+    /// The price per share.
+    /// </summary>
+    public decimal Price => _trade.Price;
 
-		/// <summary>
-		/// Total tax paid on the trade
-		/// </summary>
-		public decimal Tax => _trade.Tax;
+    /// <summary>
+    ///     Total tax paid on the trade
+    /// </summary>
+    public decimal Tax => _trade.Tax;
 
-		/// <summary>
-		/// Total commission paid on the trade
-		/// </summary>
-		public decimal Commission => _trade.Commission;
+    /// <summary>
+    ///     Total commission paid on the trade
+    /// </summary>
+    public decimal Commission => _trade.Commission;
 
-		/// <summary>
-		/// The currency of the payment
-		/// </summary>
-		public CurrencyModel Currency => _trade.Currency;
+    /// <summary>
+    ///     The currency of the payment
+    /// </summary>
+    public CurrencyModel Currency => _trade.Currency;
 
-		/// <summary>
-		/// The total value of this transaction, based on the rate.
-		/// Calculated as the product of the rate and the quantity.
-		/// </summary>
-		public decimal Value => _trade.Value;
+    /// <summary>
+    ///     The total value of this transaction, based on the rate.
+    ///     Calculated as the product of the rate and the quantity.
+    /// </summary>
+    public decimal Value => _trade.Value;
 
-		/// <summary>
-		/// Initializes a new instance of TradeViewModel that represents the holding.
-		/// </summary>
-		/// <param name="trade">The trade to represent.</param>
-		public TradeViewModel(Trade trade) => this._trade = trade;
-
-		public Trade ToTrade() => _trade;
-
-	}
+    public Trade ToTrade()
+    {
+        return _trade;
+    }
 }

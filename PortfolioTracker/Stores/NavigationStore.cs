@@ -1,28 +1,29 @@
-﻿using PortfolioTracker.ViewModels;
-using System;
+﻿using System;
+using PortfolioTracker.ViewModels;
 
 namespace PortfolioTracker.Stores;
+
 public class NavigationStore
 {
-	public event Action CurrentViewModelChanged;
+    private ViewModelBase _currentViewModel;
 
-	private ViewModelBase _currentViewModel;
-	public ViewModelBase CurrentViewModel
-	{
-		get => _currentViewModel;
+    public ViewModelBase CurrentViewModel
+    {
+        get => _currentViewModel;
 
-		set
-		{
-			_currentViewModel = value;
-			OnCurrentViewModelChanged();
-		}
-	}
+        set
+        {
+            _currentViewModel = value;
+            OnCurrentViewModelChanged();
+        }
+    }
 
-	private void OnCurrentViewModelChanged()
-	{
-		CurrentViewModelChanged?.Invoke();
-	}
+    public event Action CurrentViewModelChanged;
 
-	//public PortfolioViewModel _portfolio { get; }
+    private void OnCurrentViewModelChanged()
+    {
+        CurrentViewModelChanged?.Invoke();
+    }
 
+    //public PortfolioViewModel _portfolio { get; }
 }

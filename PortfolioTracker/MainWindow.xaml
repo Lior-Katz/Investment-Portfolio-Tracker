@@ -3,56 +3,55 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PortfolioTracker"
-		xmlns:views="clr-namespace:PortfolioTracker.Views.Screens"
-		xmlns:viewmodels="clr-namespace:PortfolioTracker.ViewModels"
-		xmlns:userControls="clr-namespace:PortfolioTracker.Views.UserControls"
-		mc:Ignorable="d"
-		Name="main"
+        xmlns:views="clr-namespace:PortfolioTracker.Views.Screens"
+        xmlns:viewmodels="clr-namespace:PortfolioTracker.ViewModels"
+        xmlns:userControls="clr-namespace:PortfolioTracker.Views.UserControls"
+        mc:Ignorable="d"
+        Name="main"
         Title="MainWindow" Height="450" Width="800">
-	
-    <Grid>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="100"/>
-			<RowDefinition />
-		</Grid.RowDefinitions>
-		
-		<ContentControl
-			Grid.Row="0"
-			Content="{Binding BannerViewModel}">
-			<ContentControl.Resources>
-				<DataTemplate
-					DataType="{x:Type viewmodels:BannerViewModel}">
-					<userControls:Banner />
-				</DataTemplate>
-			</ContentControl.Resources>
-		</ContentControl>
 
-		<ContentControl
-			Grid.Row="1"
-			Content="{Binding CurrentViewModel}">
-			<ContentControl.Resources>
-				<DataTemplate
-					DataType="{x:Type viewmodels:DashboardViewModel}">
-					<views:DashboardView />
-				</DataTemplate>
-				<DataTemplate
-					DataType="{x:Type viewmodels:HoldingsListingViewModel}">
-					<views:HoldingsScreen />
-				</DataTemplate>
-				<DataTemplate
-					DataType="{x:Type viewmodels:TransactionHistoryViewModel}">
-					<views:TransactionHistoryScreen />
-				</DataTemplate>
-				<DataTemplate
-					DataType="{x:Type viewmodels:AddTransactionViewModel}">
-					<views:AddTransactionScreen />
-				</DataTemplate>
-				<DataTemplate
-					DataType="{x:Type viewmodels:DistributionsViewModel}">
-					<views:DistributionsScreen />
-				</DataTemplate>
-			</ContentControl.Resources>
-		</ContentControl>
-	</Grid>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ContentControl
+            Grid.Row="0"
+            Content="{Binding BannerViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type viewmodels:BannerViewModel}">
+                    <userControls:Banner/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+
+        <ContentControl
+            Grid.Row="1"
+            Content="{Binding CurrentViewModel}">
+            <ContentControl.Resources>
+                <DataTemplate
+                    DataType="{x:Type viewmodels:DashboardViewModel}">
+                    <views:DashboardView/>
+                </DataTemplate>
+                <DataTemplate
+                    DataType="{x:Type viewmodels:HoldingsListingViewModel}">
+                    <views:HoldingsScreen/>
+                </DataTemplate>
+                <DataTemplate
+                    DataType="{x:Type viewmodels:TransactionHistoryViewModel}">
+                    <views:TransactionHistoryScreen/>
+                </DataTemplate>
+                <DataTemplate
+                    DataType="{x:Type viewmodels:AddTransactionViewModel}">
+                    <views:AddTransactionScreen/>
+                </DataTemplate>
+                <DataTemplate
+                    DataType="{x:Type viewmodels:DistributionsViewModel}">
+                    <views:DistributionsScreen/>
+                </DataTemplate>
+            </ContentControl.Resources>
+        </ContentControl>
+    </Grid>
 </Window>

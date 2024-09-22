@@ -1,25 +1,22 @@
-﻿using PortfolioTracker.Commands;
-using PortfolioTracker.Stores;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
+using PortfolioTracker.Commands;
+using PortfolioTracker.Stores;
 
-namespace PortfolioTracker.ViewModels
+namespace PortfolioTracker.ViewModels;
+
+public class BannerViewModel : ViewModelBase
 {
-	public class BannerViewModel : ViewModelBase
-	{
-		private readonly PortfolioViewModel _portfolioViewModel;
-		public PortfolioViewModel PortfolioViewModel => _portfolioViewModel;
+    public BannerViewModel(NavigationStore navigationStore, PortfolioViewModel portfolioViewModel)
+    {
+        PortfolioViewModel = portfolioViewModel;
+        NavigateToDashboardCommand = new NavigateCommand<DashboardViewModel>(navigationStore,
+                                                                             () => App.AppHost.Services
+                                                                                 .GetRequiredService<
+                                                                                     DashboardViewModel>());
+    }
 
-		public ICommand NavigateToDashboardCommand { get; }
+    public PortfolioViewModel PortfolioViewModel { get; }
 
-
-
-		public BannerViewModel(NavigationStore navigationStore, PortfolioViewModel portfolioViewModel)
-		{
-			_portfolioViewModel = portfolioViewModel;
-			this.NavigateToDashboardCommand = new NavigateCommand<DashboardViewModel>(navigationStore,
-				() => App.AppHost.Services.GetRequiredService<DashboardViewModel>());
-		}
-
-	}
+    public ICommand NavigateToDashboardCommand { get; }
 }

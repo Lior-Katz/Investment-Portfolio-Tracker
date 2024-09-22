@@ -8,9 +8,9 @@ namespace PortfolioTracker.Utils.QueryBuilder;
 
 public class SelectQueryBuilder : QueryBuilderBase
 {
-    private List<string>? _columns = null;
-    private SearchPredicate? _searchPredicate = null;
-    private Dictionary<String, Object> _values = null;
+    private List<string>? _columns;
+    private SearchPredicate? _searchPredicate;
+    private Dictionary<string, object> _values = null;
 
     public SelectQueryBuilder Connection(SqlConnection? connection)
     {
@@ -26,15 +26,9 @@ public class SelectQueryBuilder : QueryBuilderBase
 
     public SelectQueryBuilder Where(SearchPredicate? searchPredicate)
     {
-        if (searchPredicate == null)
-        {
-            return this;
-        }
+        if (searchPredicate == null) return this;
 
-        if (_searchPredicate != null)
-        {
-            throw new MultipleSetQueryException("search condition");
-        }
+        if (_searchPredicate != null) throw new MultipleSetQueryException("search condition");
 
         _searchPredicate = searchPredicate;
         return this;
@@ -42,15 +36,9 @@ public class SelectQueryBuilder : QueryBuilderBase
 
     public SelectQueryBuilder Columns(List<string>? columns)
     {
-        if (columns == null || columns.Count == 0)
-        {
-            return this;
-        }
+        if (columns == null || columns.Count == 0) return this;
 
-        if (_columns == null)
-        {
-            _columns = new List<string>();
-        }
+        if (_columns == null) _columns = new List<string>();
 
         _columns.AddRange(columns);
         return this;
@@ -58,9 +46,9 @@ public class SelectQueryBuilder : QueryBuilderBase
 
     public override string Build()
     {
-        StringBuilder query = new StringBuilder();
+        var query = new StringBuilder();
         query.Append("SELECT ");
-        string desiredColumns = _columns != null ? String.Join(", ", _columns) : "ALL";
+        var desiredColumns = _columns != null ? string.Join(", ", _columns) : "ALL";
         query.Append(desiredColumns);
         query.Append(" FROM ");
         query.Append(TableName);
@@ -75,10 +63,10 @@ public class SelectQueryBuilder : QueryBuilderBase
 
     public class SearchPredicate
     {
-        private string? _column = null;
-        private QueryConditionalOperator? _operator = null;
-        private object? _value = null;
-        private List<(string Operator, SearchPredicate Predicate)> _conditions = new List<(string, SearchPredicate)>();
+        private readonly string? _column;
+        private readonly List<(string Operator, SearchPredicate Predicate)> _conditions = new();
+        private readonly QueryConditionalOperator? _operator;
+        private readonly object? _value;
 
 
         public SearchPredicate(string column, QueryOperator op, string value)
@@ -130,12 +118,9 @@ public class SelectQueryBuilder : QueryBuilderBase
 
         public string Build()
         {
-            StringBuilder builder = new StringBuilder();
+            var builder = new StringBuilder();
             builder.Append($"{_column} {_operator} {_value}");
-            foreach (var (op, predicate) in _conditions)
-            {
-                builder.Append($" {op} {predicate.Build()}");
-            }
+            foreach (var (op, predicate) in _conditions) builder.Append($" {op} {predicate.Build()}");
             return builder.ToString();
         }
     }
@@ -143,7 +128,7 @@ public class SelectQueryBuilder : QueryBuilderBase
 
 public class QueryConditionalOperator
 {
-    private QueryOperator _operator;
+    private readonly QueryOperator _operator;
 
     public QueryConditionalOperator(QueryOperator op)
     {
@@ -190,5 +175,5 @@ public enum QueryOperator
     GREATER_THAN,
     LESS_THAN,
     GREATER_THAN_OR_EQUAL,
-    LESS_THAN_OR_EQUAL,
+    LESS_THAN_OR_EQUAL
 }

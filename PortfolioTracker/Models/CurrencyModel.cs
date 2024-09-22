@@ -1,40 +1,30 @@
 ﻿using System;
 
 namespace PortfolioTracker.ViewModels;
+
 public class CurrencyModel
 {
-	public enum Currency
-	{
-		USD,
-		NIS,
-		EUR
-	}
+    public enum Currency
+    {
+        USD,
+        NIS,
+        EUR
+    }
 
-	private Currency _selectedCurrency = Currency.USD;
-	public Currency SelectedCurrency
-	{
-		get
-		{
-			return _selectedCurrency;
-		}
-		set
-		{
-			_selectedCurrency = value;
-		}
-	}
+    public CurrencyModel(string currencyString)
+    {
+        if (Enum.TryParse(currencyString, out Currency currency)) SelectedCurrency = currency;
+    }
 
-	public CurrencyModel(string currencyString)
-	{
+    public CurrencyModel(int index = 0)
+    {
+        SelectedCurrency = (Currency)index;
+    }
 
-		if (Enum.TryParse(currencyString, out Currency currency))
-		{
-			_selectedCurrency = currency;
-		}
-	}
+    public Currency SelectedCurrency { get; set; } = Currency.USD;
 
-	public CurrencyModel(int index = 0)
-	{
-		_selectedCurrency = (Currency) index;
-	}
-	public override string ToString() => _selectedCurrency.ToString();
+    public override string ToString()
+    {
+        return SelectedCurrency.ToString();
+    }
 }

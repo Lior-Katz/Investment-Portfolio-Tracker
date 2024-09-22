@@ -1,121 +1,121 @@
 ﻿using System;
 using System.Collections.Generic;
-using PortfolioTracker.Models;
 using System.Collections.ObjectModel;
 using System.Linq;
+using PortfolioTracker.Models;
 
 namespace PortfolioTracker.ViewModels;
+
 public class PortfolioViewModel : ViewModelBase
 {
-	private readonly Portfolio _portfolio;
+    private readonly Portfolio _portfolio;
 
-	/// <summary>
-	/// The unique identifier of the portfolio.
-	/// </summary>
-	public int Id
-	{
-		get => _portfolio.Id;
-		set => _portfolio.Id = value;
-	}
-	/// <summary>
-	/// The name of the portfolio.
-	/// </summary>
-	public string Name => _portfolio.Name;
-	
-	public DateTime createdDate => _portfolio.CreatedDate;
+    public PortfolioViewModel(Portfolio portfolio)
+    {
+        _portfolio = portfolio;
 
-	public decimal Value => _portfolio.Value;
+        //_portfolio.PropertyChanged += OnPortfolioChanged;
+        //Holdings.CollectionChanged += OnCollectionChanged;
+        //Trades.CollectionChanged += OnCollectionChanged;
+    }
 
-	public decimal DailyChange => _portfolio.DailyChange;
+    /// <summary>
+    ///     The unique identifier of the portfolio.
+    /// </summary>
+    public int Id
+    {
+        get => _portfolio.Id;
+        set => _portfolio.Id = value;
+    }
 
-	public decimal DailyChangePercentage => _portfolio.DailyChangePercentage;
+    /// <summary>
+    ///     The name of the portfolio.
+    /// </summary>
+    public string Name => _portfolio.Name;
 
-	/// <summary>
-	/// A list of all assets currently held in the portfolio.
-	/// </summary>
-	public ObservableCollection<HoldingViewModel> Holdings
-	{
-		get => new ObservableCollection<HoldingViewModel>(_portfolio.Holdings.Select(holding => new HoldingViewModel(holding)).ToList());
-		set
-		{
-			_portfolio.Holdings = value.Select(holdingViewModel => holdingViewModel.ToHolding()).ToList();
-		}
-	}
-	/// <summary>
-	/// A record of all trades recorded in this portfolio.
-	/// </summary>
-	public ObservableCollection<TradeViewModel> Trades
-	{
-		get => new ObservableCollection<TradeViewModel>(_portfolio.Trades.Select(trade => new TradeViewModel(trade)).ToList());
-		set
-		{
-			_portfolio.Trades = value.Select(tradeViewModel => tradeViewModel.ToTrade()).ToList();
-		}
-	}
-	
-	public List<KeyValuePair<DateTime, decimal>> HistoricalValue
-	{
-		get => _portfolio.HistoricalValue;
-		set
-		{
-			_portfolio.HistoricalValue = value.ToList();
-		}
-	}
+    public DateTime createdDate => _portfolio.CreatedDate;
 
-	public ObservableCollection<HoldingViewModel> MostInfluentialHoldings
-	{
-		get
-		{
-			ObservableCollection<HoldingViewModel> result = new ObservableCollection<HoldingViewModel>();
-			foreach (Holding holding in _portfolio.MostInfluentialHoldings)
-			{
-				result.Add(new HoldingViewModel(holding));
-			}
-			return result;
-		}
-	}
+    public decimal Value => _portfolio.Value;
 
-	public PortfolioViewModel(Portfolio portfolio)
-	{
-		this._portfolio = portfolio;
+    public decimal DailyChange => _portfolio.DailyChange;
 
-		//_portfolio.PropertyChanged += OnPortfolioChanged;
-		//Holdings.CollectionChanged += OnCollectionChanged;
-		//Trades.CollectionChanged += OnCollectionChanged;
-	}
+    public decimal DailyChangePercentage => _portfolio.DailyChangePercentage;
 
-	public Trade AddTransaction(Trade trade)
-	{
-		Trade res = _portfolio.AddTrade(trade);
-		onPortfolioChanged(nameof(Trades));
-		return res;
-	}
-	public void RemoveTransaction(Trade trade) => _portfolio.RemoveTrade(trade);
+    /// <summary>
+    ///     A list of all assets currently held in the portfolio.
+    /// </summary>
+    public ObservableCollection<HoldingViewModel> Holdings
+    {
+        get => new(_portfolio.Holdings.Select(holding => new HoldingViewModel(holding)).ToList());
+        set { _portfolio.Holdings = value.Select(holdingViewModel => holdingViewModel.ToHolding()).ToList(); }
+    }
 
-	public void AddToHoldings(Holding holding)
-	{
-		_portfolio.AddToHoldings(holding);
-		onPortfolioChanged(nameof(Holdings));
-	}
+    /// <summary>
+    ///     A record of all trades recorded in this portfolio.
+    /// </summary>
+    public ObservableCollection<TradeViewModel> Trades
+    {
+        get => new(_portfolio.Trades.Select(trade => new TradeViewModel(trade)).ToList());
+        set { _portfolio.Trades = value.Select(tradeViewModel => tradeViewModel.ToTrade()).ToList(); }
+    }
 
-	public decimal GetPercentageOfPortfolio(int holdingId) => _portfolio.GetPercentageOfPortfolio(holdingId);
+    public List<KeyValuePair<DateTime, decimal>> HistoricalValue
+    {
+        get => _portfolio.HistoricalValue;
+        set => _portfolio.HistoricalValue = value.ToList();
+    }
 
-	public bool isHoldingExist(string ticker) => _portfolio.isHoldingExist(ticker);
+    public ObservableCollection<HoldingViewModel> MostInfluentialHoldings
+    {
+        get
+        {
+            var result = new ObservableCollection<HoldingViewModel>();
+            foreach (var holding in _portfolio.MostInfluentialHoldings) result.Add(new HoldingViewModel(holding));
+            return result;
+        }
+    }
 
-	//private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-	//{
-	//	OnPropertyChanged(nameof(Value));
-	//}
-	//private void OnPortfolioChanged(object? sender, PropertyChangedEventArgs e)
-	//{
-	//	OnPropertyChanged(nameof(Value));
-	//}
+    public Trade AddTransaction(Trade trade)
+    {
+        var res = _portfolio.AddTrade(trade);
+        onPortfolioChanged(nameof(Trades));
+        return res;
+    }
 
-	private void onPortfolioChanged(string propertyName)
-	{
-		OnPropertyChanged(nameof(Value));
-		OnPropertyChanged(nameof(DailyChangePercentage));
-		OnPropertyChanged(nameof(DailyChange));
-	}
+    public void RemoveTransaction(Trade trade)
+    {
+        _portfolio.RemoveTrade(trade);
+    }
 
+    public void AddToHoldings(Holding holding)
+    {
+        _portfolio.AddToHoldings(holding);
+        onPortfolioChanged(nameof(Holdings));
+    }
+
+    public decimal GetPercentageOfPortfolio(int holdingId)
+    {
+        return _portfolio.GetPercentageOfPortfolio(holdingId);
+    }
+
+    public bool isHoldingExist(string ticker)
+    {
+        return _portfolio.isHoldingExist(ticker);
+    }
+
+    //private void OnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    //{
+    //	OnPropertyChanged(nameof(Value));
+    //}
+    //private void OnPortfolioChanged(object? sender, PropertyChangedEventArgs e)
+    //{
+    //	OnPropertyChanged(nameof(Value));
+    //}
+
+    private void onPortfolioChanged(string propertyName)
+    {
+        OnPropertyChanged(nameof(Value));
+        OnPropertyChanged(nameof(DailyChangePercentage));
+        OnPropertyChanged(nameof(DailyChange));
+    }
 }
