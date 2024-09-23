@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
+using System.Windows.Documents;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -59,6 +62,11 @@ public partial class App : Application
 
     private void saveHistoryOnExit(PortfolioViewModel portfolio)
     {
+        DateTime lastSavedHistoryDate = DataService.GetLastSavedHistoryDate(portfolio.Id).GetValueOrDefault(portfolio.createdDate);
+        // get all the values from this date onwards
+        DataService.WriteToSQL(portfolio.Id, portfolio.HistoricalValue
+                                                      .Where(pair => pair.Key > lastSavedHistoryDate)
+                                                      .ToList());
     }
 
     private static void InitServices(IServiceCollection services)

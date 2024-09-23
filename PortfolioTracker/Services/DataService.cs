@@ -82,6 +82,21 @@ public static class DataService
         return portfolio;
     }
 
+    public static DateTime? GetLastSavedHistoryDate(int portfolioId)
+    {
+        using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+                                                          .Select(new List<string> { "MAX(date)" })
+                                                          .From("ValueHistory")
+                                                          .Where(new SelectQueryBuilder.SearchPredicate("portfolioId", QueryOperator.EQUALS, "@portfolioId"))
+                                                          .BuildCommand();
+        
+        command.Parameters.AddWithValue("@portfolioId", portfolioId);
+        
+        using var reader = command.ExecuteReader();
+        
+        return reader.Read() ? reader.GetDateTime(reader.GetOrdinal("MAX(date)")) : null;
+    }
+
     /// <summary>
     ///     Writes a portfolio to the database and returns the generated ID.
     /// </summary>
