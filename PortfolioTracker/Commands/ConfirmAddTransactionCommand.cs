@@ -69,15 +69,32 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
     /// <param name="parameter">This parameter is not used, and can be set to null.</param>
     public override void Execute(object? parameter)
     {
+        if (_addTransactionViewModel.IsBuyOrder)
+        {
+            ExecuteBuy(parameter);
+        }
+        else
+        {
+            ExecuteSell(parameter);
+        }
+    }
+
+    private void ExecuteSell(object? parameter)
+    {
+        return;
+    }
+
+    private void ExecuteBuy(object? parameter)
+    {
         // Check if there is already a holding with a matching ticker symbol in the portfolio.
         var isHoldingExist = _portfolio.isHoldingExist(_addTransactionViewModel.Ticker);
 
         if (!isHoldingExist && !getAdditionalInfo()) return;
 
-        var taxPaid = _addTransactionViewModel.TaxRate * _addTransactionViewModel.Rate *
-                      _addTransactionViewModel.Quantity;
-        var commissionPaid = _addTransactionViewModel.CommissionRate * _addTransactionViewModel.Rate *
-                             _addTransactionViewModel.Quantity;
+        // var taxPaid = _addTransactionViewModel.TaxRate * _addTransactionViewModel.Rate *
+        //               _addTransactionViewModel.Quantity;
+        // var commissionPaid = _addTransactionViewModel.CommissionRate * _addTransactionViewModel.Rate *
+        //                      _addTransactionViewModel.Quantity;
 
         var trade = new Trade(_addTransactionViewModel.Name,
                               _addTransactionViewModel.Ticker,
@@ -85,11 +102,14 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
                               DateOnly.FromDateTime(_addTransactionViewModel.Date),
                               _addTransactionViewModel.Quantity.ToString(),
                               _addTransactionViewModel.Rate.ToString(),
-                              taxPaid.ToString(),
-                              commissionPaid.ToString(),
+                              "0", "0",
+                              // taxPaid.ToString(),
+                              // commissionPaid.ToString(),
                               new CurrencyModel(_addTransactionViewModel.Currency));
 
         trade = _portfolio.AddTransaction(trade);
+        
+        // TODO: update portfolio
 
         if (isHoldingExist)
         {
