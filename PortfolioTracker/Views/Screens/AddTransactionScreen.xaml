@@ -25,6 +25,7 @@
                  HorizontalAlignment="Left"
                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                  FontSize="16"/>
+        
 
         <TextBox Width="140"
                  Margin="20"
@@ -40,7 +41,7 @@
                       Grid.Row="1"
                       HorizontalAlignment="Left"
                       Margin="20"
-                      IsChecked="{Binding OrderType}">
+                      IsChecked="{Binding IsBuyOrder}">
             <ToggleButton.Template>
                 <ControlTemplate TargetType="ToggleButton">
                     <Border x:Name="Outer"
@@ -102,16 +103,16 @@
                      TextAlignment="Center"
                      FontSize="15"/>
 
-            <!--Currency-->
-            <ComboBox Grid.Column="2"
-                      Width="100"
-                      Margin="20"
-                      HorizontalAlignment="Center"
-                      SelectedValuePath="Content"
-                      SelectedValue="{Binding Currency, UpdateSourceTrigger=PropertyChanged}">
-                <ComboBoxItem Content="USD"/>
-                <ComboBoxItem Content="NIS"/>
-            </ComboBox>
+            <!-- ~1~Currency@1@ -->
+            <!-- <ComboBox Grid.Column="2" -->
+            <!--           Width="100" -->
+            <!--           Margin="20" -->
+            <!--           HorizontalAlignment="Center" -->
+            <!--           SelectedValuePath="Content" -->
+            <!--           SelectedValue="{Binding Currency, UpdateSourceTrigger=PropertyChanged}"> -->
+            <!--     <ComboBoxItem Content="USD"/> -->
+            <!--     <ComboBoxItem Content="NIS"/> -->
+            <!-- </ComboBox> -->
 
             <!--Date-->
             <DatePicker Grid.Column="3"
@@ -129,22 +130,22 @@
                                   SharedSizeGroup="SecondColumn"/>
             </Grid.ColumnDefinitions>
 
-            <!--Commission-->
-            <TextBox Width="100"
-                     Margin="20"
-                     HorizontalAlignment="Center"
-                     Text="{Binding CommissionRate, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     FontSize="15"/>
-
-            <!--Tax-->
-            <TextBox Grid.Column="1"
-                     Width="100"
-                     Margin="20"
-                     HorizontalAlignment="Center"
-                     Text="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"
-                     FontSize="15"/>
+            <!-- ~1~Commission@1@ -->
+            <!-- <TextBox Width="100" -->
+            <!--          Margin="20" -->
+            <!--          HorizontalAlignment="Center" -->
+            <!--          Text="{Binding CommissionRate, UpdateSourceTrigger=PropertyChanged}" -->
+            <!--          TextAlignment="Center" -->
+            <!--          FontSize="15"/> -->
+            <!-- -->
+            <!-- ~1~Tax@1@ -->
+            <!-- <TextBox Grid.Column="1" -->
+            <!--          Width="100" -->
+            <!--          Margin="20" -->
+            <!--          HorizontalAlignment="Center" -->
+            <!--          Text="{Binding TaxRate, UpdateSourceTrigger=PropertyChanged}" -->
+            <!--          TextAlignment="Center" -->
+            <!--          FontSize="15"/> -->
         </Grid>
 
         <StackPanel Grid.Row="4"
