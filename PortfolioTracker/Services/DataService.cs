@@ -94,7 +94,7 @@ public static class DataService
         
         using var reader = command.ExecuteReader();
         
-        return reader.Read() ? reader.GetDateTime(reader.GetOrdinal("MAX(date)")) : null;
+        return reader.Read() && !reader.IsDBNull(0) ? reader.GetDateTime(reader.GetOrdinal("MAX(date)")) : null;
     }
 
     /// <summary>
