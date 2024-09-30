@@ -51,20 +51,27 @@ public class InsertQueryBuilder : QueryBuilderBase
         if (string.IsNullOrEmpty(TableName)) throw new InvalidOperationException("Table name is not set");
 
         if (_params == null || _params.Count == 0) throw new InvalidOperationException("Params are not set");
-
+        
+        // surround all string values with single quotes
+        foreach (var (key, value) in _params)
+            if (value is string)
+                _params[key] = $"'{value}'";
+        
         var builder = new StringBuilder();
         builder.Append("INSERT INTO ");
         builder.Append(TableName);
         builder.Append(" (");
         builder.Append(string.Join(", ", _params.Keys));
-        builder.Append(") VALUES (");
-        builder.Append(string.Join(", ", _params.Values));
         builder.Append(")");
         if (_outputColumns != null && _outputColumns.Count > 0)
         {
             builder.Append(" OUTPUT ");
             builder.Append(string.Join(", ", _outputColumns));
         }
+
+        builder.Append(" VALUES (");
+        builder.Append(string.Join(", ", _params.Values));
+        builder.Append(")");
 
         return builder.ToString();
     }

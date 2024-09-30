@@ -207,7 +207,7 @@ public static class DataService
                                                    .Insert(new Dictionary<string, object>
                                                            {
                                                                ["portfolioId"] = portfolioId,
-                                                               ["date"] = trade.Date.ToDateTime(TimeOnly.MinValue),
+                                                               ["date"] =  trade.Date.ToDateTime(TimeOnly.MinValue).ToString("yyyy-MM-dd HH:mm:ss"),
                                                                ["name"] = trade.Name,
                                                                ["ticker"] = trade.Ticker,
                                                                ["quantity"] = trade.Quantity,
