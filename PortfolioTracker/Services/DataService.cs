@@ -58,7 +58,7 @@ public static class DataService
                                                    .Select(new List<string> { "name", "CreationDate" })
                                                    .From("Portfolios")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("id",
-                                                                   QueryOperator.EQUALS, "@id"))
+                                                              QueryOperator.EQUALS, "@id"))
                                                    .BuildCommand();
         command.Parameters.AddWithValue("@id", id);
 
@@ -87,13 +87,14 @@ public static class DataService
         using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
                                                           .Select(new List<string> { "MAX(date)" })
                                                           .From("ValueHistory")
-                                                          .Where(new SelectQueryBuilder.SearchPredicate("portfolioId", QueryOperator.EQUALS, "@portfolioId"))
+                                                          .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
+                                                                     QueryOperator.EQUALS, "@portfolioId"))
                                                           .BuildCommand();
-        
+
         command.Parameters.AddWithValue("@portfolioId", portfolioId);
-        
+
         using var reader = command.ExecuteReader();
-        
+
         return reader.Read() && !reader.IsDBNull(0) ? reader.GetDateTime(reader.GetOrdinal("MAX(date)")) : null;
     }
 
@@ -275,7 +276,7 @@ public static class DataService
                                                            })
                                                    .From("Holdings")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
-                                                                   QueryOperator.EQUALS, "@portfolioId"))
+                                                              QueryOperator.EQUALS, "@portfolioId"))
                                                    .BuildCommand();
         command.Parameters.AddWithValue("@portfolioId", portfolioId);
 
@@ -311,7 +312,7 @@ public static class DataService
                                                    .Select(new List<string> { "date", "value" })
                                                    .From("ValueHistory")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
-                                                                   QueryOperator.EQUALS, "@portfolioId"))
+                                                              QueryOperator.EQUALS, "@portfolioId"))
                                                    .BuildCommand();
 
         command.Parameters.AddWithValue("@portfolioId", portfolioId);
@@ -349,10 +350,11 @@ public static class DataService
                                                    .Insert(new Dictionary<string, object>
                                                            {
                                                                ["holdingId"] = holding.Id,
-                                                               ["amount"] = holding.Value * holding.Payout?.Yield,
-                                                               ["date"] = date,
-                                                               ["tax"] = holding.Payout?.Tax,
-                                                               ["commission"] = holding.Payout?.Commission
+                                                               ["amount"] = /*holding.Value * holding.Payout?.Yield,*/
+                                                                   0,
+                                                               ["date"] = date.ToString("yyyy-MM-dd HH:mm:ss"),
+                                                               ["tax"] = /*holding.Payout?.Tax,*/ 0,
+                                                               ["commission"] = /*holding.Payout?.Commission*/ 0
                                                            })
                                                    .Into("Payouts")
                                                    .Output(new List<string> { "INSERTED.id" })
@@ -439,25 +441,26 @@ public static class DataService
         var type = reader.IsDBNull(reader.GetOrdinal("type")) ? "" : reader.GetString(reader.GetOrdinal("type"));
         var sector = reader.IsDBNull(reader.GetOrdinal("sector")) ? "" : reader.GetString(reader.GetOrdinal("sector"));
         var market = reader.IsDBNull(reader.GetOrdinal("market")) ? "" : reader.GetString(reader.GetOrdinal("market"));
-        var payoutYield = reader.IsDBNull(reader.GetOrdinal("payoutYield"))
-                              ? 0
-                              : reader.GetDecimal(reader.GetOrdinal("payoutYield"));
-        var payoutTax = reader.IsDBNull(reader.GetOrdinal("payoutTax"))
-                            ? 0
-                            : reader.GetDecimal(reader.GetOrdinal("payoutTax"));
-        var payoutCommission = reader.IsDBNull(reader.GetOrdinal("payoutCommission"))
-                                   ? 0
-                                   : reader.GetDecimal(reader.GetOrdinal("payoutCommission"));
-        var payoutPeriod = reader.IsDBNull(reader.GetOrdinal("payoutPeriod"))
-                               ? 0
-                               : reader.GetInt32(reader.GetOrdinal("payoutPeriod"));
-        DateOnly? payoutLastPaid = reader.IsDBNull(reader.GetOrdinal("payoutLastPaid"))
-                                       ? null
-                                       : DateOnly
-                                           .FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
+        // var payoutYield = reader.IsDBNull(reader.GetOrdinal("payoutYield"))
+        //                       ? 0
+        //                       : reader.GetDecimal(reader.GetOrdinal("payoutYield"));
+        // var payoutTax = reader.IsDBNull(reader.GetOrdinal("payoutTax"))
+        //                     ? 0
+        //                     : reader.GetDecimal(reader.GetOrdinal("payoutTax"));
+        // var payoutCommission = reader.IsDBNull(reader.GetOrdinal("payoutCommission"))
+        //                            ? 0
+        //                            : reader.GetDecimal(reader.GetOrdinal("payoutCommission"));
+        // var payoutPeriod = reader.IsDBNull(reader.GetOrdinal("payoutPeriod"))
+        //                        ? 0
+        //                        : reader.GetInt32(reader.GetOrdinal("payoutPeriod"));
+        // DateOnly? payoutLastPaid = reader.IsDBNull(reader.GetOrdinal("payoutLastPaid"))
+        //                                ? null
+        //                                : DateOnly
+        //                                    .FromDateTime(reader.GetDateTime(reader.GetOrdinal("acquisitionDate")));
 
-        return new HoldingViewModel(new Holding(name, ticker, quantity, acquisitionDate, payoutYield, payoutTax,
-                                                payoutCommission, payoutPeriod, type, sector, market, payoutLastPaid,
+        return new HoldingViewModel(new Holding(name, ticker, quantity, acquisitionDate, /*payoutYield, payoutTax,
+                                                payoutCommission, payoutPeriod,*/ type, sector,
+                                                market, /*payoutLastPaid,*/
                                                 getHoldingTrades(ticker), id));
     }
 

@@ -53,7 +53,7 @@ public class HoldingViewModel : ViewModelBase
 	/// <summary>
 	///     The periodical payout of this asset.
 	/// </summary>
-	public Payout? Payout => _holding.Payout;
+	// public Payout? Payout => _holding.Payout;
 
 	/// <summary>
 	///     The type of investment vehicle.

@@ -18,22 +18,22 @@ public class Holding : IEquatable<Holding>
 	/// <param name="type">Type of investment vehicle</param>
 	/// <param name="sector">Sector</param>
 	/// <param name="market">Market</param>
-	public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, decimal yield,
-	               decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths, string type, string sector,
-	               string market, DateOnly? payoutLastPaid = null, List<Trade>? trades = null, int id = 0)
+	public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, /*decimal yield,
+	               decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths,*/ string type, string sector,
+	               string market, /*DateOnly? payoutLastPaid = null,*/ List<Trade>? trades = null, int id = 0)
     {
-        if (yield > 0 && payoutLastPaid == null)
-            throw new ArgumentException(nameof(payoutLastPaid) + " is null, while yield > 0");
+        // if (yield > 0 && payoutLastPaid == null)
+        //     throw new ArgumentException(nameof(payoutLastPaid) + " is null, while yield > 0");
 
         Id = id;
         Name = name;
         Ticker = ticker;
         Quantity = quantity;
         AcquisitionDate = acquisitionDate;
-        Payout = yield > 0
-                     ? new Payout(yield, payoutTax, payoutCommission, payoutPeriodInMonths,
-                                  payoutLastPaid != null ? payoutLastPaid.Value : acquisitionDate)
-                     : null;
+        // Payout = yield > 0
+        //              ? new Payout(yield, payoutTax, payoutCommission, payoutPeriodInMonths,
+        //                           payoutLastPaid != null ? payoutLastPaid.Value : acquisitionDate)
+        //              : null;
         Type = type;
         Sector = sector;
         Market = market;
@@ -76,7 +76,7 @@ public class Holding : IEquatable<Holding>
 	/// <summary>
 	///     The periodical payout of this asset.
 	/// </summary>
-	public Payout? Payout { get; set; }
+	// public Payout? Payout { get; set; }
 
 	/// <summary>
 	///     The type of investment vehicle.

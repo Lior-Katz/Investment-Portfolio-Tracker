@@ -108,32 +108,33 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
                               new CurrencyModel(_addTransactionViewModel.Currency));
 
         trade = _portfolio.AddTransaction(trade);
-        
+
         // TODO: update portfolio
 
-        if (isHoldingExist)
+        if (!isHoldingExist)
         {
-            base.Execute(parameter);
-            return;
+            addNewHolding(trade);
         }
 
+        base.Execute(parameter);
+    }
 
+    private void addNewHolding(Trade trade)
+    {
         var holding = new Holding(_addTransactionViewModel.Name,
                                   _addTransactionViewModel.Ticker,
                                   _addTransactionViewModel.Quantity,
                                   DateOnly.FromDateTime(_addTransactionViewModel.Date),
-                                  _addTransactionDialogViewModel.PayoutYield,
-                                  _addTransactionDialogViewModel.PayoutTax,
-                                  _addTransactionDialogViewModel.PayoutCommission,
-                                  _addTransactionDialogViewModel.PayoutPeriod,
+                                  // _addTransactionDialogViewModel.PayoutYield,
+                                  // _addTransactionDialogViewModel.PayoutTax,
+                                  // _addTransactionDialogViewModel.PayoutCommission,
+                                  // _addTransactionDialogViewModel.PayoutPeriod,
                                   _addTransactionDialogViewModel.AssetType,
                                   _addTransactionDialogViewModel.Sector,
                                   _addTransactionDialogViewModel.Market);
 
         holding.addTrade(trade);
         _portfolio.AddToHoldings(holding);
-
-        base.Execute(parameter);
     }
 
     /// <summary>
@@ -142,17 +143,20 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
     /// <returns></returns>
     private bool getAdditionalInfo()
     {
-        var dialog = new AddTransactionDialog
-                     {
-                         DataContext = _addTransactionDialogViewModel
-                     };
+        // var dialog = new AddTransactionDialog
+        //              {
+        //                  DataContext = _addTransactionDialogViewModel
+        //              };
+        //
+        // if (dialog.ShowDialog() == false)
+        // {
+        //     MessageBox.Show("Must fill details to add transaction.");
+        //     return false;
+        // }
 
-        if (dialog.ShowDialog() == false)
-        {
-            MessageBox.Show("Must fill details to add transaction.");
-            return false;
-        }
-
+        _addTransactionDialogViewModel.Market = "NYSE";
+        _addTransactionDialogViewModel.Sector = "Technology";
+        _addTransactionDialogViewModel.AssetType = "Stock";
         return true;
     }
 
