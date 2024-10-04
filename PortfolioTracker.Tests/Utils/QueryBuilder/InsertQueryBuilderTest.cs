@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PortfolioTracker.Utils.QueryBuilder;
-using PortfolioTracker.Utils.QueryBuilder.Exceptions;
 
 namespace PortfolioTracker.Tests.Utils.QueryBuilder;
 
