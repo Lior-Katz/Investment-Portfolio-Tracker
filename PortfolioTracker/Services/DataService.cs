@@ -158,16 +158,17 @@ public static class DataService
         using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
                                                    .Insert(new Dictionary<string, object>
                                                            {
-                                                               ["@portfolioId"] = portfolioId,
-                                                               ["@name"] = holding.Name,
-                                                               ["@ticker"] = holding.Ticker,
-                                                               ["@quantity"] = holding.Quantity,
-                                                               ["@acquisitionDate"] =
+                                                               ["portfolioId"] = portfolioId,
+                                                               ["name"] = holding.Name,
+                                                               ["ticker"] = holding.Ticker,
+                                                               ["quantity"] = holding.Quantity,
+                                                               ["acquisitionDate"] =
                                                                    holding.AcquisitionDate
-                                                                          .ToDateTime(TimeOnly.MinValue),
-                                                               ["@type"] = holding.Type,
-                                                               ["@sector"] = holding.Sector,
-                                                               ["@market"] = holding.Market
+                                                                          .ToDateTime(TimeOnly.MinValue)
+                                                                          .ToString("yyyy-MM-dd HH:mm:ss"),
+                                                               ["type"] = holding.Type,
+                                                               ["sector"] = holding.Sector,
+                                                               ["market"] = holding.Market
                                                            })
                                                    .Into("Holdings")
                                                    .Output(new List<string> { "INSERTED.id" })
@@ -207,7 +208,8 @@ public static class DataService
                                                    .Insert(new Dictionary<string, object>
                                                            {
                                                                ["portfolioId"] = portfolioId,
-                                                               ["date"] =  trade.Date.ToDateTime(TimeOnly.MinValue).ToString("yyyy-MM-dd HH:mm:ss"),
+                                                               ["date"] = trade.Date.ToDateTime(TimeOnly.MinValue)
+                                                                               .ToString("yyyy-MM-dd HH:mm:ss"),
                                                                ["name"] = trade.Name,
                                                                ["ticker"] = trade.Ticker,
                                                                ["quantity"] = trade.Quantity,
