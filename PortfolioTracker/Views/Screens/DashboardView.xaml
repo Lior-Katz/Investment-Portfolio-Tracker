@@ -54,6 +54,7 @@
                     Grid.Row="1"
                     Margin="25 0"
                     Background="DimGray"
+                    DataContext="{Binding PortfolioViewModel}"
                     ItemsSource="{Binding MostInfluentialHoldings}">
                     <ListView.ItemContainerStyle>
                         <Style

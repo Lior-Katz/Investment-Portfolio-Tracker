@@ -8,7 +8,9 @@ namespace PortfolioTracker.ViewModels;
 
 public class TransactionHistoryViewModel : ViewModelBase
 {
-    private readonly ObservableCollection<TradeViewModel> _transactions;
+    public PortfolioViewModel PortfolioViewModel { get; }
+
+    public ICommand NavigateToAddTransactionCommand { get; }
 
     /// <summary>
     ///     Initializes a new instance of the <see cref="TransactionHistoryViewModel" /> class, with an ObservableCollection of
@@ -17,14 +19,10 @@ public class TransactionHistoryViewModel : ViewModelBase
     /// </summary>
     public TransactionHistoryViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore)
     {
-        _transactions = portfolioViewModel.Trades;
-
+        PortfolioViewModel = portfolioViewModel;
         NavigateToAddTransactionCommand =
             new NavigateCommand<AddTransactionViewModel>(navigationStore,
                                                          () => new AddTransactionViewModel(portfolioViewModel,
                                                                   navigationStore));
     }
-
-    public ICommand NavigateToAddTransactionCommand { get; }
-    public IEnumerable<TradeViewModel> Transactions => _transactions;
 }

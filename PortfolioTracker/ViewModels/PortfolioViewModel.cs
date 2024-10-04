@@ -117,5 +117,6 @@ public class PortfolioViewModel : ViewModelBase
         OnPropertyChanged(nameof(Value));
         OnPropertyChanged(nameof(DailyChangePercentage));
         OnPropertyChanged(nameof(DailyChange));
+        OnPropertyChanged(nameof(MostInfluentialHoldings));
     }
 }

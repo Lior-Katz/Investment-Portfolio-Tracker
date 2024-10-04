@@ -16,11 +16,13 @@ namespace PortfolioTracker.ViewModels;
 public class DashboardViewModel : ViewModelBase
 {
     private readonly IFinancialDataService _financialDataService;
+    public PortfolioViewModel PortfolioViewModel { get; }
+
 
     public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore,
                               IFinancialDataService financialDataService)
     {
-        MostInfluentialHoldings = portfolioViewModel.MostInfluentialHoldings;
+        PortfolioViewModel = portfolioViewModel;
         _financialDataService = financialDataService;
 
         NavigateToAllHoldingsCommand =
@@ -48,11 +50,8 @@ public class DashboardViewModel : ViewModelBase
     public DashboardViewModel(ObservableCollection<HoldingViewModel> mostInfluential_holdingViewModels,
                               NavigationStore navigationStore, CurrencyModel selectedCurrency)
     {
-        MostInfluentialHoldings = mostInfluential_holdingViewModels;
         SelectedCurrency = selectedCurrency;
     }
-
-    public ObservableCollection<HoldingViewModel> MostInfluentialHoldings { get; }
 
     public ICommand NavigateToAllHoldingsCommand { get; }
 

@@ -40,7 +40,8 @@
 
         <ListView Grid.Row="0"
                   Background="DimGray"
-                  ItemsSource="{Binding Transactions}">
+                  DataContext="{Binding PortfolioViewModel}"
+                  ItemsSource="{Binding Trades}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment"
