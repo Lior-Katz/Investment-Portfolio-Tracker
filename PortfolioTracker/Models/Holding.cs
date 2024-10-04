@@ -7,20 +7,20 @@ namespace PortfolioTracker.Models;
 
 public class Holding : IEquatable<Holding>
 {
-	/// <summary>
-	///     Initializes a new instance of the Holding class that has an empty Trades list.
-	/// </summary>
-	/// <param name="name">Asset name </param>
-	/// <param name="ticker">Ticker symbol</param>
-	/// <param name="quantity">Quantity held</param>
-	/// <param name="acquisitionDate">Initial date of acquisition</param>
-	/// <param name="payout">The periodic payout</param>
-	/// <param name="type">Type of investment vehicle</param>
-	/// <param name="sector">Sector</param>
-	/// <param name="market">Market</param>
-	public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, /*decimal yield,
-	               decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths,*/ string type, string sector,
-	               string market, /*DateOnly? payoutLastPaid = null,*/ List<Trade>? trades = null, int id = 0)
+    /// <summary>
+    ///     Initializes a new instance of the Holding class that has an empty Trades list.
+    /// </summary>
+    /// <param name="name">Asset name </param>
+    /// <param name="ticker">Ticker symbol</param>
+    /// <param name="quantity">Quantity held</param>
+    /// <param name="acquisitionDate">Initial date of acquisition</param>
+    /// <param name="payout">The periodic payout</param>
+    /// <param name="type">Type of investment vehicle</param>
+    /// <param name="sector">Sector</param>
+    /// <param name="market">Market</param>
+    public Holding(string name, string ticker, decimal quantity, DateOnly acquisitionDate, /*decimal yield,
+                   decimal payoutTax, decimal payoutCommission, int payoutPeriodInMonths,*/ string type, string sector,
+                   string market, /*DateOnly? payoutLastPaid = null,*/ List<Trade>? trades = null, int id = 0)
     {
         // if (yield > 0 && payoutLastPaid == null)
         //     throw new ArgumentException(nameof(payoutLastPaid) + " is null, while yield > 0");
@@ -39,70 +39,72 @@ public class Holding : IEquatable<Holding>
         Market = market;
 
         if (trades != null)
+        {
             Trades = trades;
+        }
     }
 
-	/// <summary>
-	///     Unique identifier
-	/// </summary>
-	public int Id { get; set; }
+    /// <summary>
+    ///     Unique identifier
+    /// </summary>
+    public int Id { get; set; }
 
-	/// <summary>
-	///     Asset Name
-	/// </summary>
-	public string Name { get; set; }
+    /// <summary>
+    ///     Asset Name
+    /// </summary>
+    public string Name { get; set; }
 
-	/// <summary>
-	///     The 3- or 4-letter symbol of the asset
-	/// </summary>
-	public string Ticker { get; set; }
+    /// <summary>
+    ///     The 3- or 4-letter symbol of the asset
+    /// </summary>
+    public string Ticker { get; set; }
 
-	/// <summary>
-	///     Number of shares held.
-	/// </summary>
-	public decimal Quantity { get; set; }
+    /// <summary>
+    ///     Number of shares held.
+    /// </summary>
+    public decimal Quantity { get; set; }
 
 
-	/// <summary>
-	///     List of all trades of this asset.
-	/// </summary>
-	public List<Trade> Trades { get; set; } = new();
+    /// <summary>
+    ///     List of all trades of this asset.
+    /// </summary>
+    public List<Trade> Trades { get; set; } = new();
 
-	/// <summary>
-	///     Initial date when this asset was aquired.
-	/// </summary>
-	public DateOnly AcquisitionDate { get; set; }
+    /// <summary>
+    ///     Initial date when this asset was aquired.
+    /// </summary>
+    public DateOnly AcquisitionDate { get; set; }
 
-	/// <summary>
-	///     The periodical payout of this asset.
-	/// </summary>
-	// public Payout? Payout { get; set; }
+    /// <summary>
+    ///     The periodical payout of this asset.
+    /// </summary>
+    // public Payout? Payout { get; set; }
 
-	/// <summary>
-	///     The type of investment vehicle.
-	/// </summary>
-	/// <example>
-	///     Company stock, index fund, bond, etc.
-	/// </example>
-	public string Type { get; set; }
+    /// <summary>
+    ///     The type of investment vehicle.
+    /// </summary>
+    /// <example>
+    ///     Company stock, index fund, bond, etc.
+    /// </example>
+    public string Type { get; set; }
 
-	/// <summary>
-	///     The sector of this asset.
-	/// </summary>
-	public string Sector { get; set; }
+    /// <summary>
+    ///     The sector of this asset.
+    /// </summary>
+    public string Sector { get; set; }
 
-	/// <summary>
-	///     The market where this asset is traded.
-	/// </summary>
-	public string Market { get; set; }
+    /// <summary>
+    ///     The market where this asset is traded.
+    /// </summary>
+    public string Market { get; set; }
 
-	/// <summary>
-	///     Average rate per unit of the currently owned units of this holding.
-	///     Calculated as the differnce between all spending on this holding and all income from selling, all divided by the
-	///     quantity.
-	///     Disregards tax, commissions, and payouts.
-	/// </summary>
-	public decimal AveragePrice => getAveragePrice(Trades, Quantity);
+    /// <summary>
+    ///     Average rate per unit of the currently owned units of this holding.
+    ///     Calculated as the differnce between all spending on this holding and all income from selling, all divided by the
+    ///     quantity.
+    ///     Disregards tax, commissions, and payouts.
+    /// </summary>
+    public decimal AveragePrice => getAveragePrice(Trades, Quantity);
 
     private decimal _currentPrice =>
         App.AppHost.Services.GetRequiredService<IFinancialDataService>().GetLastPrice(Ticker);
@@ -128,7 +130,10 @@ public class Holding : IEquatable<Holding>
         get
         {
             if (Value == 0)
+            {
                 return 0;
+            }
+
             return Math.Round(_dailyChange / _value * 100, 2);
         }
     }
@@ -173,9 +178,13 @@ public class Holding : IEquatable<Holding>
             var value = trade.Quantity * trade.Price;
             value += value * trade.Commission + value * trade.Tax;
             if (trade.IsBuyOrder)
+            {
                 totalSpent += value;
+            }
             else if (!trade.IsBuyOrder)
+            {
                 totalMade += value;
+            }
         }
 
         return Math.Round((totalSpent - totalMade) / quantity, 2);
@@ -198,10 +207,14 @@ public class Holding : IEquatable<Holding>
     public void addTrade(Trade trade)
     {
         if (trade == null)
+        {
             throw new NullReferenceException("null trade added");
+        }
 
         if (Trades.Contains(trade))
+        {
             return;
+        }
 
         Trades.Add(trade);
     }

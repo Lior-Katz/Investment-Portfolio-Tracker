@@ -20,7 +20,10 @@ public class FinancialDataService : IFinancialDataService
 
     public IEnumerable<decimal> GetLastPrice(IEnumerable<string> tickers)
     {
-        foreach (var ticker in tickers) yield return GetLastPrice(ticker);
+        foreach (var ticker in tickers)
+        {
+            yield return GetLastPrice(ticker);
+        }
     }
 
     public decimal GetDailyChange(string ticker)
@@ -35,7 +38,10 @@ public class FinancialDataService : IFinancialDataService
 
     public IEnumerable<decimal> GetDailyChange(IEnumerable<string> tickers)
     {
-        foreach (var ticker in tickers) yield return GetDailyChange(ticker);
+        foreach (var ticker in tickers)
+        {
+            yield return GetDailyChange(ticker);
+        }
     }
 
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateTime startDate)
@@ -46,14 +52,22 @@ public class FinancialDataService : IFinancialDataService
                            .Get();
 
         foreach (var quote in result.Quotes)
+        {
             if (typeof(TDate) == typeof(DateTime))
+            {
                 yield return new KeyValuePair<TDate, decimal>((TDate)(object)quote.Period, quote.Close);
+            }
             else if (typeof(TDate) == typeof(DateOnly))
+            {
                 yield return new KeyValuePair<TDate, decimal>((TDate)(object)DateOnly.FromDateTime(quote.Period),
                                                               quote.Open);
+            }
             else
+            {
                 throw new ArgumentException("TDate must be " + typeof(DateOnly) + " or " + typeof(DateTime) +
                                             ", cannot be " + typeof(TDate));
+            }
+        }
     }
 
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateOnly startDate)
@@ -88,7 +102,10 @@ public class FinancialDataService : IFinancialDataService
             decimal value = 0;
             foreach (var (ticker, quantity) in
                      portfolioViewModel.Holdings.Select(holding => (holding.Ticker, holding.Quantity)))
+            {
                 value += getValueOnDate(ticker, date) * quantity;
+            }
+
             portfolioViewModel.HistoricalValue.Add(new KeyValuePair<DateTime, decimal>(date, value));
         }
     }

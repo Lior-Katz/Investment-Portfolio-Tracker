@@ -50,7 +50,11 @@ public class Portfolio
         get
         {
             decimal res = 0;
-            foreach (var holding in Holdings) res += holding.Value;
+            foreach (var holding in Holdings)
+            {
+                res += holding.Value;
+            }
+
             return Math.Round(res, 2);
         }
     }
@@ -60,7 +64,10 @@ public class Portfolio
         get
         {
             decimal res = 0;
-            foreach (var holding in Holdings) res += holding.DailyChange;
+            foreach (var holding in Holdings)
+            {
+                res += holding.DailyChange;
+            }
 
             return Math.Round(res, 2);
         }
@@ -71,7 +78,10 @@ public class Portfolio
         get
         {
             if (Value == 0)
+            {
                 return 0;
+            }
+
             return Math.Round(DailyChange / Value * 100, 2);
         }
     }
@@ -86,7 +96,9 @@ public class Portfolio
     public Trade AddTrade(Trade trade)
     {
         if (trade == null)
+        {
             throw new NullReferenceException("null trade added");
+        }
 
         //if (Trades.Contains(trade))
         //	throw new ArgumentException("Trade already exists");
@@ -101,7 +113,9 @@ public class Portfolio
         if (matchingHolding != null)
             // holding with same ticker already exists
             // TODO: this doesn't actually change the holding
+        {
             UpdateHoldingWithTrade(ref matchingHolding, trade);
+        }
 
         return trade;
     }
@@ -128,7 +142,9 @@ public class Portfolio
     public void AddToHoldings(Holding holding)
     {
         if (holding == null)
+        {
             throw new NullReferenceException();
+        }
 
         holding.Id = DataService.WriteToSQL(Id, holding);
 
@@ -165,6 +181,7 @@ public class Portfolio
         // Iterate over remaining holdings to find the most influential ones
         foreach (var portfolioHolding in Holdings.Skip(result.Count))
             // Check if the current holding has a higher daily change percentage than the least influential holding in the result
+        {
             if (portfolioHolding.DailyChangePercentage > result[result.Count - 1].DailyChangePercentage)
             {
                 // Replace the least influential holding with the current holding
@@ -173,6 +190,7 @@ public class Portfolio
                 // Re-sort the result to maintain the order
                 result.Sort(comparison);
             }
+        }
 
         return result;
     }

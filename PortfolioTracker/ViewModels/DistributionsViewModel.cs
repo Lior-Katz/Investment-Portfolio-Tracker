@@ -61,9 +61,13 @@ public class DistributionsViewModel : ViewModelBase
     private static void updateDict(Dictionary<string, decimal> dict, string key, decimal percentage)
     {
         if (dict.ContainsKey(key))
+        {
             dict[key] += percentage;
+        }
         else
+        {
             dict.Add(key, percentage);
+        }
     }
 
     private static PieChartViewModel getPieChartFromDict(string chartName, Dictionary<string, decimal> dict)

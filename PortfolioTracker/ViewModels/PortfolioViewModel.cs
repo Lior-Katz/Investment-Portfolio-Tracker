@@ -70,7 +70,11 @@ public class PortfolioViewModel : ViewModelBase
         get
         {
             var result = new ObservableCollection<HoldingViewModel>();
-            foreach (var holding in _portfolio.MostInfluentialHoldings) result.Add(new HoldingViewModel(holding));
+            foreach (var holding in _portfolio.MostInfluentialHoldings)
+            {
+                result.Add(new HoldingViewModel(holding));
+            }
+
             return result;
         }
     }

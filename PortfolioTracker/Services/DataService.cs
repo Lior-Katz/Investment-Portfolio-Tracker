@@ -58,7 +58,7 @@ public static class DataService
                                                    .Select(new List<string> { "name", "CreationDate" })
                                                    .From("Portfolios")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("id",
-                                                              QueryOperator.EQUALS, "@id"))
+                                                                   QueryOperator.EQUALS, "@id"))
                                                    .BuildCommand();
         command.Parameters.AddWithValue("@id", id);
 
@@ -84,12 +84,12 @@ public static class DataService
 
     public static DateTime? GetLastSavedHistoryDate(int portfolioId)
     {
-        using SqlCommand command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
-                                                          .Select(new List<string> { "MAX(date)" })
-                                                          .From("ValueHistory")
-                                                          .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
-                                                                     QueryOperator.EQUALS, "@portfolioId"))
-                                                          .BuildCommand();
+        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+                                                   .Select(new List<string> { "MAX(date)" })
+                                                   .From("ValueHistory")
+                                                   .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
+                                                                   QueryOperator.EQUALS, "@portfolioId"))
+                                                   .BuildCommand();
 
         command.Parameters.AddWithValue("@portfolioId", portfolioId);
 
@@ -276,13 +276,17 @@ public static class DataService
                                                            })
                                                    .From("Holdings")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
-                                                              QueryOperator.EQUALS, "@portfolioId"))
+                                                                   QueryOperator.EQUALS, "@portfolioId"))
                                                    .BuildCommand();
         command.Parameters.AddWithValue("@portfolioId", portfolioId);
 
         using var reader = command.ExecuteReader();
 
-        while (reader.Read()) holdings.Add(CreateHoldingViewModelFromSQLReader(reader));
+        while (reader.Read())
+        {
+            holdings.Add(CreateHoldingViewModelFromSQLReader(reader));
+        }
+
         return holdings;
     }
 
@@ -296,7 +300,10 @@ public static class DataService
         var trades = new ObservableCollection<TradeViewModel>();
         foreach (var trade in getTradesWithCondition(
                                                      "portfolioId = @portfolioId", ("@portfolioId", portfolioId)))
+        {
             trades.Add(new TradeViewModel(trade));
+        }
+
         return trades;
     }
 
@@ -312,7 +319,7 @@ public static class DataService
                                                    .Select(new List<string> { "date", "value" })
                                                    .From("ValueHistory")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
-                                                              QueryOperator.EQUALS, "@portfolioId"))
+                                                                   QueryOperator.EQUALS, "@portfolioId"))
                                                    .BuildCommand();
 
         command.Parameters.AddWithValue("@portfolioId", portfolioId);
@@ -320,8 +327,10 @@ public static class DataService
         using var reader = command.ExecuteReader();
 
         while (reader.Read())
+        {
             yield return new KeyValuePair<DateTime, decimal>(reader.GetDateTime(reader.GetOrdinal("date")),
                                                              reader.GetDecimal(reader.GetOrdinal("value")));
+        }
     }
 
     /// <summary>
@@ -403,7 +412,11 @@ public static class DataService
         connection.Open();
         using var command = new SqlCommand(getTransactionsQuery, connection);
 
-        foreach (var tup in queryParams) command.Parameters.AddWithValue(tup.paramName, tup.value);
+        foreach (var tup in queryParams)
+        {
+            command.Parameters.AddWithValue(tup.paramName, tup.value);
+        }
+
         using var reader = command.ExecuteReader();
 
         while (reader.Read())
@@ -476,7 +489,10 @@ public static class DataService
     {
         var command = new SqlCommand(query, connection);
 
-        foreach (var (parameterName, value) in dictionary) command.Parameters.AddWithValue(parameterName, value);
+        foreach (var (parameterName, value) in dictionary)
+        {
+            command.Parameters.AddWithValue(parameterName, value);
+        }
 
         return command;
     }

@@ -15,7 +15,10 @@ public class MockFinancialDataService : IFinancialDataService
 
     public IEnumerable<decimal> GetLastPrice(IEnumerable<string> tickers)
     {
-        foreach (var ticker in tickers) yield return 100;
+        foreach (var ticker in tickers)
+        {
+            yield return 100;
+        }
     }
 
     public decimal GetDailyChange(string ticker)
@@ -25,21 +28,28 @@ public class MockFinancialDataService : IFinancialDataService
 
     public IEnumerable<decimal> GetDailyChange(IEnumerable<string> tickers)
     {
-        foreach (var ticker in tickers) yield return 10;
+        foreach (var ticker in tickers)
+        {
+            yield return 10;
+        }
     }
 
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, DateTime startDate)
     {
         for (var i = 0; i < 10; i++)
+        {
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)startDate.AddDays(i), 100);
+        }
     }
 
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, TimeSpan timeSpan)
     {
         var random = new Random();
         for (var i = 0; i < timeSpan.Days; i++)
+        {
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)DateTime.Now.AddDays(i - timeSpan.Days),
                                                           random.Next(0, 110));
+        }
     }
 
     public void CompleteHistory(PortfolioViewModel portfolioViewModel)
@@ -52,7 +62,9 @@ public class MockFinancialDataService : IFinancialDataService
         {
             decimal value = 0;
             foreach (var ticker in portfolioViewModel.Holdings.Select(holding => holding.Ticker))
+            {
                 value += getValueOnDate(ticker, date);
+            }
         }
     }
 
@@ -71,20 +83,26 @@ public class MockFinancialDataService : IFinancialDataService
         string ticker, DateTime startDate, TimeSpan timeSpan)
     {
         for (var i = 0; i < timeSpan.Days; i++)
+        {
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)startDate.AddDays(i), 100);
+        }
     }
 
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(
         string ticker, TimeSpan timeSpan, int interval)
     {
         for (var i = 0; i < timeSpan.Days; i += interval)
+        {
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)DateTime.Now.AddDays(-i), 100);
+        }
     }
 
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(
         string ticker, DateTime startDate, TimeSpan timeSpan, int interval)
     {
         for (var i = 0; i < timeSpan.Days; i += interval)
+        {
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)startDate.AddDays(i), 100);
+        }
     }
 }

@@ -16,7 +16,6 @@ namespace PortfolioTracker.ViewModels;
 public class DashboardViewModel : ViewModelBase
 {
     private readonly IFinancialDataService _financialDataService;
-    public PortfolioViewModel PortfolioViewModel { get; }
 
 
     public DashboardViewModel(PortfolioViewModel portfolioViewModel, NavigationStore navigationStore,
@@ -53,6 +52,8 @@ public class DashboardViewModel : ViewModelBase
         SelectedCurrency = selectedCurrency;
     }
 
+    public PortfolioViewModel PortfolioViewModel { get; }
+
     public ICommand NavigateToAllHoldingsCommand { get; }
 
     public ICommand NavigateToTransactionHistoryCommand { get; }
@@ -85,6 +86,7 @@ public class DashboardViewModel : ViewModelBase
         }
 
         foreach (var comparison in comparisonValues)
+        {
             HistoricValuesLineGraph.Series = HistoricValuesLineGraph.Series.Append(new LineSeries<decimal>
                          {
                              Name = comparison.Key,
@@ -93,6 +95,7 @@ public class DashboardViewModel : ViewModelBase
                                  chartPoint => $"{Math.Round(chartPoint.Coordinate.PrimaryValue, 2)}",
                              GeometrySize = 0
                          }).ToArray();
+        }
 
         HistoricValuesLineGraph.LegendPosition = LegendPosition.Top;
     }
@@ -161,7 +164,11 @@ public class DashboardViewModel : ViewModelBase
 
     private decimal getLastValueBeforeDate(List<KeyValuePair<DateTime, decimal>> securityData, DateTime date)
     {
-        if (securityData.Count == 0 || date.Date < securityData.First().Key.Date) return 0;
+        if (securityData.Count == 0 || date.Date < securityData.First().Key.Date)
+        {
+            return 0;
+        }
+
         var valueOnDate = securityData.Find(pair => pair.Key.Date == date.Date);
 
         // if valueOnDate is a default pair, no value is available for this date, so use the value from the day before.

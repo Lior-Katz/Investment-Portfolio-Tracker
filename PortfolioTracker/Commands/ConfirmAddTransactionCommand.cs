@@ -1,11 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using PortfolioTracker.Models;
 using PortfolioTracker.Stores;
 using PortfolioTracker.ViewModels;
-using PortfolioTracker.Views.UserControls;
 
 namespace PortfolioTracker.Commands;
 
@@ -80,16 +78,17 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
     }
 
     private void ExecuteSell(object? parameter)
-    {
-        return;
-    }
+    { }
 
     private void ExecuteBuy(object? parameter)
     {
         // Check if there is already a holding with a matching ticker symbol in the portfolio.
         var isHoldingExist = _portfolio.isHoldingExist(_addTransactionViewModel.Ticker);
 
-        if (!isHoldingExist && !getAdditionalInfo()) return;
+        if (!isHoldingExist && !getAdditionalInfo())
+        {
+            return;
+        }
 
         // var taxPaid = _addTransactionViewModel.TaxRate * _addTransactionViewModel.Rate *
         //               _addTransactionViewModel.Quantity;
@@ -171,6 +170,8 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
             e.PropertyName == nameof(AddTransactionViewModel.Date) ||
             e.PropertyName == nameof(AddTransactionViewModel.Quantity) ||
             e.PropertyName == nameof(AddTransactionViewModel.Rate))
+        {
             OnCanExecuteChanged();
+        }
     }
 }

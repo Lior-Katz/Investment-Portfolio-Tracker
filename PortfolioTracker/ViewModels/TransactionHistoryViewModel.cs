@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using PortfolioTracker.Commands;
 using PortfolioTracker.Stores;
 
@@ -8,10 +6,6 @@ namespace PortfolioTracker.ViewModels;
 
 public class TransactionHistoryViewModel : ViewModelBase
 {
-    public PortfolioViewModel PortfolioViewModel { get; }
-
-    public ICommand NavigateToAddTransactionCommand { get; }
-
     /// <summary>
     ///     Initializes a new instance of the <see cref="TransactionHistoryViewModel" /> class, with an ObservableCollection of
     ///     TradeViewModels.
@@ -25,4 +19,8 @@ public class TransactionHistoryViewModel : ViewModelBase
                                                          () => new AddTransactionViewModel(portfolioViewModel,
                                                                   navigationStore));
     }
+
+    public PortfolioViewModel PortfolioViewModel { get; }
+
+    public ICommand NavigateToAddTransactionCommand { get; }
 }

@@ -13,7 +13,10 @@ public class CurrencyModel
 
     public CurrencyModel(string currencyString)
     {
-        if (Enum.TryParse(currencyString, out Currency currency)) SelectedCurrency = currency;
+        if (Enum.TryParse(currencyString, out Currency currency))
+        {
+            SelectedCurrency = currency;
+        }
     }
 
     public CurrencyModel(int index = 0)

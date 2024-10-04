@@ -139,7 +139,9 @@ public class Trade : IEquatable<Trade>
     public static bool operator ==(Trade? lvalue, Trade? rvalue)
     {
         if (lvalue is null && rvalue is null)
+        {
             return true;
+        }
 
         return lvalue is not null && lvalue.Equals(rvalue);
     }

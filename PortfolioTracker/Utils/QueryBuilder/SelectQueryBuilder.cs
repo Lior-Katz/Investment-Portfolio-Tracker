@@ -26,9 +26,15 @@ public class SelectQueryBuilder : QueryBuilderBase
 
     public SelectQueryBuilder Where(SearchPredicate? searchPredicate)
     {
-        if (searchPredicate == null) return this;
+        if (searchPredicate == null)
+        {
+            return this;
+        }
 
-        if (_searchPredicate != null) throw new MultipleSetQueryException("search condition");
+        if (_searchPredicate != null)
+        {
+            throw new MultipleSetQueryException("search condition");
+        }
 
         _searchPredicate = searchPredicate;
         return this;
@@ -36,9 +42,15 @@ public class SelectQueryBuilder : QueryBuilderBase
 
     public SelectQueryBuilder Columns(List<string>? columns)
     {
-        if (columns == null || columns.Count == 0) return this;
+        if (columns == null || columns.Count == 0)
+        {
+            return this;
+        }
 
-        if (_columns == null) _columns = new List<string>();
+        if (_columns == null)
+        {
+            _columns = new List<string>();
+        }
 
         _columns.AddRange(columns);
         return this;
@@ -120,7 +132,11 @@ public class SelectQueryBuilder : QueryBuilderBase
         {
             var builder = new StringBuilder();
             builder.Append($"{_column} {_operator} {_value}");
-            foreach (var (op, predicate) in _conditions) builder.Append($" {op} {predicate.Build()}");
+            foreach (var (op, predicate) in _conditions)
+            {
+                builder.Append($" {op} {predicate.Build()}");
+            }
+
             return builder.ToString();
         }
     }

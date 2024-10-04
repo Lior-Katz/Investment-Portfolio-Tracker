@@ -25,22 +25,38 @@ public class InsertQueryBuilder : QueryBuilderBase
 
     public InsertQueryBuilder Params(Dictionary<string, object>? @params)
     {
-        if (@params == null || @params.Count == 0) return this;
+        if (@params == null || @params.Count == 0)
+        {
+            return this;
+        }
 
-        if (_params == null) _params = new Dictionary<string, object>();
+        if (_params == null)
+        {
+            _params = new Dictionary<string, object>();
+        }
 
         foreach (var (key, value) in @params)
+        {
             if (!_params!.TryAdd(key, value))
+            {
                 throw new MultipleSetQueryException("params", $"cannot set multiple params to key {key}");
+            }
+        }
 
         return this;
     }
 
     public InsertQueryBuilder Output(List<string>? outputColumns)
     {
-        if (outputColumns == null || outputColumns.Count == 0) return this;
+        if (outputColumns == null || outputColumns.Count == 0)
+        {
+            return this;
+        }
 
-        if (_outputColumns == null) _outputColumns = new List<string>();
+        if (_outputColumns == null)
+        {
+            _outputColumns = new List<string>();
+        }
 
         _outputColumns.AddRange(outputColumns);
         return this;
@@ -48,15 +64,25 @@ public class InsertQueryBuilder : QueryBuilderBase
 
     public override string Build()
     {
-        if (string.IsNullOrEmpty(TableName)) throw new InvalidOperationException("Table name is not set");
+        if (string.IsNullOrEmpty(TableName))
+        {
+            throw new InvalidOperationException("Table name is not set");
+        }
 
-        if (_params == null || _params.Count == 0) throw new InvalidOperationException("Params are not set");
-        
+        if (_params == null || _params.Count == 0)
+        {
+            throw new InvalidOperationException("Params are not set");
+        }
+
         // surround all string values with single quotes
         foreach (var (key, value) in _params)
+        {
             if (value is string)
+            {
                 _params[key] = $"'{value}'";
-        
+            }
+        }
+
         var builder = new StringBuilder();
         builder.Append("INSERT INTO ");
         builder.Append(TableName);

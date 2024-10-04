@@ -25,7 +25,7 @@
                  HorizontalAlignment="Left"
                  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
                  FontSize="16"/>
-        
+
 
         <TextBox Width="140"
                  Margin="20"
