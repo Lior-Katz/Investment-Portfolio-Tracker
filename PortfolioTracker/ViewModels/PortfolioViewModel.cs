@@ -79,11 +79,11 @@ public class PortfolioViewModel : ViewModelBase
         }
     }
 
-    public Trade AddTransaction(Trade trade)
+    public void AddTransaction(Trade trade)
     {
-        var res = _portfolio.AddTrade(trade);
+        /*var res =*/ _portfolio.AddTrade(trade);
         onPortfolioChanged(nameof(Trades));
-        return res;
+        // return res;
     }
 
     public void RemoveTransaction(Trade trade)

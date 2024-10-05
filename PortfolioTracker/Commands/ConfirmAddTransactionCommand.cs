@@ -67,20 +67,37 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
     /// <param name="parameter">This parameter is not used, and can be set to null.</param>
     public override void Execute(object? parameter)
     {
+        
+        var trade = new Trade(_addTransactionViewModel.Name,
+                              _addTransactionViewModel.Ticker,
+                              _addTransactionViewModel.IsBuyOrder,
+                              DateOnly.FromDateTime(_addTransactionViewModel.Date),
+                              _addTransactionViewModel.Quantity.ToString(),
+                              _addTransactionViewModel.Rate.ToString(),
+                              "0", "0",
+                              // taxPaid.ToString(),
+                              // commissionPaid.ToString(),
+                              new CurrencyModel(_addTransactionViewModel.Currency));
+
         if (_addTransactionViewModel.IsBuyOrder)
         {
-            ExecuteBuy(parameter);
+            ExecuteBuy(parameter, trade);
         }
         else
         {
             ExecuteSell(parameter);
         }
+
+        _portfolio.AddTransaction(trade); // should be after executeBuy or executeSell because these methods change it
+        base.Execute(parameter);
     }
 
     private void ExecuteSell(object? parameter)
-    { }
+    {
+        
+    }
 
-    private void ExecuteBuy(object? parameter)
+    private void ExecuteBuy(object? parameter, Trade trade)
     {
         // Check if there is already a holding with a matching ticker symbol in the portfolio.
         var isHoldingExist = _portfolio.isHoldingExist(_addTransactionViewModel.Ticker);
@@ -95,34 +112,18 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
         // var commissionPaid = _addTransactionViewModel.CommissionRate * _addTransactionViewModel.Rate *
         //                      _addTransactionViewModel.Quantity;
 
-        var trade = new Trade(_addTransactionViewModel.Name,
-                              _addTransactionViewModel.Ticker,
-                              _addTransactionViewModel.IsBuyOrder,
-                              DateOnly.FromDateTime(_addTransactionViewModel.Date),
-                              _addTransactionViewModel.Quantity.ToString(),
-                              _addTransactionViewModel.Rate.ToString(),
-                              "0", "0",
-                              // taxPaid.ToString(),
-                              // commissionPaid.ToString(),
-                              new CurrencyModel(_addTransactionViewModel.Currency));
-
-        trade = _portfolio.AddTransaction(trade);
-
-        // TODO: update portfolio
 
         if (!isHoldingExist)
         {
             addNewHolding(trade);
         }
-
-        base.Execute(parameter);
     }
 
     private void addNewHolding(Trade trade)
     {
         var holding = new Holding(_addTransactionViewModel.Name,
                                   _addTransactionViewModel.Ticker,
-                                  _addTransactionViewModel.Quantity,
+                                  /*_addTransactionViewModel.Quantity*/ 0, // quantity is updated in AddTrade
                                   DateOnly.FromDateTime(_addTransactionViewModel.Date),
                                   // _addTransactionDialogViewModel.PayoutYield,
                                   // _addTransactionDialogViewModel.PayoutTax,
@@ -132,7 +133,6 @@ public class ConfirmAddTransactionCommand : NavigateCommand<TransactionHistoryVi
                                   _addTransactionDialogViewModel.Sector,
                                   _addTransactionDialogViewModel.Market);
 
-        holding.addTrade(trade);
         _portfolio.AddToHoldings(holding);
     }
 

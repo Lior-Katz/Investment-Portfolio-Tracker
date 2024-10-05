@@ -46,7 +46,7 @@ public class TradeViewModel : ViewModelBase
     {
         get => _trade.IsBuyOrder ? "Buy" : "Sell";
 
-        set => _trade.IsBuyOrder = value == "Buy" ? true : false;
+        set => _trade.IsBuyOrder = value == "Buy";
     }
 
 

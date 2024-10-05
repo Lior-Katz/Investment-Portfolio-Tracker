@@ -4,7 +4,7 @@ using PortfolioTracker.ViewModels;
 namespace PortfolioTracker.Models;
 
 public class Trade : IEquatable<Trade>
-{
+{ 
     /// <summary>
     ///     Initializes a new instance of the Trade class with specified parameters.
     /// </summary>

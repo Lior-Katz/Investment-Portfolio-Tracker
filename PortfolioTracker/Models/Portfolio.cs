@@ -93,7 +93,7 @@ public class Portfolio
     /// </summary>
     /// <param name="trade">The transaction to add to the list.</param>
     /// <exception cref="NullReferenceException">Thrown if a null reference is passed as argument.</exception>
-    public Trade AddTrade(Trade trade)
+    public void AddTrade(Trade trade)
     {
         if (trade == null)
         {
@@ -111,13 +111,12 @@ public class Portfolio
         // Search for a holding with a matching ticker symbol
         var matchingHolding = Holdings.FirstOrDefault(holding => holding.Ticker == trade.Ticker);
         if (matchingHolding != null)
-            // holding with same ticker already exists
-            // TODO: this doesn't actually change the holding
         {
-            UpdateHoldingWithTrade(ref matchingHolding, trade);
+            // holding with same ticker already exists
+            UpdateHoldingWithTrade(matchingHolding, trade);
         }
 
-        return trade;
+        // return trade;
     }
 
 
@@ -195,10 +194,18 @@ public class Portfolio
         return result;
     }
 
-    private void UpdateHoldingWithTrade(ref Holding matchingHolding, Trade trade)
+    private void UpdateHoldingWithTrade(Holding matchingHolding, Trade trade)
     {
-        matchingHolding.Quantity += trade.Quantity;
+        decimal quantity = trade.IsBuyOrder ? trade.Quantity : -trade.Quantity;
+        matchingHolding.Quantity += quantity;
+        if (matchingHolding.Quantity <= 0)
+        {
+            Holdings.Remove(matchingHolding);
+            DataService.Delete(matchingHolding);
+        }
         matchingHolding.Trades.Add(trade);
+        // update the holding in the database
+        DataService.Update(matchingHolding);
     }
 
     public decimal GetPercentageOfPortfolio(int holdingId)

@@ -154,6 +154,32 @@ public static class DataService
         return (int)command.ExecuteScalar();
     }
 
+    public static void Update(Holding holding)
+    {
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        connection.Open();
+        string updateHoldingQuery = "UPDATE Holdings SET quantity = @quantity WHERE id = @id";
+        SqlCommand command = CreateCommand(updateHoldingQuery, connection, new Dictionary<string, object>
+        {
+            ["@quantity"] = holding.Quantity,
+            ["@id"] = holding.Id
+        });
+        command.ExecuteNonQuery();
+    }
+    
+    
+    public static void Delete(Holding matchingHolding)
+    {
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        connection.Open();
+        string deleteHoldingQuery = "DELETE FROM Holdings WHERE id = @id";
+        SqlCommand command = CreateCommand(deleteHoldingQuery, connection, new Dictionary<string, object>
+        {
+            ["@id"] = matchingHolding.Id
+        });
+        command.ExecuteNonQuery();
+    }
+
     /// <summary>
     ///     Writes a trade to the database and returns the generated ID.
     /// </summary>
@@ -369,7 +395,7 @@ public static class DataService
             var commission = reader.IsDBNull(reader.GetOrdinal("commission"))
                                  ? 0
                                  : reader.GetDecimal(reader.GetOrdinal("commission"));
-            var isBuyOrder = reader.GetString(reader.GetOrdinal("orderType")) == "Sell" ? true : false;
+            var isBuyOrder = reader.GetString(reader.GetOrdinal("orderType")) == "Buy";
             var currency = reader.GetString(reader.GetOrdinal("currency"));
 
             yield return new Trade(id, name, ticker, isBuyOrder, date, quantity, price, tax, commission,
