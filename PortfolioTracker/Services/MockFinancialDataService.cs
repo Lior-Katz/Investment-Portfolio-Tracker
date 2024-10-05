@@ -65,6 +65,7 @@ public class MockFinancialDataService : IFinancialDataService
             {
                 value += getValueOnDate(ticker, date);
             }
+            portfolioViewModel.HistoricalValue.Add(KeyValuePair.Create(date, value));
         }
     }
 

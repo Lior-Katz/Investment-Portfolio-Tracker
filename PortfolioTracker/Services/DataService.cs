@@ -54,7 +54,8 @@ public static class DataService
     private static PortfolioViewModel RetrievePortfolio(int id)
     {
         PortfolioViewModel portfolio;
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Select(new List<string> { "name", "CreationDate" })
                                                    .From("Portfolios")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("id",
@@ -84,7 +85,8 @@ public static class DataService
 
     public static DateTime? GetLastSavedHistoryDate(int portfolioId)
     {
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Select(new List<string> { "MAX(date)" })
                                                    .From("ValueHistory")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
@@ -105,19 +107,8 @@ public static class DataService
     /// <returns>The generated ID of the written portfolio.</returns>
     public static int WriteToSQL(PortfolioViewModel portfolio)
     {
-        // using SqlConnection connection = new SqlConnection(ConnectionString);
-        //
-        // connection.Open();
-        //
-        // string query = "INSERT INTO Portfolios (name, CreatedDate) OUTPUT INSERTED.id VALUES (@Name, @CreatedDate)";
-        //
-        // using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-        // {
-        // 	["@Name"] = portfolio.Name,
-        // 	["@CreatedDate"] = portfolio.createdDate
-        // });
-
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Insert(new Dictionary<string, object>
                                                            {
                                                                ["name"] = portfolio.Name,
@@ -139,24 +130,8 @@ public static class DataService
     /// <returns>The generated ID of the written holding.</returns>
     public static int WriteToSQL(int portfolioId, Holding holding)
     {
-        // string query = "INSERT INTO Holdings (portfolioId, name, ticker, quantity, acquisitionDate, type, sector, market) OUTPUT INSERTED.id VALUES (@portfolioId, @name, @ticker, @quantity, @acquisitionDate, @type, @sector, @market)";
-        //
-        // using SqlConnection connection = new SqlConnection(ConnectionString);
-        // connection.Open();
-        //
-        // using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-        // {
-        // 	["@portfolioId"] = portfolioId,
-        // 	["@name"] = holding.Name,
-        // 	["@ticker"] = holding.Ticker,
-        // 	["@quantity"] = holding.Quantity,
-        // 	["@acquisitionDate"] = holding.AcquisitionDate.ToDateTime(TimeOnly.MinValue),
-        // 	["@type"] = holding.Type,
-        // 	["@sector"] = holding.Sector,
-        // 	["@market"] = holding.Market
-        // });
-
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Insert(new Dictionary<string, object>
                                                            {
                                                                ["portfolioId"] = portfolioId,
@@ -187,25 +162,8 @@ public static class DataService
     /// <returns>The generated ID of the written trade.</returns>
     public static int WriteToSQL(int portfolioId, Trade trade)
     {
-        // string query = "INSERT INTO Transactions (portfolioId, date, name, ticker, quantity, price, tax, commission, orderType, currency) OUTPUT INSERTED.id VALUES (@portfolioId, @date, @name, @ticker, @quantity, @price, @tax, @commission, @orderType, @currency)";
-        //
-        // using SqlConnection connection = new SqlConnection(ConnectionString);
-        // connection.Open();
-        // using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-        // {
-        // 	["@portfolioId"] = portfolioId,
-        // 	["@date"] = trade.Date.ToDateTime(TimeOnly.MinValue),
-        // 	["@name"] = trade.Name,
-        // 	["@ticker"] = trade.Ticker,
-        // 	["@quantity"] = trade.Quantity,
-        // 	["@price"] = trade.Price,
-        // 	["@tax"] = trade.Tax,
-        // 	["@commission"] = trade.Commission,
-        // 	["@orderType"] = trade.IsBuyOrder ? "Buy" : "Sell",
-        // 	["@currency"] = trade.Currency.ToString()
-        // });
-
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Insert(new Dictionary<string, object>
                                                            {
                                                                ["portfolioId"] = portfolioId,
@@ -230,25 +188,16 @@ public static class DataService
 
     public static void WriteToSQL(int portfolioId, List<KeyValuePair<DateTime, decimal>> historicalValues)
     {
-        // string query = "INSERT INTO ValueHistory (portfolioId, date, value) VALUES (@portfolioId, @date, @value)";
-        // using SqlConnection connection = new SqlConnection(ConnectionString);
-        // connection.Open();
-        // using SqlCommand command = CreateCommand(query, connection, new Dictionary<string, object>
-        // 	                                                    {
-        // 		                                                    ["@portfolioId"] = portfolioId,
-        // 		                                                    ["@date"] = null,
-        // 		                                                    ["@value"] = null
-        // 	                                                    });
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        InsertQueryBuilder builder = new InsertQueryBuilder().Connection(connection).Into("ValueHistory");
+        historicalValues.ForEach(pair => builder.Params(new Dictionary<string, object>()
+                                                       {
+                                                           ["portfolioId"] = portfolioId,
+                                                           ["date"] = pair.Key.ToString("yyyy-MM-dd HH:mm:ss"),
+                                                           ["value"] = pair.Value
+                                                       }));
 
-        var cmd = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
-                                         .Insert(new Dictionary<string, object>
-                                                 {
-                                                     ["portfolioId"] = portfolioId,
-                                                     ["date"] = null,
-                                                     ["value"] = null
-                                                 })
-                                         .Into("ValueHistory")
-                                         .BuildCommand();
+        builder.BuildCommand().ExecuteNonQuery();
     }
 
 
@@ -260,14 +209,8 @@ public static class DataService
     private static ObservableCollection<HoldingViewModel> RetrieveHoldings(int portfolioId)
     {
         var holdings = new ObservableCollection<HoldingViewModel>();
-        // string retrieveQuery = "SELECT id, name, ticker, quantity, acquisitionDate, type, sector, market, payoutYield, payoutTax, payoutCommission, payoutPeriod, payoutLastPaid FROM Holdings WHERE portfolioId = @portfolioId";
-        //
-        // using SqlConnection connection = new SqlConnection(ConnectionString);
-        // connection.Open();
-        //
-        // using SqlCommand command = new SqlCommand(retrieveQuery, connection);
-
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Select(new List<string>
                                                            {
                                                                "id", "name", "ticker", "quantity", "acquisitionDate",
@@ -309,13 +252,8 @@ public static class DataService
 
     private static IEnumerable<KeyValuePair<DateTime, decimal>> retrieveHistoricalValues(int portfolioId)
     {
-        // string retrieveQuery = "SELECT date, value FROM ValueHistory WHERE portfolioId = @portfolioId";
-        //
-        // using SqlConnection connection = new SqlConnection(ConnectionString);
-        // connection.Open();
-        // using SqlCommand command = new SqlCommand(retrieveQuery, connection);
-
-        using var command = new SqlCommandBuilder().Connection(new SqlConnection(ConnectionString))
+        using SqlConnection connection = new SqlConnection(ConnectionString);
+        using var command = new SqlCommandBuilder().Connection(connection)
                                                    .Select(new List<string> { "date", "value" })
                                                    .From("ValueHistory")
                                                    .Where(new SelectQueryBuilder.SearchPredicate("portfolioId",
