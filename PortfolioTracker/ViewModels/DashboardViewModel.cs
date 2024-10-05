@@ -23,6 +23,8 @@ public class DashboardViewModel : ViewModelBase
     {
         PortfolioViewModel = portfolioViewModel;
         _financialDataService = financialDataService;
+        // set the timespan to be from the time the portfolio was started to now
+        graphTimeSpan = DateTime.Now - portfolioViewModel.createdDate;
 
         NavigateToAllHoldingsCommand =
             new NavigateCommand<HoldingsListingViewModel>(navigationStore,
@@ -76,7 +78,7 @@ public class DashboardViewModel : ViewModelBase
         {
             var rawData = _financialDataService.GetHistoricalValue<DateTime>(ticker, graphTimeSpan).ToList();
             var dataWithEmptyDatesFilled = new KeyValuePair<string, List<decimal>>(ticker, new List<decimal>());
-            for (var days = graphTimeSpan.Days; days >= 0; --days)
+            for (var days = graphTimeSpan.Days - 1; days >= 0; --days)
             {
                 var date = DateTime.Now - new TimeSpan(days, 0, 0, 0);
                 dataWithEmptyDatesFilled.Value.Add(getLastValueBeforeDate(rawData, date));

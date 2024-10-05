@@ -45,7 +45,7 @@ public class MockFinancialDataService : IFinancialDataService
     public IEnumerable<KeyValuePair<TDate, decimal>> GetHistoricalValue<TDate>(string ticker, TimeSpan timeSpan)
     {
         var random = new Random();
-        for (var i = 0; i < timeSpan.Days; i++)
+        for (var i = 1; i <= timeSpan.Days; i++)
         {
             yield return new KeyValuePair<TDate, decimal>((TDate)(object)DateTime.Now.AddDays(i - timeSpan.Days),
                                                           random.Next(0, 110));

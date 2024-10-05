@@ -45,7 +45,7 @@ public static class DataService
 
         // Retrieve historical value
         var portfolioHistoricalValue = retrieveHistoricalValues(portfolio.Id).ToList();
-        portfolioHistoricalValue.Sort();
+        portfolioHistoricalValue.Sort((pair1, pair2) => pair1.Key.CompareTo(pair2.Key));
         portfolio.HistoricalValue = portfolioHistoricalValue;
 
         return portfolio;
